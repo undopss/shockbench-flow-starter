@@ -12,6 +12,10 @@ Contents: [the task](#the-task) · [the interface](#the-interface) ·
 [submitting](#submitting) · [approaches](#approaches) ·
 [background (optional)](#background-optional)
 
+For a beginner-friendly Russian explanation of Python terms, agent variables,
+configuration, observations and action slots, see the
+[agent notes](AGENT_NOTES_RU.md).
+
 ## The task
 
 An episode is T weeks (26 on Tiny, 52 on Small, 104 on Full). Each week your

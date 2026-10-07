@@ -1,0 +1,5 @@
+{"mpc_chip": {"agent": "agents/mpc_chip"},
+ "pulse_twkr_15": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": ["grid_tw","grid_kr"]}},
+ "pulse_auto": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": "auto"}},
+ "pulse_auto_obs": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": "auto", "fab_cap_mode": "observed"}},
+ "fabcap_observed": {"agent": "agents/mpc_chip", "params": {"fab_cap_mode": "observed"}}}

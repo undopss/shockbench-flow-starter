@@ -1,0 +1,101 @@
+[
+ {
+  "id": "pulse_twkr_15_s20a",
+  "title": "Fuel pulses at Taiwan + Korea",
+  "idea": "Hold LNG/crude at TW/KR terminals until 1.5 weeks of burn, then release in a batch, so some weeks the grid is fully supplied and the chip fabs (homes-first rule) get power. Ceiling: chip shortage is ~95% of the gap; -8% shortage on Small = ~+0.08 RSS minus extra power cuts.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 787505523,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_twkr_15",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ },
+ {
+  "id": "energy_H20_s20a",
+  "title": "Energy plan 20 weeks ahead (was 12)",
+  "idea": "Longer energy planning window. For the organisers' planner the horizon was the biggest lever on Small (H12 0.57 -> H20 0.69 -> default 0.72). Ceiling: large if our 12-week window starves grids of slow fuel.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 787505523,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "energy_H20",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "H": 20
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ },
+ {
+  "id": "pulse_twkrjp_20_s20a",
+  "title": "Fuel pulses at Taiwan + Korea + Japan, 2 weeks",
+  "idea": "Same pulse idea, also at Japan (memory fab), bigger batches (2 weeks of burn).",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 787505523,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_twkrjp_20",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 2.0,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr",
+     "grid_jp"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ },
+ {
+  "id": "chiplp_vs_mpc_s20a",
+  "title": "Chip planner (calibration on Small)",
+  "idea": "Old mpc as the variant against mpc_chip: measures how much the chip planner adds on Small (+0.06 seen on 6 Full episodes). Calibration of the Small filter.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 787505523,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "chiplp_vs_mpc",
+   "agent": "agents/mpc",
+   "params": {}
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ }
+]

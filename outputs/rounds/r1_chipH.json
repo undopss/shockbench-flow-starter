@@ -1,0 +1,8 @@
+{
+  "mpc_chip": {"agent": "agents/mpc_chip"},
+  "chipH_16": {"agent": "agents/mpc_chip", "params": {"chip_H": 16}},
+  "chipH_32": {"agent": "agents/mpc_chip", "params": {"chip_H": 32}},
+  "energyH_20": {"agent": "agents/mpc_chip", "params": {"H": 20}},
+  "safety_1": {"agent": "agents/mpc_chip", "params": {"safety_weeks": 1.0}},
+  "safety_5": {"agent": "agents/mpc_chip", "params": {"safety_weeks": 5.0}}
+}

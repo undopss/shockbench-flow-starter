@@ -1,0 +1,8 @@
+{
+  "mpc_chip": {"agent": "agents/mpc_chip"},
+  "mpc_old": {"agent": "agents/mpc"},
+  "pulse_twkr_1.5": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": ["grid_tw", "grid_kr"]}},
+  "pulse_twkr_1.0": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.0, "pulse_grids": ["grid_tw", "grid_kr"]}},
+  "pulse_twkr_2.0": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 2.0, "pulse_grids": ["grid_tw", "grid_kr"]}},
+  "pulse_twkrjp_1.5": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": ["grid_tw", "grid_kr", "grid_jp"]}}
+}

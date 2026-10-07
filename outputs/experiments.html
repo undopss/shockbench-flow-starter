@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mantis Experiments</title>
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--fg:#17212b;--muted:#5b6773;--line:#d5dbe1;--accent:#1d6a86;--ok:#2c7a55;--bad:#b0412c;--warn:#9a6a12;
+--okbg:#e2f1e9;--badbg:#f7e5e0;--warnbg:#f6edd9;--bar:#dfe7ec}
+@media (prefers-color-scheme:dark){:root{--bg:#11171d;--card:#18212a;--fg:#e3e9ee;--muted:#93a1ad;--line:#2c3843;--accent:#5db3d3;
+--ok:#62c08f;--bad:#e58a72;--warn:#e0b45a;--okbg:#14301f;--badbg:#3a1e17;--warnbg:#352a12;--bar:#24313c}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:28px}
+h1{margin:0;font-size:26px} h2{margin:0 0 10px;font-size:18px}
+.sub{color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h3{margin:0;font-size:16px}
+.idea{color:var(--muted);font-size:14px}
+.meta{font:12px ui-monospace,Consolas,monospace;color:var(--muted);word-break:break-all}
+.bar{height:10px;background:var(--bar);border-radius:6px;overflow:hidden}
+.bar>div{height:100%;background:var(--accent);transition:width .5s}
+.bar.ind>div{width:30%!important;animation:slide 1.6s infinite ease-in-out}
+@keyframes slide{0%{margin-left:-30%}100%{margin-left:100%}}
+.chip{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td.n{font-family:ui-monospace,Consolas,monospace;white-space:nowrap;font-variant-numeric:tabular-nums}
+.v{font-weight:700;padding:2px 8px;border-radius:6px;font-size:12px;text-transform:uppercase}
+.v.better{color:var(--ok);background:var(--okbg)} .v.worse{color:var(--bad);background:var(--badbg)}
+.v.unclear{color:var(--warn);background:var(--warnbg)} .v.failed{color:var(--bad);background:var(--badbg)}
+.empty{color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Mantis Experiments</h1><div class="sub" id="gen">loading…</div></header>
+  <section><h2>Running now</h2><div class="cards" id="running"></div></section>
+  <section><h2>Queued</h2><div class="tbl"><table><thead><tr><th>#</th><th>Idea</th><th>Stage</th><th>Seed</th><th>Source</th></tr></thead><tbody id="queue"></tbody></table></div></section>
+  <section><h2>Finished</h2><div class="tbl"><table><thead><tr><th>Verdict</th><th>Idea</th><th>Stage</th><th>Score vs baseline</th><th>90% interval</th><th>Calm L1</th><th>Took</th><th>Finished</th></tr></thead><tbody id="done"></tbody></table></div></section>
+  <footer class="sub">Each test = one idea vs the current best agent on the same episodes. Better = the whole 90% interval is above 0. Stages: small20 (filter) → full6 → full20 (decision). Page refreshes every 10 s.</footer>
+</div>
+<script>
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function dur(s){if(s==null||!isFinite(s))return"-";s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h?h+"h "+m+"m":m?m+"m "+(s%60)+"s":s+"s"}
+function when(t){return t?new Date(t*1000).toLocaleString([], {month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"-"}
+function f4(x,sign){return x==null||!isFinite(x)?"-":(sign&&x>0?"+":"")+x.toFixed(4)}
+async function load(){
+  let d; try{d=await (await fetch("experiments.json?"+Date.now())).json()}catch(e){document.getElementById("gen").textContent="no data yet ("+e+")";return}
+  const now=Date.now()/1000;
+  document.getElementById("gen").textContent=`updated ${when(d.generated)} · ${d.running.length}/${d.max_running} running · ${d.queue.length} queued · ${d.done.length} finished`;
+  const R=document.getElementById("running");
+  R.innerHTML=d.running.length?d.running.map(x=>{const p=x.progress||{};const ind=!p.total;const pct=p.total?Math.round(100*p.done/p.total):0;
+    return `<div class="card"><h3>${esc(x.title||x.id)}</h3><div class="idea">${esc(x.idea)}</div>
+    <div><span class="chip">${esc(x.stage)}</span> <span class="chip">seed ${esc(x.entropy)}</span> <span class="chip">${esc(x.source||"")}</span></div>
+    <div class="bar ${ind?"ind":""}"><div style="width:${pct}%"></div></div>
+    <div class="meta">${esc(p.phase||"starting")}${p.total?` · ${p.done}/${p.total}`:""} · running ${dur(now-x.started)}</div>
+    <div class="meta">${esc(p.last_line||"")}</div></div>`}).join(""):`<div class="empty">nothing running</div>`;
+  document.getElementById("queue").innerHTML=d.queue.length?d.queue.map((x,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(x.title||x.id)}</b><div class="idea">${esc(x.idea)}</div></td><td>${esc(x.stage)}</td><td class="n">${esc(x.entropy)}</td><td>${esc(x.source||"")}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">queue empty</td></tr>`;
+  document.getElementById("done").innerHTML=d.done.length?d.done.map(x=>{const r=x.result||{};const iv=r.interval||[];const l1=(r.levels||{})["1"],b1=(r.baseline_levels||{})["1"];
+    return `<tr><td><span class="v ${esc(x.verdict)}">${esc(x.verdict)}</span></td><td><b>${esc(x.title||x.id)}</b><div class="idea">${esc(x.idea)}</div>${x.error?`<div class="meta">${esc(x.error)}</div>`:""}</td>
+    <td>${esc(x.stage)}<div class="meta">seed ${esc(x.entropy)}</div></td>
+    <td class="n">${f4(r.variant_rss)} vs ${f4(r.baseline_rss)}<br><b>${f4(r.diff,true)}</b></td>
+    <td class="n">[${f4(iv[0],true)}, ${f4(iv[1],true)}]</td><td class="n">${l1!=null?l1.toFixed(3):"-"} vs ${b1!=null?b1.toFixed(3):"-"}</td>
+    <td class="n">${dur((x.finished||0)-(x.started||0))}</td><td class="n">${when(x.finished)}</td></tr>`}).join(""):`<tr><td colspan="8" class="empty">nothing finished yet</td></tr>`;
+}
+load(); setInterval(load,10000);
+</script>
+</body>
+</html>

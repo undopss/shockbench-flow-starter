@@ -89,7 +89,7 @@ def run(n, cls, spec, agent_root):
         _, params = task_generator(task)
         J_naive = rollout(inst, anchor_policy(inst, params, reps), omega, ANCHOR_REGIME, pseed, marks=marks,
                           fallback=fallback).J_cents / 100
-    return dict(episode=n, cls=cls, dropped=ndrop, J_agent=traj.J_cents / 100, J_oracle=res.J_cents / 100,
+    return dict(episode=n, cls=cls, dropped=ndrop, J_agent=traj.J_cents / 100, J_oracle=None if res.J_cents is None else res.J_cents / 100,
                 J_naive=J_naive, omega_hash=omega.hash,
                 fallback_weeks=sum(took_fallback(r) for r in traj.records), seconds=round(time.perf_counter() - t0))
 
@@ -119,7 +119,17 @@ def main(task, entropy, eps_spec, agent, n_jobs, classes=None):
     done = {(r["episode"], r["cls"]) for r in old}
     jobs = [(n, c) for c in classes for n in ns if (n, c) not in done]
     print(f"episodes {ns}, classes {classes}, {len(jobs)} runs", flush=True)
-    rows = old + Parallel(n_jobs=n_jobs, verbose=10)(delayed(run)(n, c, spec, root) for n, c in jobs)
+    rows = list(old)
+
+    def safe(n, c):
+        try:
+            return run(n, c, spec, root)
+        except Exception as err:  # keep the batch going; the row says what failed
+            return dict(episode=n, cls=c, error=repr(err)[:300], J_agent=None, J_oracle=None, J_naive=None)
+
+    for r in Parallel(n_jobs=n_jobs, verbose=10, return_as="generator_unordered")(delayed(safe)(n, c) for n, c in jobs):
+        rows.append(r)
+        out.write_text(json.dumps(rows, indent=1))
     naive = {r["episode"]: r["J_naive"] for r in rows if r.get("J_naive") is not None}
     for r in rows:
         ref = refs.get(r["episode"])
@@ -132,7 +142,11 @@ def main(task, entropy, eps_spec, agent, n_jobs, classes=None):
 
 
 def report(rows):
-    by = {(r["episode"], r["cls"]): r for r in rows}
+    bad = [(r["episode"], r["cls"], r.get("error", "oracle not solved")) for r in rows
+           if r.get("J_agent") is None or r.get("J_oracle") is None]
+    if bad:
+        print("left out (failed runs):", bad)
+    by = {(r["episode"], r["cls"]): r for r in rows if r.get("J_agent") is not None and r.get("J_oracle") is not None}
     ns = sorted({r["episode"] for r in rows})
     base = {n: by[(n, "base")] for n in ns if (n, "base") in by}
     print("\nbase check: agent RSS per episode", {n: round((b["J_naive_ref"] - b["J_agent"]) /

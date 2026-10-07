@@ -1,0 +1,6 @@
+{"mpc_chip": {"agent": "agents/mpc_chip"},
+ "pulse_all_15": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5}},
+ "pp_enum_lpval": {"agent": "agents/mpc_pulse", "params": {"pp_chip_value": true, "pp_value": 1.0}},
+ "pp_enum_pi05": {"agent": "agents/mpc_pulse", "params": {"pp_chip_value": false, "pp_value": 0.5}},
+ "pp_enum_pi10": {"agent": "agents/mpc_pulse", "params": {"pp_chip_value": false, "pp_value": 1.0}},
+ "pp_milp_pi05": {"agent": "agents/mpc_pulse", "params": {"pp_chip_value": false, "pp_value": 0.5, "pp_method": "milp"}}}

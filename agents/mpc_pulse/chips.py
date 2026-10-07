@@ -1,0 +1,379 @@
+"""Chip MPC: one linear program over the next H weeks for every wafer and chip shipment.
+
+The simulator runs fabs and OSATs on its own (a fab starts every wafer on hand up to its capacity, an OSAT packages
+every raw chip up to its throughput), so the plan only chooses shipments: wafers from the materials to the fabs, raw
+chips from the fabs to the OSATs, finished chips from the OSATs to the sinks. The LP follows each (node, commodity)
+stock week by week:
+
+    stock[t] = stock[t-1] + arrivals[t] + produced[t] - shipped[t] - started_or_served[t] - disposed[t]
+
+with shipments arriving after their route's lead time, fab starts turning into raw chips tau_f weeks later, OSAT
+starts into finished chips tau_o weeks later, work in process and shipments already under way as fixed arrivals, the
+storage cap (stock above it is disposed of at the commodity's disposal cost), and a shipment leaving only stock that
+was there at the end of last week, as in the simulator. Every sink is lost-sales: each unit of forecast demand not
+served costs its pi (about 50 k USD for leading-edge chips, 10 k for mature ones), against freight of a few USD.
+
+The present graph (capacities, lead times, open fractions, prohibitions, fab capacity and OSAT throughput) is assumed
+to persist over the window; announced prohibitions close their slots from their effective week. Demand beyond the
+8-week forecast repeats its last observed week. Fabs are assumed to get the energy they ask for (the energy MPC keeps
+the grids within ~0.2 % of the clairvoyant plan's power shed).
+"""
+
+import numpy as np
+from scipy.optimize import linprog
+from scipy.sparse import coo_matrix
+
+CHIP_TYPES = ("material", "fab", "osat", "sink")
+
+
+class ChipPlanner:
+    def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25):
+        self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
+        self.fab_plan = None
+        static, layout = config["static"], config["layout"]
+        inst = static["instance"]
+        nodes = inst["nodes"]
+        self.H = H
+        self.T = int(static["T"])
+        commodities = static["commodities"]["id"]
+        self.edges = static["edges"]
+        lanes, slots = static["lanes"], static["action_slots"]
+        node_type = [n.get("type") for n in nodes]
+        disposal_cost = {c["id"]: float(c.get("disposal_cost", 0.0)) for c in inst["commodities"]}
+
+        # stock positions the LP follows: every (node, k) slot of a material, fab, osat or sink
+        self.stock_index = {tuple(row): i for i, row in enumerate(layout["stock_slots"])}
+        self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
+        self.pos = []  # dicts: node, k, cap, hold, disp, kind
+        self.pos_index = {}
+        for (node, k) in self.stock_index:
+            kind = node_type[node]
+            if kind not in CHIP_TYPES:
+                continue
+            spec = nodes[node].get("stock", {}).get(commodities[k], {})
+            self.pos_index[(node, k)] = len(self.pos)
+            self.pos.append({
+                "node": node, "k": k, "kind": kind, "cap": float(spec.get("storage", np.inf) or np.inf),
+                "hold": float(spec.get("holding_cost", 0.0) or 0.0), "disp": disposal_cost.get(commodities[k], 0.0),
+            })
+        chip_k = {p["k"] for p in self.pos}
+
+        # fabs: wafer position -> product position, lead time
+        self.fabs = []
+        for f_pos, node in enumerate(layout["fabs"]):
+            fab = nodes[node]["fab"]
+            kin, kout = commodities.index(fab["input"]), commodities.index(fab["product"])
+            if (node, kin) in self.pos_index and (node, kout) in self.pos_index:
+                g = fab.get("grid")
+                gpos = None
+                if g is not None:
+                    gnode = next((i for i, n in enumerate(nodes) if n.get("id") == g), None)
+                    gpos = list(layout["grids"]).index(gnode) if gnode in list(layout["grids"]) else None
+                self.fabs.append({"pos": f_pos, "in": self.pos_index[(node, kin)], "out": self.pos_index[(node, kout)],
+                                  "tau": int(fab["tau"]), "cap0": float(fab["cap0"]), "node": node, "grid_pos": gpos,
+                                  "e": float(fab.get("e", 0.0))})
+        # osats: (raw position, finished position) pairs sharing one throughput
+        self.osats = []
+        for o_pos, node in enumerate(layout["osats"]):
+            osat = nodes[node]["osat"]
+            pairs = []
+            for raw, pk in osat["packages"].items():
+                kr, kp = commodities.index(raw), commodities.index(pk)
+                if (node, kr) in self.pos_index and (node, kp) in self.pos_index:
+                    pairs.append((self.pos_index[(node, kr)], self.pos_index[(node, kp)]))
+            if pairs:
+                self.osats.append({"pos": o_pos, "pairs": pairs, "tau": int(osat["tau"]), "thr0": float(osat["thr"])})
+        # sinks: demand row -> position, pi
+        self.sinks = []
+        sk = static["sinks"]
+        pi_of = {(n, k): float(p) for n, k, p in zip(sk["node"], sk["k"], sk["pi"])}
+        dbar = {}
+        for node, n in enumerate(nodes):
+            for kname, d in (n.get("sink", {}) or {}).get("demand", {}).items():
+                dbar[(node, commodities.index(kname))] = float(d.get("dbar", 0.0))
+        for row, (node, k) in enumerate(layout["demands"]):
+            if (node, k) in self.pos_index:
+                self.sinks.append({"row": row, "pos": self.pos_index[(node, k)], "pi": pi_of.get((node, k), 0.0),
+                                   "dbar": dbar.get((node, k), 0.0)})
+        # materials: supply refills the stock up to storage
+        self.materials = [i for i, p in enumerate(self.pos) if p["kind"] == "material"]
+
+        # LP slots: chip slots from one followed position to another (a lane counts as one pipe)
+        self.lp_slots = []
+        for s, (edge, k, lane) in enumerate(zip(slots["edge"], slots["k"], slots["lane"])):
+            if k not in chip_k:
+                continue
+            route = list(lanes["edges"][lane]) if lane is not None else [edge]
+            src = self.pos_index.get((self.edges["tail"][route[0]], k))
+            dst = self.pos_index.get((self.edges["head"][route[-1]], k))
+            if src is None or dst is None:
+                continue
+            chk = list(lanes["chokepoints"][lane]) if lane is not None else []
+            self.lp_slots.append({"slot": s, "k": k, "route": route, "src": src, "dst": dst, "first": route[0],
+                                  "chk": chk})
+        self.slots = [ls["slot"] for ls in self.lp_slots]
+        self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
+        self.lane_rest = {}
+        for li, route in enumerate(lanes["edges"]):
+            for j, e in enumerate(route):
+                self.lane_rest[(li, e)] = list(route[j + 1:])
+        self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])}
+        self.lot_keys = layout.get("lot_keys")
+
+    def _recent_starts(self, obs, f, week):
+        """Mean lots started per week over the last ``recent_weeks`` weeks, read from the fab's work in process."""
+        tot, n = 0.0, 0
+        for node, qty, out, seen in zip(obs["wip.node"], obs["wip.qty"], obs["wip.out_week"], obs["wip.qty.observed"]):
+            if seen and int(node) == f["node"]:
+                started = int(out) - f["tau"]
+                if week - self.recent_weeks <= started < week:
+                    tot += float(qty)
+        return tot / max(1, min(self.recent_weeks, week - 1))
+
+    # ------------------------------------------------------------------------------------------------------------
+    def plan(self, obs):
+        """{slot: quantity} for this week's chip slots, or None when the LP does not solve."""
+        week = int(obs["week"][0])
+        H = max(1, min(self.H, self.T - week + 1))
+        P, S = len(self.pos), len(self.lp_slots)
+        tau, u, c = obs["graph_now.tau"], obs["graph_now.u"], obs["graph_now.c"]
+        mask = obs["action_mask"]
+        open_now = np.where(obs["graph_now.open.observed"] == 1, obs["graph_now.open"], 1.0)
+        stock, stock_seen = obs["stock.qty"], obs["stock.qty.observed"]
+
+        I0 = np.zeros(P)
+        for i, p in enumerate(self.pos):
+            idx = self.stock_index[(p["node"], p["k"])]
+            if stock_seen[idx]:
+                I0[i] = max(float(stock[idx]), 0.0)
+
+        # fixed arrivals: shipments under way, cargo queued at open chokepoints, fab and OSAT work in process
+        fixed = np.zeros((P, H))
+
+        def arrive(pos, off, qty):
+            if pos is not None and 0 <= off < H:
+                fixed[pos, off] += qty
+
+        for edge, k, lane, qty, arr, seen, lane_seen in zip(
+            obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.lane"], obs["pipeline.qty"],
+            obs["pipeline.arrival_week"], obs["pipeline.qty.observed"], obs["pipeline.lane.observed"],
+        ):
+            if not seen:
+                continue
+            rest = self.lane_rest.get((int(lane), int(edge)), []) if lane_seen else []
+            dest = self.edges["head"][rest[-1]] if rest else self.edges["head"][int(edge)]
+            arrive(self.pos_index.get((dest, int(k))), int(arr) - week + sum(int(tau[e]) for e in rest), float(qty))
+        if self.lot_keys is not None and "queue_lots.qty" in obs:
+            queued = obs["queue_lots.qty"].sum(axis=1)
+            for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
+                if queued[row] <= 0:
+                    continue
+                pos = self.chk_pos.get(chk_node)
+                if pos is not None and open_now[pos] < 0.5:
+                    continue
+                lane = self.lane_index.get(lane_key) if isinstance(lane_key, str) else lane_key
+                route = [next_edge] + (self.lane_rest.get((lane, next_edge), []) if lane is not None else [])
+                dest = self.edges["head"][route[-1]]
+                arrive(self.pos_index.get((dest, int(k))), sum(int(tau[e]) for e in route), float(queued[row]))
+        for node, k, qty, out, seen in zip(obs["wip.node"], obs["wip.k"], obs["wip.qty"], obs["wip.out_week"],
+                                           obs["wip.qty.observed"]):
+            if seen:
+                arrive(self.pos_index.get((int(node), int(k))), int(out) - week, float(qty))
+
+        # demand per sink and window week
+        fc, fc_seen = obs["demand_forecast.qty"], obs["demand_forecast.qty.observed"]
+        dem = np.zeros((len(self.sinks), H))
+        for j, sk in enumerate(self.sinks):
+            row, last = sk["row"], sk["dbar"]
+            for t in range(H):
+                if t < fc.shape[1] and fc_seen[row, t]:
+                    last = float(fc[row, t])
+                dem[j, t] = last
+        cap_eff = np.where(obs["graph_now.fab.cap_eff.observed"] == 1, obs["graph_now.fab.cap_eff"], np.nan)
+        thr_eff = np.where(obs["graph_now.osat.thr_eff.observed"] == 1, obs["graph_now.osat.thr_eff"], np.nan)
+        supply = obs["graph_now.supply.avail"]
+        supply_seen = obs["graph_now.supply.avail.observed"]
+
+        # ---- variables: x[s,t] | I[p,t] | d[p,t] disposal | start[f,t] fab | pk[o,pair,t] osat | sv[j,t] served |
+        #      lift[m,t] material supply
+        nF = len(self.fabs)
+        pairs = [(oi, pi) for oi, o in enumerate(self.osats) for pi in range(len(o["pairs"]))]
+        nO, nJ, nM = len(pairs), len(self.sinks), len(self.materials)
+        off_I = S * H
+        off_d = off_I + P * H
+        off_f = off_d + P * H
+        off_o = off_f + nF * H
+        off_s = off_o + nO * H
+        off_m = off_s + nJ * H
+        n = off_m + nM * H
+        cost = np.zeros(n)
+        hi = np.full(n, np.inf)
+
+        banned = {}
+        if "pending_prohibitions.edge" in obs:
+            for e, k, w, seen in zip(obs["pending_prohibitions.edge"], obs["pending_prohibitions.k"],
+                                     obs["pending_prohibitions.effective_week"],
+                                     obs["pending_prohibitions.edge.observed"]):
+                if seen:
+                    banned[(int(e), int(k))] = min(banned.get((int(e), int(k)), 10**9), int(w))
+        lead = np.zeros(S, dtype=int)
+        for j, ls in enumerate(self.lp_slots):
+            route = ls["route"]
+            lead[j] = max(1, sum(int(tau[e]) for e in route))
+            freight = sum(float(c[e]) for e in route)
+            cap = min(float(u[e]) for e in route) if mask[ls["slot"]] else 0.0
+            cap *= max(min((float(open_now[self.chk_pos[q]]) for q in ls["chk"] if q in self.chk_pos), default=1.0),
+                       0.0)
+            stop = min((banned.get((e, ls["k"]), 10**9) - week for e in route), default=10**9)
+            for t in range(H):
+                cost[j * H + t] = freight
+                hi[j * H + t] = cap if t < stop else 0.0
+        for i, p in enumerate(self.pos):
+            for t in range(H):
+                cost[off_I + i * H + t] = p["hold"]
+                hi[off_I + i * H + t] = p["cap"]
+                cost[off_d + i * H + t] = p["disp"]
+        shed = obs["last_week.shed.qty"] if "last_week.shed.qty" in obs else None
+        shed_seen = obs["last_week.shed.qty.observed"] if "last_week.shed.qty.observed" in obs else None
+        fab_cap = {}
+        if self.fab_cap_mode == "energy2":
+            # spare power per grid (deliverable output minus base load) is split among its fabs in proportion to their
+            # draw e * p_hat / R (simulator step 7, base_first): cap_f <= R_f * E_f / e_f
+            Gb, yb = obs["graph_now.grid.G_bar"], obs["graph_now.grid.y_bar"]
+            Rf = np.where(obs["graph_now.fab.R.observed"] == 1, obs["graph_now.fab.R"], 1.0)
+            by_grid = {}
+            for fi, f in enumerate(self.fabs):
+                if f["grid_pos"] is not None and f["e"] > 0:
+                    by_grid.setdefault(f["grid_pos"], []).append(fi)
+            for g, fis in by_grid.items():
+                spare = max(float(Gb[g]) - float(yb[g]), 0.0)
+                draws = {}
+                for fi in fis:
+                    f = self.fabs[fi]
+                    c = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+                    r = max(float(Rf[f["pos"]]), 1e-9)
+                    draws[fi] = (f["e"] * c / r, c, r)
+                tot = sum(d for d, _c, _r in draws.values())
+                for fi, (d, c, r) in draws.items():
+                    E = spare * d / tot if tot > 0 else 0.0
+                    fab_cap[fi] = min(c, r * E / self.fabs[fi]["e"])
+        if self.fab_cap_mode == "observed" and week > 1:
+            # a fab holding wafers but starting few is limited by power (or damage), not wafers: plan it at what it
+            # started recently; a fab without wafers is wafer-limited, so it keeps its nameplate capacity
+            for fi, f in enumerate(self.fabs):
+                c = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+                recent = self._recent_starts(obs, f, week)
+                if I0[f["in"]] > 2.0 * recent + 1.0:
+                    fab_cap[fi] = min(c, self.growth * recent + 0.02 * c)
+        for fi, f in enumerate(self.fabs):
+            cap = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+            if fi in fab_cap:
+                cap = fab_cap[fi]
+            g = f["grid_pos"]
+            if (self.fab_cap_mode in ("energy", "energy2") and g is not None and shed is not None and shed_seen[g]
+                    and float(shed[g]) > 1e-6):
+                # the grid cut homes last week, so (homes first) this fab got little power: plan with what it
+                # actually started over the last weeks (from its work in process), not with its nameplate capacity
+                cap = min(cap, self.growth * self._recent_starts(obs, f, week) + 1.0)
+            hi[off_f + fi * H: off_f + fi * H + H] = max(cap, 0.0)
+        for j, sk in enumerate(self.sinks):
+            cost[off_s + j * H: off_s + j * H + H] = -sk["pi"]
+            hi[off_s + j * H: off_s + j * H + H] = dem[j]
+        for mi, m in enumerate(self.materials):
+            p = self.pos[m]
+            sidx = self.supply_index.get((p["node"], p["k"]))
+            per_week = float(supply[sidx]) if sidx is not None and supply_seen[sidx] else 0.0
+            hi[off_m + mi * H: off_m + mi * H + H] = max(per_week, 0.0)
+
+        # ---- balance rows: I[t] - I[t-1] + d[t] + out[t] + start/pack/serve[t] - in[t] - lift[t] = fixed[t] (+I0)
+        rows, cols, vals = [], [], []
+        rhs = np.zeros(P * H)
+        for i in range(P):
+            for t in range(H):
+                r = i * H + t
+                rows += [r, r]
+                cols += [off_I + i * H + t, off_d + i * H + t]
+                vals += [1.0, 1.0]
+                if t > 0:
+                    rows.append(r); cols.append(off_I + i * H + t - 1); vals.append(-1.0)
+                rhs[r] = fixed[i, t] + (I0[i] if t == 0 else 0.0)
+        for j, ls in enumerate(self.lp_slots):
+            for t in range(H):
+                rows.append(ls["src"] * H + t); cols.append(j * H + t); vals.append(1.0)
+                ta = t + lead[j]
+                if ta < H:
+                    rows.append(ls["dst"] * H + ta); cols.append(j * H + t); vals.append(-1.0)
+        for fi, f in enumerate(self.fabs):
+            for t in range(H):
+                rows.append(f["in"] * H + t); cols.append(off_f + fi * H + t); vals.append(1.0)
+                if t + f["tau"] < H:
+                    rows.append(f["out"] * H + t + f["tau"]); cols.append(off_f + fi * H + t); vals.append(-1.0)
+        for q, (oi, pi) in enumerate(pairs):
+            o = self.osats[oi]
+            raw, fin = o["pairs"][pi]
+            for t in range(H):
+                rows.append(raw * H + t); cols.append(off_o + q * H + t); vals.append(1.0)
+                if t + o["tau"] < H:
+                    rows.append(fin * H + t + o["tau"]); cols.append(off_o + q * H + t); vals.append(-1.0)
+        for j, sk in enumerate(self.sinks):
+            for t in range(H):
+                rows.append(sk["pos"] * H + t); cols.append(off_s + j * H + t); vals.append(1.0)
+        for mi, m in enumerate(self.materials):
+            for t in range(H):
+                rows.append(m * H + t); cols.append(off_m + mi * H + t); vals.append(-1.0)
+        A_eq = coo_matrix((vals, (rows, cols)), shape=(P * H, n)).tocsr()
+
+        # ---- inequalities
+        rows, cols, vals, b = [], [], [], []
+        r = 0
+        # a shipment leaves only last week's stock: sum_out[t] <= I[t-1] (I[-1] = I0)
+        by_src = {}
+        for j, ls in enumerate(self.lp_slots):
+            by_src.setdefault(ls["src"], []).append(j)
+        for i, js in by_src.items():
+            for t in range(H):
+                for j in js:
+                    rows.append(r); cols.append(j * H + t); vals.append(1.0)
+                if t > 0:
+                    rows.append(r); cols.append(off_I + i * H + t - 1); vals.append(-1.0)
+                    b.append(0.0)
+                else:
+                    b.append(I0[i])
+                r += 1
+        # each first edge's capacity is shared by its slots
+        by_edge = {}
+        for j, ls in enumerate(self.lp_slots):
+            by_edge.setdefault(ls["first"], []).append(j)
+        for e, js in by_edge.items():
+            if len(js) < 2:
+                continue
+            for t in range(H):
+                for j in js:
+                    rows.append(r); cols.append(j * H + t); vals.append(1.0)
+                b.append(float(u[e]))
+                r += 1
+        # an OSAT's throughput is shared by its packaged commodities
+        for oi, o in enumerate(self.osats):
+            qs = [q for q, (oo, _p) in enumerate(pairs) if oo == oi]
+            thr = thr_eff[o["pos"]] if np.isfinite(thr_eff[o["pos"]]) else o["thr0"]
+            for t in range(H):
+                for q in qs:
+                    rows.append(r); cols.append(off_o + q * H + t); vals.append(1.0)
+                b.append(max(thr, 0.0))
+                r += 1
+        A_ub = coo_matrix((vals, (rows, cols)), shape=(r, n)).tocsr()
+
+        res = linprog(cost, A_ub=A_ub, b_ub=np.array(b), A_eq=A_eq, b_eq=rhs,
+                      bounds=np.column_stack([np.zeros(n), hi]), method="highs")
+        if res.status != 0:
+            return None
+        x = res.x
+        # planned wafer starts per fab and their shadow value (USD per extra start), for the pulse planner
+        try:
+            marg = res.upper.marginals
+            self.fab_plan = {f["pos"]: (np.maximum(x[off_f + fi * H: off_f + fi * H + H], 0.0),
+                                        np.maximum(-marg[off_f + fi * H: off_f + fi * H + H], 0.0))
+                             for fi, f in enumerate(self.fabs)}
+        except Exception:
+            self.fab_plan = None
+        return {ls["slot"]: max(float(x[j * H]), 0.0) for j, ls in enumerate(self.lp_slots)}

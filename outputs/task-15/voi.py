@@ -80,7 +80,17 @@ def run(n, cls, spec, agent_root):
     traj = rollout(inst, shim, om, regime, pseed, marks=mk, fallback=fallback)
     unload_agent()
     res = solve_oracle(build_lp(inst, mk), method=ORACLE_METHOD)
+    J_naive = None
+    if cls == "base":  # naive on the real omega: the RSS scale (computed here, the dev cache is not usable)
+        from shockbench_flow.hosting.tasks import task_generator
+        from shockbench_flow.policies.naive_fq import anchor_policy
+        from shockbench_flow_agent.local_eval import ANCHOR_REGIME
+
+        _, params = task_generator(task)
+        J_naive = rollout(inst, anchor_policy(inst, params, reps), omega, ANCHOR_REGIME, pseed, marks=marks,
+                          fallback=fallback).J_cents / 100
     return dict(episode=n, cls=cls, dropped=ndrop, J_agent=traj.J_cents / 100, J_oracle=res.J_cents / 100,
+                J_naive=J_naive, omega_hash=omega.hash,
                 fallback_weeks=sum(took_fallback(r) for r in traj.records), seconds=round(time.perf_counter() - t0))
 
 
@@ -90,10 +100,16 @@ def main(task, entropy, eps_spec, agent, n_jobs, classes=None):
     from variants import pick_episodes
 
     entropy, n_jobs = int(entropy), int(n_jobs)
-    eps = pick_episodes(task, entropy, eps_spec, n_jobs)
-    es = EpisodeSet.build(task, eps, entropy=entropy, n_jobs=n_jobs)
-    ns = [int(n) for n in es.episodes]
-    refs = {int(r["episode"]): r for r in es.references}
+    if eps_spec.startswith("devpick"):
+        eps = pick_episodes(task, entropy, eps_spec, n_jobs)
+        es = EpisodeSet.build(task, eps, entropy=entropy, n_jobs=n_jobs)
+        ns, spec = [int(n) for n in es.episodes], es._spec
+        refs = {int(r["episode"]): r for r in es.references}
+    else:  # an explicit list: no EpisodeSet (its reference cache / dev split), naive computed in the base runs
+        from shockbench_flow.evaluation.cache import default_cache_dir
+
+        ns, spec, refs = [int(x) for x in eps_spec.split(",")], (task, entropy, "standard", 1000,
+                                                                  str(default_cache_dir())), {}
     classes = classes.split(",") if classes else list(CLASSES)
     if "base" not in classes:
         classes = ["base"] + classes
@@ -103,11 +119,14 @@ def main(task, entropy, eps_spec, agent, n_jobs, classes=None):
     done = {(r["episode"], r["cls"]) for r in old}
     jobs = [(n, c) for c in classes for n in ns if (n, c) not in done]
     print(f"episodes {ns}, classes {classes}, {len(jobs)} runs", flush=True)
-    rows = old + Parallel(n_jobs=n_jobs, verbose=10)(delayed(run)(n, c, es._spec, root) for n, c in jobs)
+    rows = old + Parallel(n_jobs=n_jobs, verbose=10)(delayed(run)(n, c, spec, root) for n, c in jobs)
+    naive = {r["episode"]: r["J_naive"] for r in rows if r.get("J_naive") is not None}
     for r in rows:
-        r["stratum"] = refs[r["episode"]]["stratum"]
-        r["J_naive_ref"] = refs[r["episode"]]["J_naive_cents"] / 100
-        r["J_oracle_ref"] = refs[r["episode"]]["J_oracle_cents"] / 100
+        ref = refs.get(r["episode"])
+        r["stratum"] = ref["stratum"] if ref else None
+        r["J_naive_ref"] = ref["J_naive_cents"] / 100 if ref else naive.get(r["episode"])
+        oracle = [x["J_oracle"] for x in rows if x["episode"] == r["episode"] and x["cls"] == "base"]
+        r["J_oracle_ref"] = ref["J_oracle_cents"] / 100 if ref else (oracle[0] if oracle else None)
     out.write_text(json.dumps(rows, indent=1))
     report(rows)
 

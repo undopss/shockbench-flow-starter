@@ -1,0 +1,4 @@
+{"mpc_chip": {"agent": "agents/mpc_chip"},
+ "pulse_twkrjpsea_15": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": ["grid_tw","grid_kr","grid_jp","grid_sea"]}},
+ "pulse_jpsea_15": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 1.5, "pulse_grids": ["grid_jp","grid_sea"]}},
+ "pulse_jpsea_25": {"agent": "agents/mpc_chip", "params": {"pulse_weeks": 2.5, "pulse_grids": ["grid_jp","grid_sea"]}}}

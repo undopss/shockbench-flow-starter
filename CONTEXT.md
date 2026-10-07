@@ -75,6 +75,14 @@ Other results:
 - Mentor advice (2026-10-06): prefer optimisation + parameter calibration over hand rules, separate tune and held-out
   seed sets, small NN components only. Andrii and Botan are open to time-series models for disruptions, not for demand.
 
+## !!! Final pick (organisers' announcement, 2026-10-07)
+
+- The board automatically shows each team's best submission by Small RSS (ours: scen v3, 0.699). It can't be changed
+  before **2026-10-10 00:00 Kyiv**.
+- **2026-10-10 00:00–23:59 Kyiv**: pick the final entry (My Submissions → green icon). If nothing is done, the best-on-Small
+  goes to the final. That would be scen v3, which is WORSE on Full. **Switching on Oct 10 is mandatory.**
+- The entry at 23:59 on Oct 10 is re-run on 400 hidden Full episodes. The candidate must be uploaded before then.
+
 ## Results 2026-10-07 (cloud sessions + upload)
 
 - **scen v3 on Codabench (Small): RSS 0.699**. Strata: L1 0.651, L2 0.737, L3 0.761, L4 0.789. Fallbacks 448, of which

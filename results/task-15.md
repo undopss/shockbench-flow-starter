@@ -143,5 +143,5 @@ something in the environment?). That's why step 2 uses root-0 episodes 0-19 (har
 devpick:2,2,1,1. Worth checking which generator id the scoring server uses.
 
 ## Files
-- `outputs/task-15/signals.py`, `signals_full_120.log`, `signals_full_120_summary.json`
+- `outputs/task-15/signals.py`, `signals_full_120.log`, `signals_full_120_summary.json` (the raw 7 MB `signals_full_120.json` is not committed; `signals.py full 120 4` rebuilds it in ~6 min)
 - `outputs/task-15/voi.py`, `voi_full_0_0_..._19.json`, `voi_20.log`; first 6-episode pass `voi_full_0_0_1_2_3_4_5.json`, `voi_1.log`

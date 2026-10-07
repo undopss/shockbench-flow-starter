@@ -40,6 +40,7 @@ PARAMS = {
     "fab_boost": 0.0,
     "pulse_weeks": 0.0,
     "pulse_grids": [],  # grid ids the pulse applies to (empty = all)  # experiment: hold terminal->grid fuel until the terminal has this many weeks of burn (0 = off)  # extra VOLL weight on grids feeding fabs (experiment)
+    "fab_cap_mode": "full",  # "energy": plan power-starved fabs (grid shed last week) at their recent starts
     "chip_H": 24,  # chip planning horizon in weeks (wafer -> fab -> OSAT -> sink takes up to ~20)
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)
 }
@@ -58,7 +59,7 @@ class Agent:
             pass
         self.chips = None
         try:
-            self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]))
+            self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"])
         except Exception:
             pass
 

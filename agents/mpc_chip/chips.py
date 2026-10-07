@@ -27,7 +27,8 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 
 
 class ChipPlanner:
-    def __init__(self, config, H=24):
+    def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25):
+        self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -62,8 +63,14 @@ class ChipPlanner:
             fab = nodes[node]["fab"]
             kin, kout = commodities.index(fab["input"]), commodities.index(fab["product"])
             if (node, kin) in self.pos_index and (node, kout) in self.pos_index:
+                g = fab.get("grid")
+                gpos = None
+                if g is not None:
+                    gnode = next((i for i, n in enumerate(nodes) if n.get("id") == g), None)
+                    gpos = list(layout["grids"]).index(gnode) if gnode in list(layout["grids"]) else None
                 self.fabs.append({"pos": f_pos, "in": self.pos_index[(node, kin)], "out": self.pos_index[(node, kout)],
-                                  "tau": int(fab["tau"]), "cap0": float(fab["cap0"])})
+                                  "tau": int(fab["tau"]), "cap0": float(fab["cap0"]), "node": node, "grid_pos": gpos,
+                                  "e": float(fab.get("e", 0.0))})
         # osats: (raw position, finished position) pairs sharing one throughput
         self.osats = []
         for o_pos, node in enumerate(layout["osats"]):
@@ -111,6 +118,16 @@ class ChipPlanner:
                 self.lane_rest[(li, e)] = list(route[j + 1:])
         self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])}
         self.lot_keys = layout.get("lot_keys")
+
+    def _recent_starts(self, obs, f, week):
+        """Mean lots started per week over the last ``recent_weeks`` weeks, read from the fab's work in process."""
+        tot, n = 0.0, 0
+        for node, qty, out, seen in zip(obs["wip.node"], obs["wip.qty"], obs["wip.out_week"], obs["wip.qty.observed"]):
+            if seen and int(node) == f["node"]:
+                started = int(out) - f["tau"]
+                if week - self.recent_weeks <= started < week:
+                    tot += float(qty)
+        return tot / max(1, min(self.recent_weeks, week - 1))
 
     # ------------------------------------------------------------------------------------------------------------
     def plan(self, obs):
@@ -215,8 +232,48 @@ class ChipPlanner:
                 cost[off_I + i * H + t] = p["hold"]
                 hi[off_I + i * H + t] = p["cap"]
                 cost[off_d + i * H + t] = p["disp"]
+        shed = obs["last_week.shed.qty"] if "last_week.shed.qty" in obs else None
+        shed_seen = obs["last_week.shed.qty.observed"] if "last_week.shed.qty.observed" in obs else None
+        fab_cap = {}
+        if self.fab_cap_mode == "energy2":
+            # spare power per grid (deliverable output minus base load) is split among its fabs in proportion to their
+            # draw e * p_hat / R (simulator step 7, base_first): cap_f <= R_f * E_f / e_f
+            Gb, yb = obs["graph_now.grid.G_bar"], obs["graph_now.grid.y_bar"]
+            Rf = np.where(obs["graph_now.fab.R.observed"] == 1, obs["graph_now.fab.R"], 1.0)
+            by_grid = {}
+            for fi, f in enumerate(self.fabs):
+                if f["grid_pos"] is not None and f["e"] > 0:
+                    by_grid.setdefault(f["grid_pos"], []).append(fi)
+            for g, fis in by_grid.items():
+                spare = max(float(Gb[g]) - float(yb[g]), 0.0)
+                draws = {}
+                for fi in fis:
+                    f = self.fabs[fi]
+                    c = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+                    r = max(float(Rf[f["pos"]]), 1e-9)
+                    draws[fi] = (f["e"] * c / r, c, r)
+                tot = sum(d for d, _c, _r in draws.values())
+                for fi, (d, c, r) in draws.items():
+                    E = spare * d / tot if tot > 0 else 0.0
+                    fab_cap[fi] = min(c, r * E / self.fabs[fi]["e"])
+        if self.fab_cap_mode == "observed" and week > 1:
+            # a fab holding wafers but starting few is limited by power (or damage), not wafers: plan it at what it
+            # started recently; a fab without wafers is wafer-limited, so it keeps its nameplate capacity
+            for fi, f in enumerate(self.fabs):
+                c = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+                recent = self._recent_starts(obs, f, week)
+                if I0[f["in"]] > 2.0 * recent + 1.0:
+                    fab_cap[fi] = min(c, self.growth * recent + 0.02 * c)
         for fi, f in enumerate(self.fabs):
             cap = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
+            if fi in fab_cap:
+                cap = fab_cap[fi]
+            g = f["grid_pos"]
+            if (self.fab_cap_mode in ("energy", "energy2") and g is not None and shed is not None and shed_seen[g]
+                    and float(shed[g]) > 1e-6):
+                # the grid cut homes last week, so (homes first) this fab got little power: plan with what it
+                # actually started over the last weeks (from its work in process), not with its nameplate capacity
+                cap = min(cap, self.growth * self._recent_starts(obs, f, week) + 1.0)
             hi[off_f + fi * H: off_f + fi * H + H] = max(cap, 0.0)
         for j, sk in enumerate(self.sinks):
             cost[off_s + j * H: off_s + j * H + H] = -sk["pi"]

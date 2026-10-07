@@ -118,6 +118,14 @@ def loop():
     XDIR.mkdir(parents=True, exist_ok=True)
     while True:
         queue, running, done = load("queue.json", []), load("running.json", []), load("done.json", [])
+        inbox = XDIR / "inbox"  # `add` drops files here; only this loop writes queue.json (no lost updates)
+        inbox.mkdir(exist_ok=True)
+        for f in sorted(inbox.glob("*.json")):
+            try:
+                queue.extend(json.loads(f.read_text()))
+            except (OSError, ValueError):
+                continue
+            f.unlink()
         still = []
         for x in running:
             st = job_status(x["id"])
@@ -126,6 +134,12 @@ def loop():
             else:
                 still.append(x)
         running = still
+        kills = XDIR / "kill"
+        if kills.is_dir():
+            drop = {f.name for f in kills.iterdir()}
+            queue = [x for x in queue if x["id"] not in drop]
+            for f in kills.iterdir():
+                f.unlink()
         while len(running) < MAX_RUNNING and queue:
             running.append(start(queue.pop(0)))
         save("queue.json", queue)
@@ -137,27 +151,33 @@ def loop():
 
 def add(path):
     XDIR.mkdir(parents=True, exist_ok=True)
-    queue = load("queue.json", [])
-    new = json.loads(Path(path).read_text())
-    ids = {x["id"] for x in queue + load("running.json", []) + load("done.json", [])}
-    for x in new:
+    (XDIR / "inbox").mkdir(exist_ok=True)
+    ids = {x["id"] for x in load("queue.json", []) + load("running.json", []) + load("done.json", [])}
+    new = []
+    for x in json.loads(Path(path).read_text()):
         if x["id"] in ids:
             print(f"skip {x['id']}: id already used")
             continue
         x.setdefault("state", "queued")
         x["queued"] = time.time()
-        queue.append(x)
+        new.append(x)
         print(f"queued {x['id']}")
-    save("queue.json", queue)
+    tmp = XDIR / "inbox" / f".{time.time_ns()}.tmp"
+    tmp.write_text(json.dumps(new))
+    os.replace(tmp, XDIR / "inbox" / f"{time.time_ns()}.json")
 
 
 def kill(xid):
-    queue = [x for x in load("queue.json", []) if x["id"] != xid]
-    save("queue.json", queue)
+    """Stop a running experiment (the loop then records it as failed); drop a queued one via the inbox."""
     for x in load("running.json", []):
         if x["id"] == xid and alive(x["pid"]):
             os.killpg(os.getpgid(x["pid"]), signal.SIGTERM)
             print(f"stopped {xid}")
+            return
+    (XDIR / "inbox").mkdir(exist_ok=True)
+    (XDIR / "kill").mkdir(exist_ok=True)
+    (XDIR / "kill" / xid).touch()
+    print(f"marked {xid} to drop from the queue")
 
 
 if __name__ == "__main__":

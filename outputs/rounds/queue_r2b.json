@@ -1,0 +1,29 @@
+[
+ {
+  "id": "pulse_twkr_15_full20",
+  "title": "Fuel pulses TW+KR (decision run)",
+  "idea": "Passed small20 (+0.037) and full6 (+0.079). Final check on the 20 official Full dev episodes.",
+  "stage": "full20",
+  "task": "full",
+  "entropy": 0,
+  "episodes": "dev",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_twkr_15",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 3
+ }
+]

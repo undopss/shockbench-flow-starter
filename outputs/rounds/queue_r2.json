@@ -1,0 +1,106 @@
+[
+ {
+  "id": "pulse_twkr_15_full6",
+  "title": "Fuel pulses at Taiwan + Korea (Full check)",
+  "idea": "Winner of Small round 1 (+0.037). Now on 6 Full dev episodes, all four harm levels.",
+  "stage": "full6",
+  "task": "full",
+  "entropy": 0,
+  "episodes": "devpick:2,2,1,1",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_twkr_15",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 3
+ },
+ {
+  "id": "pulse_tw_15_small20",
+  "title": "Fuel pulses at Taiwan only",
+  "idea": "Pulse shape: only TW (leading + mature fabs). Tells if KR adds or costs.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 223948299,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_tw_15",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": [
+     "grid_tw"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ },
+ {
+  "id": "pulse_twkr_25_small20",
+  "title": "Fuel pulses TW+KR, bigger batches (2.5 weeks)",
+  "idea": "Pulse shape: fewer, bigger full weeks.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 223948299,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_twkr_25",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 2.5,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr"
+    ]
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ },
+ {
+  "id": "pulse_all_15_small20",
+  "title": "Fuel pulses at every grid",
+  "idea": "Pulse shape: all grids incl. EU (2 Small eps earlier said worse; check on 20).",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 223948299,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_all_15",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": []
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ }
+]

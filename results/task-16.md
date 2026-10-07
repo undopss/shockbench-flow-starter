@@ -1,4 +1,4 @@
-Status: running full 0 devpick:2,2,1,1 (all 5 variants)
+Status: running full 0 dev (20 episodes: mpc_buffer, pp20, pp50)
 
 ## Small random 20 (entropy 148337082)
 ```

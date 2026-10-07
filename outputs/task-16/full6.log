@@ -1,0 +1,18 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants16_full_0_1007-2129: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_buffer
+references ready in 1691 s (6 episodes)
+  played mpc_buffer in 43 s: RSS 0.7902
+  played pp20 in 48 s: RSS 0.8219
+  played pp50 in 43 s: RSS 0.8226
+  played pp20_cnjpsea in 41 s: RSS 0.8035
+  played pp50_cnjpsea in 42 s: RSS 0.8034
+
+full, entropy 0, 6 episodes; diff = variant - mpc_buffer, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_buffer                0.7902  0.786  0.813  0.771  0.768  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp20                      0.8219  0.828  0.836  0.795  0.786  +0.0316  [+0.0132, +0.0526]   100.0%      0  <-- better
+pp50                      0.8226  0.828  0.838  0.795  0.790  +0.0324  [+0.0143, +0.0528]   100.0%      0  <-- better
+pp20_cnjpsea              0.8035  0.804  0.823  0.780  0.768  +0.0132  [+0.0041, +0.0235]   100.0%      0  <-- better
+pp50_cnjpsea              0.8034  0.804  0.823  0.780  0.767  +0.0132  [+0.0040, +0.0235]   100.0%      0  <-- better
+
+results: outputs/variants/variants16_full_0_1007-2129/results.json

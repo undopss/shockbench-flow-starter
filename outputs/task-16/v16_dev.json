@@ -1,0 +1,19 @@
+{
+ "mpc_buffer": {
+  "agent": "agents/mpc_buffer"
+ },
+ "pp20": {
+  "agent": "agents/mpc_bufplan",
+  "params": {
+   "pulse_plan": true,
+   "pp_value": 20
+  }
+ },
+ "pp50": {
+  "agent": "agents/mpc_bufplan",
+  "params": {
+   "pulse_plan": true,
+   "pp_value": 50
+  }
+ }
+}

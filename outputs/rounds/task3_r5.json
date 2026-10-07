@@ -1,0 +1,3 @@
+{"mpc_chip": {"agent": "agents/mpc_chip"},
+ "pp_enum_pi20": {"agent": "agents/mpc_pulse", "params": {"pp_value": 2.0}},
+ "pp_enum_pi50": {"agent": "agents/mpc_pulse", "params": {"pp_value": 5.0}}}

@@ -1,0 +1,14 @@
+round task3_r5_small_1039472713_1007-1546: task small, entropy 1039472713, episodes 20, baseline mpc_chip
+references ready in 1 s (20 episodes)
+  baseline mpc_chip: reused small_1039472713_20_888596c3bad8c820.json
+  played mpc_chip in 0 s: RSS 0.6486
+  played pp_enum_pi20 in 31 s: RSS 0.6932
+  played pp_enum_pi50 in 29 s: RSS 0.6943
+
+small, entropy 1039472713, 20 episodes; diff = variant - mpc_chip, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_chip                  0.6486  0.630  0.647  0.688  0.790  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp_enum_pi20              0.6932  0.694  0.668  0.717  0.777  +0.0446  [+0.0184, +0.0742]   100.0%      0  <-- better
+pp_enum_pi50              0.6943  0.695  0.670  0.719  0.777  +0.0457  [+0.0202, +0.0750]   100.0%      0  <-- better
+
+results: outputs/variants/task3_r5_small_1039472713_1007-1546/results.json

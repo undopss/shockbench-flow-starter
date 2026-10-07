@@ -1,0 +1,19 @@
+round task3_r1_full_0_1007-1445: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_chip
+references ready in 1722 s (6 episodes)
+  played mpc_chip in 39 s: RSS 0.5802
+  played pulse_all_15 in 40 s: RSS 0.5263
+  played pp_enum_lpval in 41 s: RSS 0.5810
+  played pp_enum_pi05 in 42 s: RSS 0.6205
+  played pp_enum_pi10 in 43 s: RSS 0.6230
+  played pp_milp_pi05 in 146 s: RSS 0.5953
+
+full, entropy 0, 6 episodes; diff = variant - mpc_chip, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_chip                  0.5802  0.517  0.692  0.568  0.522  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_all_15              0.5263  0.502  0.541  0.550  0.567  -0.0539  [-0.0773, -0.0273]     0.0%      0  <-- worse
+pp_enum_lpval             0.5810  0.517  0.692  0.572  0.522  +0.0008  [+0.0007, +0.0009]   100.0%      0  <-- better
+pp_enum_pi05              0.6205  0.546  0.735  0.618  0.613  +0.0404  [+0.0105, +0.0742]   100.0%      0  <-- better
+pp_enum_pi10              0.6230  0.556  0.713  0.620  0.706  +0.0429  [+0.0132, +0.0764]   100.0%      0  <-- better
+pp_milp_pi05              0.5953  0.538  0.694  0.578  0.585  +0.0151  [-0.0013, +0.0338]    94.8%      0
+
+results: outputs/variants/task3_r1_full_0_1007-1445/results.json

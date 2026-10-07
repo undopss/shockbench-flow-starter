@@ -41,7 +41,7 @@ PARAMS = {
     "pulse_weeks": 1.5,
     "pulse_grids": ["grid_tw", "grid_kr"],  # grid ids the pulse applies to (empty = all)  # experiment: hold terminal->grid fuel until the terminal has this many weeks of burn (0 = off)  # extra VOLL weight on grids feeding fabs (experiment)
     "fab_cap_mode": "observed",  # "energy": plan power-starved fabs (grid shed last week) at their recent starts
-    "wafer_buffer": 0.0,  # weeks of nameplate fab starts kept on hand as wafers (soft; 0 = off)
+    "wafer_buffer": 3.0,  # weeks of nameplate fab starts kept on hand as wafers (soft; 0 = off)
     "buffer_cost": 1000.0,  # USD per wafer and week below that buffer
     "chip_H": 24,  # chip planning horizon in weeks (wafer -> fab -> OSAT -> sink takes up to ~20)
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)

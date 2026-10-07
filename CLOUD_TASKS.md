@@ -25,9 +25,17 @@ Runner: `uv run python outputs/variants.py <small|full> <entropy|random> <episod
 - An idea is promising if its Full stage interval is above 0 (the runner prints `<-- better`).
 - **The bar:** we only care about ideas that can plausibly add **+0.05 RSS on Full**. Don't spend time on small tuning.
 
+## Show up on the team's page right away
+
+The team watches a page that reads your branch from GitHub every 2 minutes. So **before any long work**:
+create the branch `task-N-<short-name>` from `cloud`, write `results/task-N.md` with a first line
+`Status: started` and one sentence on your plan, commit and push. Then **push an update at every milestone**
+(the status line + what you learned so far; e.g. `Status: building references`, `Status: running Full test`,
+`Status: done`). Keep it short.
+
 ## How to hand back
 
-1. Work on a new branch `task-N-<short-name>` from `cloud`.
+1. Work on the branch `task-N-<short-name>` from `cloud` (created at the start, see above).
 2. New agent code goes in a **new folder** `agents/<short_name>/` (start from a copy of `agents/mpc_chip`), or as a new
    option in `agents/mpc_chip` that is **off by default** (so the baseline doesn't change).
 3. Write `results/task-N.md` (in Ukrainian or English, short): what you built, the runner tables exactly as printed

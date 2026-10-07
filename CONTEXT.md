@@ -43,7 +43,8 @@ humans: `STATUS_UA.md`. Write anything meant for the team in Ukrainian, short an
 | `agents/heuristic` | organisers' heuristic | board 0.4283; Full dev 0.370 |
 | `agents/mine` | Andrii's demand-aware dispatch | board 0.4487; Full dev 0.352 |
 | `agents/mpc` | energy LP (H=12) + `fallback.py` (= `mine`) for every other slot | board 0.5397; **Full dev 0.5124** |
-| **`agents/mpc_pulse`** | `mpc_chip` with the winners on by default: fuel pulse at TW/KR (`pulse_weeks` 1.5) + `fab_cap_mode: observed` | **Full dev 0.6751 (+0.131 vs mpc_chip, CI +0.097…+0.162). Codabench 967249: 0.6896, 0 fallbacks. Current final candidate.** |
+| **`agents/mpc_buffer`** | `mpc_pulse` + `wafer_buffer` 3 (keep 3 weeks of nameplate wafers at every fab, task 12) | **Full dev 0.7361 (+0.061 vs mpc_pulse, CI +0.049…+0.075; home and cloud agree), fresh Full +0.051. Codabench 967583: 0.7223, 0 fallbacks. CURRENT FINAL CANDIDATE.** |
+| **`agents/mpc_pulse`** | `mpc_chip` with the winners on by default: fuel pulse at TW/KR (`pulse_weeks` 1.5) + `fab_cap_mode: observed` | **Full dev 0.6751 (+0.131 vs mpc_chip, CI +0.097…+0.162). Codabench 967249: 0.6896, 0 fallbacks. Previous candidate.** |
 | `agents/mpc_chip` | `mpc` + **chip LP** (`chips.py`) for every wafer/chip slot, + energy LP fix (the grid must burn) | **Full dev 0.5443 (+0.032 vs mpc, CI +0.009…+0.056)**. Current best on Full. Not uploaded yet |
 | `agents/scen` | port of the organisers' `mpc_scen` | board **0.699** (Small) but **Full dev 0.42 < mpc** → not a final candidate |
 | `agents/scen_final` (branch `scen-final`) | scen without debug weeks | Small +0.006 vs scen; same Full problem |

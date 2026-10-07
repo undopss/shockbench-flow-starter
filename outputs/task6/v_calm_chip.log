@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v_calm_chip_full_0_1007-1856: task full, entropy 0, episodes dev, baseline mpc_chip
+references ready in 2 s (20 episodes)
+  played mpc_chip in 145 s: RSS 0.5443
+  played chip_rel_bonus_300 in 149 s: RSS 0.6237
+
+full, entropy 0, 20 episodes; diff = variant - mpc_chip, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_chip                  0.5443  0.458  0.724  0.516  0.492  +0.0000  [+0.0000, +0.0000]     nan%      0
+chip_rel_bonus_300        0.6237  0.569  0.772  0.571  0.528  +0.0794  [+0.0645, +0.0960]   100.0%      0  <-- better
+
+results: outputs/variants/v_calm_chip_full_0_1007-1856/results.json

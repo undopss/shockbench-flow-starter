@@ -1,0 +1,2 @@
+{"mpc_chip": {"agent": "agents/mpc_chip"},
+ "chip_rel_bonus_300": {"agent": "agents/mpc_calm", "params": {"reliable_bonus": 300.0, "pulse_weeks": 0.0, "pulse_grids": [], "fab_cap_mode": "full"}}}

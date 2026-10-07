@@ -1,0 +1,3 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "fab_boost_2": {"agent": "agents/mpc_pulse", "params": {"fab_boost": 2.0}},
+ "fab_boost_5": {"agent": "agents/mpc_pulse", "params": {"fab_boost": 5.0}}}

@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v_calm_small_small_130424204_1007-1902: task small, entropy 130424204, episodes 20, baseline mpc_pulse
+references ready in 1477 s (20 episodes)
+  played mpc_pulse in 31 s: RSS 0.5915
+  played mpc_calm in 31 s: RSS 0.5939
+
+small, entropy 130424204, 20 episodes; diff = variant - mpc_pulse, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.5915  0.597  0.576  0.566      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+mpc_calm                  0.5939  0.600  0.576  0.576      -  +0.0024  [-0.0005, +0.0057]    90.5%      0
+
+results: outputs/variants/v_calm_small_small_130424204_1007-1902/results.json

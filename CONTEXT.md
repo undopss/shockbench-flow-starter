@@ -1,6 +1,6 @@
 # Team context for Claude (cloud sessions and Andrii's AI)
 
-Maintained from Botan's local Claude memory. Last update: **2026-10-07 19:00**. Full test log: `EXPERIMENTS.md`. Read `AGENTS.md` and `docs/GUIDE.md`
+Maintained from Botan's local Claude memory. Last update: **2026-10-07 23:59**. Full test log: `EXPERIMENTS.md`. Read `AGENTS.md` and `docs/GUIDE.md`
 too. Team: Botan (Codabench `botan_krutan`) and Andrii (GitHub `undopss`, owns this fork). Short Ukrainian status for
 humans: `STATUS_UA.md`. Write anything meant for the team in Ukrainian, short and clear.
 
@@ -64,9 +64,11 @@ experiment, off by default), `fab_boost` (no effect, ignore).
   **fabs get ~1–2% of the power they need and run at ~2% of capacity**, while wafers pile up.
 - Gap analysis on Full dev (`outputs/cost_breakdown.py`): mpc's gap to the clairvoyant plan is **95% chip shortage**,
   power shed only 0.2%.
-- **The clairvoyant oracle LP relaxes the `base_first` rule** (`shockbench_flow/oracle/lp.py` docstring: the priority
-  rule is replaced by its feasible set), so it powers fabs while shedding homes (its fabs run at ~40%, same shed as
-  ours). **A large part of the chip gap is unreachable for any real agent.**
+- The clairvoyant oracle LP relaxes the `base_first` rule (its docstring says so), **but that relaxation is worth ~0**:
+  `outputs/reachable_bound.py` (oracle LP + a binary per grid-week forcing homes-first, Full 6, per grid) costs
+  ≤0.003 T/episode at JP/CN/KR and keeps 72-100% of the oracle's fab power. **The chip gap is reachable with good
+  planning/foresight** (timing of fuel + wafers on hand). An earlier version of this file said it was unreachable — that
+  was an untested inference and is wrong.
 - What a real agent can still win:
   1. **Timing:** the rule is checked per week. Batching fuel so a grid is fully supplied in some weeks lets fabs run in
      those weeks ("fuel pulse"; crude test on Small: chip shortage −8%, total −1.4%).

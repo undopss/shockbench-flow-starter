@@ -1,0 +1,18 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v1_small_521238367_1007-1439: task small, entropy 521238367, episodes 20, baseline mpc_chip
+references ready in 808 s (20 episodes)
+  played mpc_chip in 23 s: RSS 0.6187
+  played tk_lp in 19 s: RSS 0.5702
+  played tk_lp_eta in 19 s: RSS 0.5721
+  played eta in 18 s: RSS 0.6197
+  played tk_lp_eta_fab in 19 s: RSS 0.5724
+
+small, entropy 521238367, 20 episodes; diff = variant - mpc_chip, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_chip                  0.6187  0.601  0.674  0.669      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+tk_lp                     0.5702  0.566  0.608  0.492      -  -0.0485  [-0.0858, -0.0196]     0.0%      0  <-- worse
+tk_lp_eta                 0.5721  0.567  0.612  0.492      -  -0.0466  [-0.0838, -0.0171]     0.1%      0  <-- worse
+eta                       0.6197  0.602  0.675  0.669      -  +0.0010  [-0.0000, +0.0023]    94.3%      0
+tk_lp_eta_fab             0.5724  0.567  0.614  0.492      -  -0.0464  [-0.0837, -0.0168]     0.1%      0  <-- worse
+
+results: outputs/variants/v1_small_521238367_1007-1439/results.json

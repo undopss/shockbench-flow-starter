@@ -8,20 +8,18 @@ An override slot (c, k, out edge, lane) releases cargo of k queued at c, FIFO wh
 lane: the queue of (c, k) is one pool that can go to any destination the slots reach. Every week a small LP chooses the
 release per slot:
 
-    max  sum_s (release_value + w_s) q_s - overflow_cost * sum z
-    s.t. sum_{s of (c,k)} q_s <= queued content of (c, k)
-         sum_{s on out edge e} q_s <= u_e,  sum_{s at c} q_s <= kappa_tb[c]
-         sum_{s through later edge e'} q_s - z_e' <= u_e' - (cargo already queued for e') / drain_weeks
-         sum_{s through later chokepoint c'} q_s - z_c' <= kappa_tb[c'] - (tanker cargo queued at c') / drain_weeks
-         q, z >= 0
+    max  sum_s (release_value - lead_cost * lead_s) y_s + sum_s (w_s - lead_cost * lead_s) r_s - overflow_cost * sum z
+    s.t. y_s <= own cargo of slot s (lots whose lane and next edge are the slot's: what the default rule sends there)
+         r_s only for a slot whose destination pool (grid, fuel) is short: its stock plus the next ``need_weeks`` of
+             arrivals below its floor (rationing line + safety stock); w_s = 1 + fab_bonus at grids that power fabs
+         sum_{s of (c,k)} (y_s + r_s) <= queued content of (c, k), this week's arrivals included
+         sum_{s on out edge e} (y_s + r_s) <= u_e,  sum_{s at c} (y_s + r_s) <= kappa_tb[c]
+         sum_{s through later edge e'} (y_s + r_s) - z_e' <= u_e' - (cargo already queued for e') / drain_weeks
+         sum_{s through later chokepoint c'} (y_s + r_s) - z_c' <= kappa_tb[c'] - (tanker cargo queued at c') / drain_weeks
 
-release_value > overflow_cost: the plan releases as much as the default rule would (holding cargo back never helps a
-short grid) and only steers which out edges and destinations it goes to.
-
-w_s is the need of the destination pool (grid, fuel): 1 when its stock and pipeline over the next ``need_weeks`` fall
-short of the burn plus the floor, ``spare_weight`` otherwise, times (1 + ``fab_bonus``) at grids that power fabs, minus
-a small cost per week of lead time. Every pair (c, k) with content at an open chokepoint goes to mode 1 (override);
-the others keep the default release.
+release_value > every overflow a slot can collect > w: each lot goes its own way first, as the default rule sends it
+(the energy LP planned those lanes); only cargo its own edge cannot take this week is redirected, and only to a short
+pool. Every pair (c, k) with content at an open chokepoint goes to mode 1 (override); the others keep the default.
 """
 
 import numpy as np
@@ -50,6 +48,10 @@ class TankerPlanner:
                 "rest": rest, "later": later, "pool": agent.feeds.get((dest, k)),
             })
         self.grid_has_fab = agent.grid_has_fab
+        self.edge_head = [int(h) for h in edges["head"]]
+        self.lane_rest = agent.lane_rest
+        self.slot_by_key = {(int(ov["chokepoint"][s]), int(ov["k"][s]), int(ov["out_edge"][s]),
+                             None if ov["lane"][s] is None else int(ov["lane"][s])): s for s in range(self.n_ov)}
         self.pools = agent.pools
 
     def plan(self, obs, need, params):
@@ -61,16 +63,41 @@ class TankerPlanner:
         content = np.zeros(P)
         queued_next = {}  # next edge -> cargo already queued for it (all commodities)
         queued_chk = {}  # chokepoint position -> tanker cargo already queued there
-        for row, (c, k, _lane, e) in enumerate(self.lot_keys):
+        own = np.zeros(self.n_ov)  # cargo whose own lane and next edge are this slot's
+        for row, (c, k, lane, e) in enumerate(self.lot_keys):
             q = float(lots[row])
             if q <= 0:
                 continue
+            s_own = self.slot_by_key.get((int(c), int(k), int(e), None if lane is None else int(lane)))
+            if s_own is not None:
+                own[s_own] += q
             queued_next[int(e)] = queued_next.get(int(e), 0.0) + q
             if (int(c), int(k)) in self.pair_index:
                 queued_chk[self.chk_pos[int(c)]] = queued_chk.get(self.chk_pos[int(c)], 0.0) + q
             p = self.pair_index.get((int(c), int(k)))
             if p is not None:
                 content[p] += q
+        # cargo reaching a chokepoint this week joins its queue before the release (step 1): it counts too, or the
+        # override would hold every arrival for a week
+        week = int(obs["week"][0])
+        for e, k, lane, q, arr, seen, lane_seen in zip(
+            obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.lane"], obs["pipeline.qty"],
+            obs["pipeline.arrival_week"], obs["pipeline.qty.observed"], obs["pipeline.lane.observed"],
+        ):
+            if not seen or int(arr) > week:
+                continue
+            p = self.pair_index.get((self.edge_head[int(e)], int(k)))
+            if p is None:
+                continue
+            content[p] += float(q)
+            rest = self.lane_rest.get((int(lane), int(e))) if lane_seen else None
+            if rest:
+                s_own = self.slot_by_key.get((self.edge_head[int(e)], int(k), int(rest[0]), int(lane)))
+                if s_own is not None:
+                    own[s_own] += float(q)
+                queued_next[rest[0]] = queued_next.get(rest[0], 0.0) + float(q)
+                queued_chk[self.chk_pos[self.edge_head[int(e)]]] = (
+                    queued_chk.get(self.chk_pos[self.edge_head[int(e)]], 0.0) + float(q))
         if content.max(initial=0.0) <= params["min_queue"]:
             return qty, mode, []
         u, tau = obs["graph_now.u"], obs["graph_now.tau"]
@@ -94,15 +121,23 @@ class TankerPlanner:
         if not live:
             return qty, mode, []
 
-        n = len(live)
-        # variables: q_s (n), then one overflow per later-edge / later-chokepoint row (soft downstream rates)
-        cost = []
-        for sl in live:
+        # columns: per live slot its own cargo (lots whose lane and next edge are the slot's: what the default rule
+        # would send there) and, to a pool that is short, cargo redirected from the pair's other lanes; then one
+        # overflow per soft row
+        cols_of = []  # (live index, own?)
+        cost, ub = [], []
+        for j, sl in enumerate(live):
             pool = self.pools[sl["pool"]]
-            w = 1.0 if need[sl["pool"]] else params["spare_weight"]
-            w *= 1.0 + params["fab_bonus"] * self.grid_has_fab.get(pool["grid"], 0.0)
             lead = int(tau[sl["edge"]]) + sum(int(tau[e]) for e in sl["rest"])
-            cost.append(-(params["release_value"] + w - params["lead_cost"] * lead))
+            cols_of.append((j, True))
+            cost.append(-(params["release_value"] - params["lead_cost"] * lead))
+            ub.append(own[sl["slot"]])
+            if need[sl["pool"]]:
+                w = 1.0 + params["fab_bonus"] * self.grid_has_fab.get(pool["grid"], 0.0)
+                cols_of.append((j, False))
+                cost.append(-(w - params["lead_cost"] * lead))
+                ub.append(np.inf)
+        n = len(cost)
         rows, cols, vals, rhs = [], [], [], []
         r = 0
 
@@ -113,11 +148,13 @@ class TankerPlanner:
             if soft:
                 rows.append(r); cols.append(len(cost)); vals.append(-1.0)
                 cost.append(params["overflow_cost"])
+                ub.append(np.inf)
             rhs.append(max(float(b), 0.0))
             r += 1
 
         by_pair, first, later_e, later_c = {}, {}, {}, {}
-        for j, sl in enumerate(live):
+        for j, (li, _own) in enumerate(cols_of):
+            sl = live[li]
             by_pair.setdefault(sl["pair"], []).append(j)
             first.setdefault(("e", sl["edge"]), []).append(j)
             first.setdefault(("c", sl["chk"]), []).append(j)
@@ -135,14 +172,16 @@ class TankerPlanner:
             add(sorted(set(js)), float(kap[q]) - queued_chk.get(q, 0.0) / drain, soft=True)
         cost = np.array(cost)
         A = coo_matrix((vals, (rows, cols)), shape=(r, len(cost))).tocsr()
-        res = linprog(cost, A_ub=A, b_ub=np.array(rhs), bounds=(0, None), method="highs")
+        res = linprog(cost, A_ub=A, b_ub=np.array(rhs), bounds=list(zip([0.0] * len(ub), ub)), method="highs")
         if res.status != 0:
             return np.zeros(self.n_ov), np.zeros(P, dtype=np.int64), []
         releases = []
-        for j, sl in enumerate(live):
-            x = max(float(res.x[j]), 0.0)
-            qty[sl["slot"]] = x
+        for sl in live:
             mode[sl["pair"]] = 1
+        for j, (li, _own) in enumerate(cols_of):
+            sl = live[li]
+            x = max(float(res.x[j]), 0.0)
+            qty[sl["slot"]] += x
             if x > 0:
                 lead = int(tau[sl["edge"]]) + sum(int(tau[e]) for e in sl["rest"])
                 releases.append((sl["pool"], lead, x, sl["pair"]))

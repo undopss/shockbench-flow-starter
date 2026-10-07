@@ -48,7 +48,7 @@ PARAMS = {
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)
     # tanker releases at chokepoints (tankers.py): "off" = the default release; "lp" = override slots chosen by an LP
     "tanker_mode": "off",
-    "tanker": {"min_queue": 1.0, "drain_weeks": 4.0, "need_weeks": 6, "spare_weight": 0.1, "fab_bonus": 0.0,
+    "tanker": {"min_queue": 1.0, "drain_weeks": 4.0, "need_weeks": 2, "spare_weight": 0.1, "fab_bonus": 0.0,
                "lead_cost": 0.002, "release_value": 3.0, "overflow_cost": 0.5},
     "queue_eta": False,  # energy LP: queued tanker cargo arrives after the time its next edge needs to drain the queue
 }
@@ -268,7 +268,7 @@ class Agent:
         if self.tankers is not None and "queue_lots.qty" in obs:
             tp = PARAMS["tanker"]
             L = int(tp["need_weeks"])
-            need = I0 + fixed_in[:, :L].sum(axis=1) < floor + L * burn
+            need = I0 + fixed_in[:, :L].sum(axis=1) < floor
             qty, mode, releases = self.tankers.plan(obs, need, tp)
             self._tanker_action = (qty, mode)
             content = {}

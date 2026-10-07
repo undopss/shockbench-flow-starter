@@ -152,3 +152,33 @@ The pulse (TW/KR, `pulse_weeks` 1.5) adds power shed. Compare `mpc_pulse` with `
 Ceiling = the shed the pulse adds (if a smarter pulse kept the same chips with no extra shed) + the chips a pulse at
 other grids/timings could add (see task 2: JP/SEA added only ~+0.01). If big: build a pulse that only releases when
 the stored fuel covers homes + fabs for the whole pulse week and doesn't starve homes before it.
+
+## Round 3 (2026-10-08 night)
+
+New facts (see CONTEXT.md + results/task-12.md): **`agents/mpc_buffer`** (mpc_pulse + `wafer_buffer` 3 weeks of wafers at
+every fab) is the new best: Full dev 20 0.7363 (+0.061 vs mpc_pulse). A homes-first MILP (`outputs/reachable_bound.py`)
+shows the oracle's extra fab power at JP/CN/KR is reachable with foresight, so the remaining gap is **foresight and
+planning**, not the rules. **Baseline for round 3: `agents/mpc_buffer`.**
+
+### 15. MEASURE (+BUILD): are the early warnings worth something? (Full first)
+The GUIDE says the signals are "where an agent can gain". We only ever tested one: chokepoint `warning.score` vs a
+closure within 8 weeks (AUC 0.51, `outputs/warnings_study.py`). Never tested: **region** units (14 regions) and the
+**dyad** unit (rival pair, e.g. TW–CN conflict → fab/OSAT outages), **`messages.*`** threads (tariff proposals/final
+notices, sanction threats, military threats; some are false alarms), **`pending_prohibitions.*`** (announced sanctions
+with their start week). Read the ground truth from the episode's omega (see how `outputs/warnings_study.py` and the
+package's `disruption/` and `information/` modules do it).
+1. Per signal type on **Full** (gym `ShockBench/Full-v0`, ≥100 episodes): base rate of its event, AUC / precision at a
+   few thresholds, and **lead time** (weeks between the first useful signal and the event).
+2. **Value of information** (the money question): for the event types that predict well, how much does knowing them
+   help? E.g. compare the oracle LP with vs without that event class (or run mpc_buffer with the true event injected
+   into its plan vs without) on Full devpick:2,2,1,1. Ceiling in USD/episode; bar 0.17 T.
+3. Only above the bar: use the signal in `agents/mpc_buffer` (new folder or off-by-default option), funnel vs
+   `agents/mpc_buffer`: `small random 20` → `full 0 devpick:2,2,1,1` → `full 0 dev`.
+
+### 16. RUN/BUILD: planned pulses on top of the wafer buffer
+Task 3's planner (`agents/mpc_pplan`, options `pulse_plan`, `pp_value`, `fab_cap_mode`) was +0.08 vs mpc_chip but −0.012
+vs mpc_pulse on Full dev 20, maybe because its pulses landed on fabs with no wafers (task 12's finding). Port its
+`pplan.py` + options into a copy of `agents/mpc_buffer` (`agents/mpc_bufplan/`, off by default = mpc_buffer exactly),
+then test `pp_value` 20 / 50 (with the buffer on) vs `agents/mpc_buffer`: `small random 20` → `full 0 devpick:2,2,1,1`
+→ `full 0 dev` if better. Also try enabling it for CN/JP/SEA only (task 14: the plain pulse at CN/EU costs −0.15 RSS;
+say why if you can).

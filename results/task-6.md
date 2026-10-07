@@ -1,4 +1,4 @@
-Status: testing fix 1 (fab_boost on Full L1 episodes)
+Status: reliable_bonus +0.015 on L1; trying to widen it, then Full 6
 
 Plan: find where mpc_pulse/mpc_chip lose money in calm (L1) Full episodes and fix one reachable piece.
 
@@ -9,3 +9,7 @@ So far:
   LNG is kept exactly at the rationing line, so every dip sheds homes and stops the fab for weeks.
 - Energy LP prices any fuel shortfall at VOLL (~4M/unit), but at a fab grid the first `headroom` units cost fab power: ~11M USD/unit (mature), 25-38M (leading/memory).
 - OSAT->sink edges (some at 0.25 of u0 permanently) cap leading-edge deliveries at ~300k/wk vs 640k demand; the LP is right about those.
+
+Milestone (Full L1 dev episodes 2,5,7,10,14, baseline mpc_pulse):
+- fab_boost 2 / 5: +0.0003 / +0.0015, intervals hold 0 -> dead end (energy LP sees no shortfall at fab grids; CN/SEA fuel is physically capped, the oracle gets the same fuel and wins only by breaking homes-first).
+- NEW reliable_bonus (agents/mpc_calm, off by default): 300 -> +0.0146 [+0.0076, +0.0231], 1500 -> +0.0140. chip_growth 1.0: +0.0005 (no).

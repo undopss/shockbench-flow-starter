@@ -1,0 +1,4 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "rel_bonus_300": {"agent": "agents/mpc_calm", "params": {"reliable_bonus": 300.0}},
+ "rel_bonus_1500": {"agent": "agents/mpc_calm", "params": {"reliable_bonus": 1500.0}},
+ "chip_growth_1": {"agent": "agents/mpc_calm", "params": {"chip_growth": 1.0}}}

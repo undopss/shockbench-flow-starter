@@ -1,0 +1,29 @@
+{
+ "mpc_buffer": {
+  "agent": "agents/mpc_buffer"
+ },
+ "pp20_cnjpsea": {
+  "agent": "agents/mpc_bufplan",
+  "params": {
+   "pulse_plan": true,
+   "pp_value": 20,
+   "pp_grids": [
+    "grid_cn",
+    "grid_jp",
+    "grid_sea"
+   ]
+  }
+ },
+ "pp50_cnjpsea": {
+  "agent": "agents/mpc_bufplan",
+  "params": {
+   "pulse_plan": true,
+   "pp_value": 50,
+   "pp_grids": [
+    "grid_cn",
+    "grid_jp",
+    "grid_sea"
+   ]
+  }
+ }
+}

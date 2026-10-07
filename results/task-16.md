@@ -1,3 +1,3 @@
-Status: running small random 20 (agents/mpc_bufplan built)
+Status: running small random 20 (all-grid pp20/pp50) — rerun session
 
-Plan: port `agents/mpc_pplan`'s planned pulses (`pplan.py`, `pulse_plan`, `pp_value`) into a copy of `agents/mpc_buffer` (`agents/mpc_bufplan`, off by default), then run small random 20 → full devpick:2,2,1,1 → full dev vs `agents/mpc_buffer`.
+Plan: agents/mpc_bufplan (built by the first session, off by default = mpc_buffer). Small random 20 for all-grid pp20/pp50; CN/JP/SEA-only variants directly on full 0 devpick:2,2,1,1; anything better → full 0 dev.

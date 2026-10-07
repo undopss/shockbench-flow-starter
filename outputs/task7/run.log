@@ -1,0 +1,18 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_task7_full_1583854723_1007-1429: task full, entropy 1583854723, episodes 12, baseline mpc_chip
+references ready in 1380 s (12 episodes)
+  played mpc_chip in 65 s: RSS 0.5320
+  played pulse_twkr_15 in 59 s: RSS 0.6268
+  played pulse_auto in 60 s: RSS 0.5648
+  played pulse_auto_obs in 60 s: RSS 0.5902
+  played fabcap_observed in 60 s: RSS 0.5762
+
+full, entropy 1583854723, 12 episodes; diff = variant - mpc_chip, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_chip                  0.5320  0.548  0.511  0.542      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_twkr_15             0.6268  0.646  0.613  0.625      -  +0.0948  [+0.0516, +0.1357]   100.0%      0  <-- better
+pulse_auto                0.5648  0.629  0.562  0.507      -  +0.0327  [-0.0502, +0.1066]    74.1%      0
+pulse_auto_obs            0.5902  0.659  0.601  0.512      -  +0.0582  [-0.0268, +0.1331]    87.0%      0
+fabcap_observed           0.5762  0.603  0.565  0.564      -  +0.0442  [+0.0296, +0.0587]   100.0%      0  <-- better
+
+results: outputs/variants/variants_task7_full_1583854723_1007-1429/results.json

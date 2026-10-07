@@ -75,6 +75,21 @@ Other results:
 - Mentor advice (2026-10-06): prefer optimisation + parameter calibration over hand rules, separate tune and held-out
   seed sets, small NN components only. Andrii and Botan are open to time-series models for disruptions, not for demand.
 
+## Results 2026-10-07 (cloud sessions + upload)
+
+- **scen v3 on Codabench (Small): RSS 0.699**. Strata: L1 0.651, L2 0.737, L3 0.761, L4 0.789. Fallbacks 448, of which
+  446 are "invalid" (our own deliberate raises) and 2 "over_budget" (real weeks over 2 s on the server). No crashes.
+- **Full, 20 dev eps: scen 0.4196 vs mpc 0.5124, diff −0.093 (90% CI −0.143…−0.037). scen is WORSE on Full.** Why is
+  not known yet. A hypothesis to test, not a fact: the same horizon/stock problem mpc v1 had (nuclear fuel runs down).
+  Full uses only S=2 scenarios.
+- scen planner timing on Full (cloud Xeon 2.1 GHz, guard off): median 1.5–2.1 s/week, max 5–9.4 s, 7–9 of 104 weeks
+  over 4 s. The scoring server's speed vs this machine is not measured.
+- `agents/scen_final` (no debug weeks, safety net kept, week-1 guard fixed) vs scen, Small, 16 eps: 0.7850 vs 0.7792,
+  +0.006 (CI +0.0008…+0.0104). It exists only as a patch (push to this repo was blocked).
+- `SCEN_SLOW_SHARE` does not reach the agent inside `sbf check` (the isolated run passes only PATH/HOME).
+- Reference caches are tiny (Full ≈ 772 KB in total); building them costs ~11 min on Full on the cloud machine.
+- **The final re-scores the board submission on Full**, so the board entry at the deadline must be the best agent ON FULL.
+
 ## Next steps (as of 2026-10-07)
 
 1. Get `scen` v3 on the board (Botan uploads) and decode its Fallbacks.

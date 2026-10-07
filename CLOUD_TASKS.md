@@ -188,3 +188,23 @@ vs mpc_pulse on Full dev 20, maybe because its pulses landed on fabs with no waf
 then test `pp_value` 20 / 50 (with the buffer on) vs `agents/mpc_buffer`: `small random 20` → `full 0 devpick:2,2,1,1`
 → `full 0 dev` if better. Also try enabling it for CN/JP/SEA only (task 14: the plain pulse at CN/EU costs −0.15 RSS;
 say why if you can).
+
+### 16 (rerun). Planned pulses on the buffer — finish it
+The first task-16 session ended its turn while its Small run was in the background, so nothing was tested. The agent is
+already built: `git fetch origin task-16-bufplan && git checkout task-16-bufplan` (`agents/mpc_bufplan`, off by default
+= mpc_buffer). Use `outputs/task-16/variants16.json` (baseline mpc_buffer; pp20, pp50 on all grids; pp20/pp50 at
+CN/JP/SEA only). CN/SEA exist only on Full, so: run the all-grid variants `small random 20` first, and the CN/JP/SEA
+ones directly on `full 0 devpick:2,2,1,1`; anything better on Full 6 → `full 0 dev`. Keep pushing to `task-16-bufplan`.
+**Wait for every run in the foreground** (see "Never end your turn while a test runs").
+
+### 17. MEASURE: where is mpc_buffer's remaining gap on Full? (do this first, report fast)
+`uv run python outputs/cost_breakdown.py full 0 dev agents/mpc_buffer 4` (all 20 Full dev episodes). Then break the
+gap to the clairvoyant plan down further so the team knows where the next +0.1 can come from:
+1. per cost component and per harm level (the script prints this);
+2. chip shortage by product (chip_le / chip_mat) and by sink, and fab lots started per fab vs the oracle's
+   (`outputs/oracle_fabs.py full 0 dev 4` gives the oracle's lots per fab; compare with the agent's `detail.lots_started`);
+3. shed by grid (agent vs oracle);
+4. per episode: which disruption types were active (from omega: closures, sanctions, tariffs, conflicts, fab outages)
+   and how the gap correlates with them (is the gap mostly in episodes with event X?).
+Write the tables to `results/task-17.md` with a short "where the next 0.1 RSS is" section (≈0.33 T USD/episode).
+No building in this task.

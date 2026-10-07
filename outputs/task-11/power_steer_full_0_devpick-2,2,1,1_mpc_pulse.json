@@ -1,0 +1,278 @@
+[
+ {
+  "episode": 2,
+  "J_agent_cents": 506366841155984,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1986797640356.372,
+   "chip_mat": 760681968026.2969
+  },
+  "lost_units": {
+   "chip_le": 39360636.144963995,
+   "chip_mat": 73693078.48070423
+  },
+  "pi_mean": {
+   "chip_le": 50476.76650954162,
+   "chip_mat": 10322.298697637845
+  },
+  "contested_weeks": {
+   "grid_tw": 34,
+   "grid_kr": 2
+  },
+  "value_made_contested": {
+   "grid_tw": 153584089829.48956,
+   "grid_kr": 22858276208.99575
+  },
+  "gain_by_grid": {
+   "grid_tw": 30847245251.011677,
+   "grid_kr": 800269596.9159069
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 30847245251.011677,
+   "grid_kr": 800269596.9159069
+  },
+  "dchips": {
+   "chip_le": 1136011.1361190698,
+   "chip_mat": -2489237.598605218
+  },
+  "dchips_early": {
+   "chip_le": 1136011.1361190698,
+   "chip_mat": -2489237.598605218
+  },
+  "ceiling_uncapped": 31647514847.92758,
+  "ceiling_loose_all_weeks": 168346839229.6984,
+  "ceiling_capped": 31647514847.927593,
+  "ceiling_capped_early": 31647514847.927593,
+  "seconds": 13.6,
+  "stratum": 1
+ },
+ {
+  "episode": 5,
+  "J_agent_cents": 491340953510100,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1895247254418.3533,
+   "chip_mat": 724130930176.6765
+  },
+  "lost_units": {
+   "chip_le": 37561755.77587953,
+   "chip_mat": 70193838.83380835
+  },
+  "pi_mean": {
+   "chip_le": 50456.83342724345,
+   "chip_mat": 10316.160822763039
+  },
+  "contested_weeks": {
+   "grid_tw": 17,
+   "grid_kr": 5
+  },
+  "value_made_contested": {
+   "grid_tw": 121756671007.46744,
+   "grid_kr": 31840344782.988297
+  },
+  "gain_by_grid": {
+   "grid_tw": 12210863310.437298,
+   "grid_kr": 2686612097.0981536
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 12210863310.437298,
+   "grid_kr": 2686612097.0981536
+  },
+  "dchips": {
+   "chip_le": 496760.546688523,
+   "chip_mat": -985588.4300987985
+  },
+  "dchips_early": {
+   "chip_le": 496760.546688523,
+   "chip_mat": -985588.4300987985
+  },
+  "ceiling_uncapped": 14897475407.535452,
+  "ceiling_loose_all_weeks": 131651083997.55956,
+  "ceiling_capped": 14897475407.535448,
+  "ceiling_capped_early": 14897475407.535448,
+  "seconds": 13.0,
+  "stratum": 1
+ },
+ {
+  "episode": 0,
+  "J_agent_cents": 521290268190792,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2031112715309.3213,
+   "chip_mat": 737684836591.456
+  },
+  "lost_units": {
+   "chip_le": 40246902.28920829,
+   "chip_mat": 71362176.90315242
+  },
+  "pi_mean": {
+   "chip_le": 50466.31168565584,
+   "chip_mat": 10337.196377747676
+  },
+  "contested_weeks": {
+   "grid_kr": 4
+  },
+  "value_made_contested": {
+   "grid_kr": 40855254534.8912
+  },
+  "gain_by_grid": {
+   "grid_kr": 3127258555.5001125
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 3127258555.5001125
+  },
+  "dchips": {
+   "chip_le": 61967.2500534447
+  },
+  "dchips_early": {
+   "chip_le": 61967.2500534447
+  },
+  "ceiling_uncapped": 3127258555.5001125,
+  "ceiling_loose_all_weeks": 94041350093.02078,
+  "ceiling_capped": 3127258555.500114,
+  "ceiling_capped_early": 3127258555.500114,
+  "seconds": 13.1,
+  "stratum": 2
+ },
+ {
+  "episode": 1,
+  "J_agent_cents": 773319442586019,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1226715355357.925,
+   "chip_mat": 846564211706.7385
+  },
+  "lost_units": {
+   "chip_le": 24306254.660581697,
+   "chip_mat": 82048282.10013111
+  },
+  "pi_mean": {
+   "chip_le": 50469.12296806189,
+   "chip_mat": 10317.878571468418
+  },
+  "contested_weeks": {
+   "grid_kr": 9,
+   "grid_tw": 3
+  },
+  "value_made_contested": {
+   "grid_kr": 88907065220.39388,
+   "grid_tw": 4656635904.623579
+  },
+  "gain_by_grid": {
+   "grid_kr": 5020008204.69014,
+   "grid_tw": 233017273.89211553
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 5020008204.69014,
+   "grid_tw": 233017273.89211553
+  },
+  "dchips": {
+   "chip_le": 107927.81338065745,
+   "chip_mat": -18801.985820673366
+  },
+  "dchips_early": {
+   "chip_le": 107927.81338065745,
+   "chip_mat": -18801.985820673366
+  },
+  "ceiling_uncapped": 5253025478.582255,
+  "ceiling_loose_all_weeks": 148846893368.80634,
+  "ceiling_capped": 5253025478.582257,
+  "ceiling_capped_early": 5253025478.582257,
+  "seconds": 13.9,
+  "stratum": 2
+ },
+ {
+  "episode": 53,
+  "J_agent_cents": 708581189546260,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2390722277015.188,
+   "chip_mat": 781220329102.6484
+  },
+  "lost_units": {
+   "chip_le": 47382444.35940748,
+   "chip_mat": 75744205.32695504
+  },
+  "pi_mean": {
+   "chip_le": 50455.86628838674,
+   "chip_mat": 10313.928646164515
+  },
+  "contested_weeks": {
+   "grid_kr": 8,
+   "grid_tw": 1
+  },
+  "value_made_contested": {
+   "grid_kr": 68707540902.90528,
+   "grid_tw": 2001507435.4705858
+  },
+  "gain_by_grid": {
+   "grid_kr": 6793560240.505059,
+   "grid_tw": 461311448.6676445
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 6793560240.505059,
+   "grid_tw": 461311448.6676445
+  },
+  "dchips": {
+   "chip_le": 151396.63051803474,
+   "chip_mat": -37228.92313205388
+  },
+  "dchips_early": {
+   "chip_le": 151396.63051803474,
+   "chip_mat": -37228.92313205388
+  },
+  "ceiling_uncapped": 7254871689.172704,
+  "ceiling_loose_all_weeks": 165265583578.88287,
+  "ceiling_capped": 7254871689.172705,
+  "ceiling_capped_early": 7254871689.172705,
+  "seconds": 13.4,
+  "stratum": 3
+ },
+ {
+  "episode": 26,
+  "J_agent_cents": 1100851677986768,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2095625130605.6997,
+   "chip_mat": 898434397530.1377
+  },
+  "lost_units": {
+   "chip_le": 41529327.36890942,
+   "chip_mat": 86981771.14233002
+  },
+  "pi_mean": {
+   "chip_le": 50461.33090454462,
+   "chip_mat": 10328.996360168516
+  },
+  "contested_weeks": {
+   "grid_kr": 13,
+   "grid_tw": 2
+  },
+  "value_made_contested": {
+   "grid_kr": 175426227836.75388,
+   "grid_tw": 7837082033.904756
+  },
+  "gain_by_grid": {
+   "grid_kr": 6497129931.6182,
+   "grid_tw": 752212951.018042
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 6497129931.6182,
+   "grid_tw": 752212951.018042
+  },
+  "dchips": {
+   "chip_le": 156099.86645732925,
+   "chip_mat": -60767.19469499764
+  },
+  "dchips_early": {
+   "chip_le": 156099.86645732925,
+   "chip_mat": -60767.19469499764
+  },
+  "ceiling_uncapped": 7249342882.636242,
+  "ceiling_loose_all_weeks": 77347924952.81425,
+  "ceiling_capped": 7249342882.636235,
+  "ceiling_capped_early": 7249342882.636235,
+  "seconds": 12.0,
+  "stratum": 4
+ }
+]

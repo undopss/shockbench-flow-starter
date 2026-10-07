@@ -1,0 +1,31 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 tasks      | elapsed:   40.6s
+[Parallel(n_jobs=4)]: Done  18 out of  20 | elapsed:  1.1min remaining:    7.3s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:  1.1min finished
+written outputs/task-11/power_steer_full_0_dev_mpc_pulse.json RSS check: {'rss': 0.6752411297338179, 'pooled': True, 'rss_all': 0.6642854493764442, 'rss_by_stratum': {1: 0.6501867431542854, 2: 0.7521382026633144, 3: 0.6352797959609715, 4: 0.6324126718650402}}
+   ep lvl   lost USD   uncapped     capped capped,early  gain by grid (T USD)
+    0   2      2.769     0.0031     0.0031       0.0031  {'grid_kr': 0.0031}
+    1   2      2.073     0.0053     0.0053       0.0053  {'grid_kr': 0.005}
+    2   1      2.747     0.0316     0.0316       0.0316  {'grid_tw': 0.0308}
+    3   2      3.614     0.0000     0.0000       0.0000  {}
+    4   2      1.998     0.0384     0.0384       0.0384  {'grid_kr': 0.0103, 'grid_tw': 0.0281}
+    5   1      2.619     0.0149     0.0149       0.0149  {'grid_tw': 0.0122, 'grid_kr': 0.0027}
+    6   2      1.966     0.0007     0.0007       0.0007  {}
+    7   1      2.436     0.0162     0.0162       0.0162  {'grid_kr': 0.0084, 'grid_tw': 0.0078}
+   10   1      2.557     0.0012     0.0012       0.0012  {'grid_kr': 0.0012}
+   14   1      2.650     0.0117     0.0117       0.0117  {'grid_kr': 0.0113}
+   26   4      2.994     0.0072     0.0072       0.0072  {'grid_kr': 0.0065}
+   41   4      3.437     0.0177     0.0177       0.0177  {'grid_tw': 0.0164, 'grid_kr': 0.0013}
+   44   4      3.029     0.0073     0.0073       0.0073  {'grid_kr': 0.0073}
+   53   3      3.172     0.0073     0.0073       0.0073  {'grid_kr': 0.0068}
+   57   3      3.509     0.0097     0.0097       0.0097  {'grid_kr': 0.0097}
+   61   3      3.026     0.0011     0.0011       0.0011  {}
+   69   3      2.604     0.0067     0.0067       0.0067  {'grid_kr': 0.0052, 'grid_tw': 0.0014}
+   76   3      3.214     0.0049     0.0049       0.0049  {'grid_kr': 0.0047}
+   80   4      3.204     0.0132     0.0132       0.0132  {'grid_kr': 0.0129}
+  102   4      3.168     0.0227     0.0227       0.0227  {'grid_kr': 0.0223}
+ceiling_loose_all_weeks plain mean 0.1245 T, harm-weighted 0.1274 T, per level L1 0.1216, L2 0.1353, L3 0.1392, L4 0.1019
+ceiling_uncapped       plain mean 0.0110 T, harm-weighted 0.0120 T, per level L1 0.0151, L2 0.0095, L3 0.0059, L4 0.0136
+ceiling_capped         plain mean 0.0110 T, harm-weighted 0.0120 T, per level L1 0.0151, L2 0.0095, L3 0.0059, L4 0.0136
+ceiling_capped_early   plain mean 0.0110 T, harm-weighted 0.0120 T, per level L1 0.0151, L2 0.0095, L3 0.0059, L4 0.0136

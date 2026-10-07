@@ -58,6 +58,7 @@ def episode(n, spec, agent_root):
     dchips_e = defaultdict(float)  # per packaged product, early weeks only
     contested = defaultdict(int)
     used_val = defaultdict(float)
+    loose = 0.0  # looser bound: re-split sum E in every grid-week with power to fabs, power-limited or not
     for r in R:
         t, ti = r.week, r.week - 1
         alpha, Rt = marks.alpha_bar[ti], marks.R[ti]
@@ -84,6 +85,14 @@ def episode(n, spec, agent_root):
                 phat = min(alpha[fi] * Rt[fi] * fabs[fi].cap0, r.stock[s_in] + p + r.disposal[s_in])
                 if phat > 1e-6 and p < phat * (1 - 1e-7):
                     limited = True
+            if L > 0:
+                pk0 = [raw2pk[fabs[fi].product] for fi in mem]
+                v0 = np.array([pi_mean.get(pk0[j], 0.0) * Rt[fi] / fabs[fi].e for j, fi in enumerate(mem)])
+                Eb0, rem0 = np.zeros(len(mem)), L
+                for j in np.argsort(-v0):
+                    Eb0[j] = min(rem0, ehat[j])
+                    rem0 -= Eb0[j]
+                loose += float(v0 @ Eb0 - v0 @ E)
             if not limited or L <= 0:
                 continue
             contested[N[g].id] += 1
@@ -128,6 +137,7 @@ def episode(n, spec, agent_root):
         "dchips": {C[k].id: v for k, v in dchips.items()},
         "dchips_early": {C[k].id: v for k, v in dchips_e.items()},
         "ceiling_uncapped": sum(gain.values()),
+        "ceiling_loose_all_weeks": loose,
         "ceiling_capped": capped(dchips),
         "ceiling_capped_early": capped(dchips_e),
         "seconds": round(time.perf_counter() - t0, 1),
@@ -156,7 +166,7 @@ def main(task, entropy, neps, agent, n_jobs):
         print(f"{r['episode']:5d} {r['stratum']:3d} {sum(r['lost_usd'].values()) / 1e12:10.3f} {r['ceiling_uncapped'] / 1e12:10.4f} "
               f"{r['ceiling_capped'] / 1e12:10.4f} {r['ceiling_capped_early'] / 1e12:12.4f}  {g}")
     w = {1: .5, 2: .3, 3: .15, 4: .05}
-    for key in ("ceiling_uncapped", "ceiling_capped", "ceiling_capped_early"):
+    for key in ("ceiling_loose_all_weeks", "ceiling_uncapped", "ceiling_capped", "ceiling_capped_early"):
         lv = {s: np.mean([r[key] for r in rows if r["stratum"] == s]) for s in sorted({r["stratum"] for r in rows})}
         wm = sum(w[s] * v for s, v in lv.items()) / sum(w[s] for s in lv)
         print(f"{key:22s} plain mean {np.mean([r[key] for r in rows]) / 1e12:.4f} T, harm-weighted {wm / 1e12:.4f} T, per level "

@@ -1,0 +1,15 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   12.5s remaining:   12.5s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:   25.4s finished
+written outputs/task-11/power_steer_full_0_devpick-2,2,1,1_mpc_pulse.json RSS check: {'rss': 0.7132132427710741, 'pooled': True, 'rss_all': 0.7104566263065007, 'rss_by_stratum': {1: 0.7250143869967227, 2: 0.7527935361456293, 3: 0.6252539833535259, 4: 0.7093238696319016}}
+   ep lvl   lost USD   uncapped     capped capped,early  gain by grid (T USD)
+    2   1      2.747     0.0316     0.0316       0.0316  {'grid_tw': 0.0308}
+    5   1      2.619     0.0149     0.0149       0.0149  {'grid_tw': 0.0122, 'grid_kr': 0.0027}
+    0   2      2.769     0.0031     0.0031       0.0031  {'grid_kr': 0.0031}
+    1   2      2.073     0.0053     0.0053       0.0053  {'grid_kr': 0.005}
+   53   3      3.172     0.0073     0.0073       0.0073  {'grid_kr': 0.0068}
+   26   4      2.994     0.0072     0.0072       0.0072  {'grid_kr': 0.0065}
+ceiling_uncapped       plain mean 0.0116 T, harm-weighted 0.0143 T, per level L1 0.0233, L2 0.0042, L3 0.0073, L4 0.0072
+ceiling_capped         plain mean 0.0116 T, harm-weighted 0.0143 T, per level L1 0.0233, L2 0.0042, L3 0.0073, L4 0.0072
+ceiling_capped_early   plain mean 0.0116 T, harm-weighted 0.0143 T, per level L1 0.0233, L2 0.0042, L3 0.0073, L4 0.0072

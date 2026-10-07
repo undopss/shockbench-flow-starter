@@ -1,0 +1,894 @@
+[
+ {
+  "episode": 0,
+  "J_agent_cents": 521290268190792,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2031112715309.3213,
+   "chip_mat": 737684836591.456
+  },
+  "lost_units": {
+   "chip_le": 40246902.28920829,
+   "chip_mat": 71362176.90315242
+  },
+  "pi_mean": {
+   "chip_le": 50466.31168565584,
+   "chip_mat": 10337.196377747676
+  },
+  "contested_weeks": {
+   "grid_kr": 4
+  },
+  "value_made_contested": {
+   "grid_kr": 40855254534.8912
+  },
+  "gain_by_grid": {
+   "grid_kr": 3127258555.5001125
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 3127258555.5001125
+  },
+  "dchips": {
+   "chip_le": 61967.2500534447
+  },
+  "dchips_early": {
+   "chip_le": 61967.2500534447
+  },
+  "ceiling_uncapped": 3127258555.5001125,
+  "ceiling_loose_all_weeks": 94041350093.02078,
+  "ceiling_capped": 3127258555.500114,
+  "ceiling_capped_early": 3127258555.500114,
+  "seconds": 13.3,
+  "stratum": 2
+ },
+ {
+  "episode": 1,
+  "J_agent_cents": 773319442586019,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1226715355357.925,
+   "chip_mat": 846564211706.7385
+  },
+  "lost_units": {
+   "chip_le": 24306254.660581697,
+   "chip_mat": 82048282.10013111
+  },
+  "pi_mean": {
+   "chip_le": 50469.12296806189,
+   "chip_mat": 10317.878571468418
+  },
+  "contested_weeks": {
+   "grid_kr": 9,
+   "grid_tw": 3
+  },
+  "value_made_contested": {
+   "grid_kr": 88907065220.39388,
+   "grid_tw": 4656635904.623579
+  },
+  "gain_by_grid": {
+   "grid_kr": 5020008204.69014,
+   "grid_tw": 233017273.89211553
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 5020008204.69014,
+   "grid_tw": 233017273.89211553
+  },
+  "dchips": {
+   "chip_le": 107927.81338065745,
+   "chip_mat": -18801.985820673366
+  },
+  "dchips_early": {
+   "chip_le": 107927.81338065745,
+   "chip_mat": -18801.985820673366
+  },
+  "ceiling_uncapped": 5253025478.582255,
+  "ceiling_loose_all_weeks": 148846893368.80634,
+  "ceiling_capped": 5253025478.582257,
+  "ceiling_capped_early": 5253025478.582257,
+  "seconds": 14.2,
+  "stratum": 2
+ },
+ {
+  "episode": 2,
+  "J_agent_cents": 506366841155984,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1986797640356.372,
+   "chip_mat": 760681968026.2969
+  },
+  "lost_units": {
+   "chip_le": 39360636.144963995,
+   "chip_mat": 73693078.48070423
+  },
+  "pi_mean": {
+   "chip_le": 50476.76650954162,
+   "chip_mat": 10322.298697637845
+  },
+  "contested_weeks": {
+   "grid_tw": 34,
+   "grid_kr": 2
+  },
+  "value_made_contested": {
+   "grid_tw": 153584089829.48956,
+   "grid_kr": 22858276208.99575
+  },
+  "gain_by_grid": {
+   "grid_tw": 30847245251.011677,
+   "grid_kr": 800269596.9159069
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 30847245251.011677,
+   "grid_kr": 800269596.9159069
+  },
+  "dchips": {
+   "chip_le": 1136011.1361190698,
+   "chip_mat": -2489237.598605218
+  },
+  "dchips_early": {
+   "chip_le": 1136011.1361190698,
+   "chip_mat": -2489237.598605218
+  },
+  "ceiling_uncapped": 31647514847.92758,
+  "ceiling_loose_all_weeks": 168346839229.6984,
+  "ceiling_capped": 31647514847.927593,
+  "ceiling_capped_early": 31647514847.927593,
+  "seconds": 13.7,
+  "stratum": 1
+ },
+ {
+  "episode": 3,
+  "J_agent_cents": 612619440799289,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2801636275793.2183,
+   "chip_mat": 811977100093.7896
+  },
+  "lost_units": {
+   "chip_le": 55514992.56584624,
+   "chip_mat": 78697200.54988208
+  },
+  "pi_mean": {
+   "chip_le": 50466.300116499195,
+   "chip_mat": 10317.73804430463
+  },
+  "contested_weeks": {},
+  "value_made_contested": {},
+  "gain_by_grid": {},
+  "gain_by_grid_early": {},
+  "dchips": {},
+  "dchips_early": {},
+  "ceiling_uncapped": 0,
+  "ceiling_loose_all_weeks": 151681861630.72928,
+  "ceiling_capped": 0.0,
+  "ceiling_capped_early": 0.0,
+  "seconds": 14.1,
+  "stratum": 2
+ },
+ {
+  "episode": 4,
+  "J_agent_cents": 915807729861532,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1223918928203.4648,
+   "chip_mat": 773733115279.2834
+  },
+  "lost_units": {
+   "chip_le": 24254450.67452092,
+   "chip_mat": 74939742.2398936
+  },
+  "pi_mean": {
+   "chip_le": 50461.6222658541,
+   "chip_mat": 10324.73681057569
+  },
+  "contested_weeks": {
+   "grid_kr": 20,
+   "grid_tw": 29
+  },
+  "value_made_contested": {
+   "grid_kr": 124069287317.36919,
+   "grid_tw": 89794345105.17435
+  },
+  "gain_by_grid": {
+   "grid_kr": 10252531127.013264,
+   "grid_tw": 28126123051.713867
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 10252531127.013264,
+   "grid_tw": 28126123051.713867
+  },
+  "dchips": {
+   "chip_le": 1225282.7373396535,
+   "chip_mat": -2271350.922742854
+  },
+  "dchips_early": {
+   "chip_le": 1225282.7373396535,
+   "chip_mat": -2271350.922742854
+  },
+  "ceiling_uncapped": 38378654178.72713,
+  "ceiling_loose_all_weeks": 160708080466.89636,
+  "ceiling_capped": 38378654178.72712,
+  "ceiling_capped_early": 38378654178.72712,
+  "seconds": 12.9,
+  "stratum": 2
+ },
+ {
+  "episode": 5,
+  "J_agent_cents": 491340953510100,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1895247254418.3533,
+   "chip_mat": 724130930176.6765
+  },
+  "lost_units": {
+   "chip_le": 37561755.77587953,
+   "chip_mat": 70193838.83380835
+  },
+  "pi_mean": {
+   "chip_le": 50456.83342724345,
+   "chip_mat": 10316.160822763039
+  },
+  "contested_weeks": {
+   "grid_tw": 17,
+   "grid_kr": 5
+  },
+  "value_made_contested": {
+   "grid_tw": 121756671007.46744,
+   "grid_kr": 31840344782.988297
+  },
+  "gain_by_grid": {
+   "grid_tw": 12210863310.437298,
+   "grid_kr": 2686612097.0981536
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 12210863310.437298,
+   "grid_kr": 2686612097.0981536
+  },
+  "dchips": {
+   "chip_le": 496760.546688523,
+   "chip_mat": -985588.4300987985
+  },
+  "dchips_early": {
+   "chip_le": 496760.546688523,
+   "chip_mat": -985588.4300987985
+  },
+  "ceiling_uncapped": 14897475407.535452,
+  "ceiling_loose_all_weeks": 131651083997.55956,
+  "ceiling_capped": 14897475407.535448,
+  "ceiling_capped_early": 14897475407.535448,
+  "seconds": 12.8,
+  "stratum": 1
+ },
+ {
+  "episode": 6,
+  "J_agent_cents": 778712596687224,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1156696532794.8179,
+   "chip_mat": 809487616393.0276
+  },
+  "lost_units": {
+   "chip_le": 22931145.24433866,
+   "chip_mat": 78422601.12136525
+  },
+  "pi_mean": {
+   "chip_le": 50442.16154360577,
+   "chip_mat": 10322.121490720268
+  },
+  "contested_weeks": {
+   "grid_kr": 2
+  },
+  "value_made_contested": {
+   "grid_kr": 11582742685.205122
+  },
+  "gain_by_grid": {
+   "grid_kr": 685758608.7971799
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 685758608.7971799
+  },
+  "dchips": {
+   "chip_le": 13594.948904090106
+  },
+  "dchips_early": {
+   "chip_le": 13594.948904090106
+  },
+  "ceiling_uncapped": 685758608.7971799,
+  "ceiling_loose_all_weeks": 121436350471.99275,
+  "ceiling_capped": 685758608.7971793,
+  "ceiling_capped_early": 685758608.7971793,
+  "seconds": 13.9,
+  "stratum": 2
+ },
+ {
+  "episode": 7,
+  "J_agent_cents": 503585626726899,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1686406652703.7136,
+   "chip_mat": 749443858072.6597
+  },
+  "lost_units": {
+   "chip_le": 33428300.850062087,
+   "chip_mat": 72665257.08953078
+  },
+  "pi_mean": {
+   "chip_le": 50448.47060183681,
+   "chip_mat": 10313.647650751042
+  },
+  "contested_weeks": {
+   "grid_kr": 21,
+   "grid_tw": 8
+  },
+  "value_made_contested": {
+   "grid_kr": 275600451132.5892,
+   "grid_tw": 39582551468.616516
+  },
+  "gain_by_grid": {
+   "grid_kr": 8393199819.69236,
+   "grid_tw": 7801057327.772621
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 8393199819.69236,
+   "grid_tw": 7801057327.772621
+  },
+  "dchips": {
+   "chip_le": 449745.1083109212,
+   "chip_mat": -629718.5968928755
+  },
+  "dchips_early": {
+   "chip_le": 449745.1083109212,
+   "chip_mat": -629718.5968928755
+  },
+  "ceiling_uncapped": 16194257147.464981,
+  "ceiling_loose_all_weeks": 38984334331.6977,
+  "ceiling_capped": 16194257147.46497,
+  "ceiling_capped_early": 16194257147.46497,
+  "seconds": 15.2,
+  "stratum": 1
+ },
+ {
+  "episode": 10,
+  "J_agent_cents": 804641550871012,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1912371876231.9036,
+   "chip_mat": 644980739769.1715
+  },
+  "lost_units": {
+   "chip_le": 37894879.06540975,
+   "chip_mat": 62438445.43422412
+  },
+  "pi_mean": {
+   "chip_le": 50465.17955449835,
+   "chip_mat": 10329.865442416043
+  },
+  "contested_weeks": {
+   "grid_kr": 2
+  },
+  "value_made_contested": {
+   "grid_kr": 17688508168.48912
+  },
+  "gain_by_grid": {
+   "grid_kr": 1190251161.432045
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 1190251161.432045
+  },
+  "dchips": {
+   "chip_le": 23585.592520218193
+  },
+  "dchips_early": {
+   "chip_le": 23585.592520218193
+  },
+  "ceiling_uncapped": 1190251161.432045,
+  "ceiling_loose_all_weeks": 122667457138.64828,
+  "ceiling_capped": 1190251161.4320443,
+  "ceiling_capped_early": 1190251161.4320443,
+  "seconds": 13.5,
+  "stratum": 1
+ },
+ {
+  "episode": 14,
+  "J_agent_cents": 370866898529529,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2044569850024.5823,
+   "chip_mat": 605870388614.6398
+  },
+  "lost_units": {
+   "chip_le": 40512450.50465516,
+   "chip_mat": 58646739.625299074
+  },
+  "pi_mean": {
+   "chip_le": 50467.69140241583,
+   "chip_mat": 10330.845201039598
+  },
+  "contested_weeks": {
+   "grid_kr": 26,
+   "grid_tw": 1
+  },
+  "value_made_contested": {
+   "grid_kr": 214999865273.82388,
+   "grid_tw": 678788878.4455136
+  },
+  "gain_by_grid": {
+   "grid_kr": 11340550575.17314,
+   "grid_tw": 317364739.45993197
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 11340550575.17314,
+   "grid_tw": 317364739.45993197
+  },
+  "dchips": {
+   "chip_le": 236245.35393867892,
+   "chip_mat": -25636.073142594956
+  },
+  "dchips_early": {
+   "chip_le": 236245.35393867892,
+   "chip_mat": -25636.073142594956
+  },
+  "ceiling_uncapped": 11657915314.633072,
+  "ceiling_loose_all_weeks": 146505780513.01776,
+  "ceiling_capped": 11657915314.633074,
+  "ceiling_capped_early": 11657915314.633074,
+  "seconds": 13.0,
+  "stratum": 1
+ },
+ {
+  "episode": 26,
+  "J_agent_cents": 1100851677986768,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2095625130605.6997,
+   "chip_mat": 898434397530.1377
+  },
+  "lost_units": {
+   "chip_le": 41529327.36890942,
+   "chip_mat": 86981771.14233002
+  },
+  "pi_mean": {
+   "chip_le": 50461.33090454462,
+   "chip_mat": 10328.996360168516
+  },
+  "contested_weeks": {
+   "grid_kr": 13,
+   "grid_tw": 2
+  },
+  "value_made_contested": {
+   "grid_kr": 175426227836.75388,
+   "grid_tw": 7837082033.904756
+  },
+  "gain_by_grid": {
+   "grid_kr": 6497129931.6182,
+   "grid_tw": 752212951.018042
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 6497129931.6182,
+   "grid_tw": 752212951.018042
+  },
+  "dchips": {
+   "chip_le": 156099.86645732925,
+   "chip_mat": -60767.19469499764
+  },
+  "dchips_early": {
+   "chip_le": 156099.86645732925,
+   "chip_mat": -60767.19469499764
+  },
+  "ceiling_uncapped": 7249342882.636242,
+  "ceiling_loose_all_weeks": 77347924952.81425,
+  "ceiling_capped": 7249342882.636235,
+  "ceiling_capped_early": 7249342882.636235,
+  "seconds": 12.1,
+  "stratum": 4
+ },
+ {
+  "episode": 41,
+  "J_agent_cents": 992591646387978,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2535518732554.482,
+   "chip_mat": 901383313118.7837
+  },
+  "lost_units": {
+   "chip_le": 50239658.0490249,
+   "chip_mat": 87287923.92030667
+  },
+  "pi_mean": {
+   "chip_le": 50468.47114445465,
+   "chip_mat": 10326.552318299391
+  },
+  "contested_weeks": {
+   "grid_tw": 29,
+   "grid_kr": 2
+  },
+  "value_made_contested": {
+   "grid_tw": 201083165861.07562,
+   "grid_kr": 17615670731.05573
+  },
+  "gain_by_grid": {
+   "grid_tw": 16447959638.649624,
+   "grid_kr": 1264319965.426426
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 16419150409.570309,
+   "grid_kr": 1264319965.426426
+  },
+  "dchips": {
+   "chip_le": 622712.0983718606,
+   "chip_mat": -1328134.2640953797
+  },
+  "dchips_early": {
+   "chip_le": 621665.273337245,
+   "chip_mat": -1325807.9862406785
+  },
+  "ceiling_uncapped": 17712279604.07605,
+  "ceiling_loose_all_weeks": 67453118639.379944,
+  "ceiling_capped": 17712279604.07605,
+  "ceiling_capped_early": 17683470374.996735,
+  "seconds": 12.0,
+  "stratum": 4
+ },
+ {
+  "episode": 44,
+  "J_agent_cents": 685621025857434,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2178535147118.4895,
+   "chip_mat": 850639189547.7344
+  },
+  "lost_units": {
+   "chip_le": 43171997.56484827,
+   "chip_mat": 82381172.10028595
+  },
+  "pi_mean": {
+   "chip_le": 50461.76387474616,
+   "chip_mat": 10325.650483732094
+  },
+  "contested_weeks": {
+   "grid_kr": 12
+  },
+  "value_made_contested": {
+   "grid_kr": 127607097470.37227
+  },
+  "gain_by_grid": {
+   "grid_kr": 7322974684.811121
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 7322974684.811121
+  },
+  "dchips": {
+   "chip_le": 145119.27690414994
+  },
+  "dchips_early": {
+   "chip_le": 145119.27690414994
+  },
+  "ceiling_uncapped": 7322974684.811121,
+  "ceiling_loose_all_weeks": 175092675202.27438,
+  "ceiling_capped": 7322974684.811118,
+  "ceiling_capped_early": 7322974684.811118,
+  "seconds": 12.5,
+  "stratum": 4
+ },
+ {
+  "episode": 53,
+  "J_agent_cents": 708581189546260,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2390722277015.188,
+   "chip_mat": 781220329102.6484
+  },
+  "lost_units": {
+   "chip_le": 47382444.35940748,
+   "chip_mat": 75744205.32695504
+  },
+  "pi_mean": {
+   "chip_le": 50455.86628838674,
+   "chip_mat": 10313.928646164515
+  },
+  "contested_weeks": {
+   "grid_kr": 8,
+   "grid_tw": 1
+  },
+  "value_made_contested": {
+   "grid_kr": 68707540902.90528,
+   "grid_tw": 2001507435.4705858
+  },
+  "gain_by_grid": {
+   "grid_kr": 6793560240.505059,
+   "grid_tw": 461311448.6676445
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 6793560240.505059,
+   "grid_tw": 461311448.6676445
+  },
+  "dchips": {
+   "chip_le": 151396.63051803474,
+   "chip_mat": -37228.92313205388
+  },
+  "dchips_early": {
+   "chip_le": 151396.63051803474,
+   "chip_mat": -37228.92313205388
+  },
+  "ceiling_uncapped": 7254871689.172704,
+  "ceiling_loose_all_weeks": 165265583578.88287,
+  "ceiling_capped": 7254871689.172705,
+  "ceiling_capped_early": 7254871689.172705,
+  "seconds": 13.4,
+  "stratum": 3
+ },
+ {
+  "episode": 57,
+  "J_agent_cents": 680304053898317,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2636954125219.672,
+   "chip_mat": 872083915339.663
+  },
+  "lost_units": {
+   "chip_le": 52255041.904941015,
+   "chip_mat": 84514291.18086076
+  },
+  "pi_mean": {
+   "chip_le": 50463.15205366494,
+   "chip_mat": 10318.774530965438
+  },
+  "contested_weeks": {
+   "grid_kr": 15
+  },
+  "value_made_contested": {
+   "grid_kr": 123829642464.78004
+  },
+  "gain_by_grid": {
+   "grid_kr": 9669491788.906988
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 9669491788.906988
+  },
+  "dchips": {
+   "chip_le": 191614.89909754315
+  },
+  "dchips_early": {
+   "chip_le": 191614.89909754315
+  },
+  "ceiling_uncapped": 9669491788.906988,
+  "ceiling_loose_all_weeks": 154266196165.19705,
+  "ceiling_capped": 9669491788.906984,
+  "ceiling_capped_early": 9669491788.906984,
+  "seconds": 12.3,
+  "stratum": 3
+ },
+ {
+  "episode": 61,
+  "J_agent_cents": 904605210393494,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2245712646596.5103,
+   "chip_mat": 780645019205.6483
+  },
+  "lost_units": {
+   "chip_le": 44502750.65274285,
+   "chip_mat": 75634633.22349982
+  },
+  "pi_mean": {
+   "chip_le": 50462.333533491365,
+   "chip_mat": 10321.264028594514
+  },
+  "contested_weeks": {
+   "grid_tw": 1,
+   "grid_kr": 1
+  },
+  "value_made_contested": {
+   "grid_tw": 1936153272.8526328,
+   "grid_kr": 10644155891.776182
+  },
+  "gain_by_grid": {
+   "grid_tw": 222450198.33510423,
+   "grid_kr": 844240031.5797596
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 222450198.33510423,
+   "grid_kr": 844240031.5797596
+  },
+  "dchips": {
+   "chip_le": 24811.504201850184,
+   "chip_mat": -17958.66960413028
+  },
+  "dchips_early": {
+   "chip_le": 24811.504201850184,
+   "chip_mat": -17958.66960413028
+  },
+  "ceiling_uncapped": 1066690229.9148638,
+  "ceiling_loose_all_weeks": 136834545210.0102,
+  "ceiling_capped": 1066690229.9148629,
+  "ceiling_capped_early": 1066690229.9148629,
+  "seconds": 12.8,
+  "stratum": 3
+ },
+ {
+  "episode": 69,
+  "J_agent_cents": 568616113511691,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 1996143307696.2703,
+   "chip_mat": 607897866987.671
+  },
+  "lost_units": {
+   "chip_le": 39554699.12059746,
+   "chip_mat": 58923516.89116502
+  },
+  "pi_mean": {
+   "chip_le": 50465.38975332039,
+   "chip_mat": 10316.72749796133
+  },
+  "contested_weeks": {
+   "grid_kr": 10,
+   "grid_tw": 2
+  },
+  "value_made_contested": {
+   "grid_kr": 106044861944.96689,
+   "grid_tw": 13742732073.805182
+  },
+  "gain_by_grid": {
+   "grid_kr": 5229886380.850595,
+   "grid_tw": 1430057135.938796
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 5229886380.850595,
+   "grid_tw": 1430057135.938796
+  },
+  "dchips": {
+   "chip_le": 155560.9456757667,
+   "chip_mat": -115395.14224530262
+  },
+  "dchips_early": {
+   "chip_le": 155560.9456757667,
+   "chip_mat": -115395.14224530262
+  },
+  "ceiling_uncapped": 6659943516.7893915,
+  "ceiling_loose_all_weeks": 135438685411.46632,
+  "ceiling_capped": 6659943516.789394,
+  "ceiling_capped_early": 6659943516.789394,
+  "seconds": 12.9,
+  "stratum": 3
+ },
+ {
+  "episode": 76,
+  "J_agent_cents": 604896354988269,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2411474160878.7993,
+   "chip_mat": 802142032290.2778
+  },
+  "lost_units": {
+   "chip_le": 47791424.53968839,
+   "chip_mat": 77707131.86535624
+  },
+  "pi_mean": {
+   "chip_le": 50458.30259519028,
+   "chip_mat": 10322.630793788087
+  },
+  "contested_weeks": {
+   "grid_kr": 6,
+   "grid_tw": 1
+  },
+  "value_made_contested": {
+   "grid_kr": 51954798361.204834,
+   "grid_tw": 8830890551.807056
+  },
+  "gain_by_grid": {
+   "grid_kr": 4673761725.193717,
+   "grid_tw": 233147635.19216156
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 4673761725.193717,
+   "grid_tw": 233147635.19216156
+  },
+  "dchips": {
+   "chip_le": 101098.42217582511,
+   "chip_mat": -18827.120870693616
+  },
+  "dchips_early": {
+   "chip_le": 101098.42217582511,
+   "chip_mat": -18827.120870693616
+  },
+  "ceiling_uncapped": 4906909360.385879,
+  "ceiling_loose_all_weeks": 104072887842.55322,
+  "ceiling_capped": 4906909360.385886,
+  "ceiling_capped_early": 4906909360.385886,
+  "seconds": 12.1,
+  "stratum": 3
+ },
+ {
+  "episode": 80,
+  "J_agent_cents": 1027507482981309,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2362123238726.0522,
+   "chip_mat": 842252711257.6929
+  },
+  "lost_units": {
+   "chip_le": 46812240.397921756,
+   "chip_mat": 81602640.59784643
+  },
+  "pi_mean": {
+   "chip_le": 50459.52124160499,
+   "chip_mat": 10321.390399711167
+  },
+  "contested_weeks": {
+   "grid_tw": 3,
+   "grid_kr": 23
+  },
+  "value_made_contested": {
+   "grid_tw": 16017825037.44149,
+   "grid_kr": 204215944381.06885
+  },
+  "gain_by_grid": {
+   "grid_tw": 322142851.7005367,
+   "grid_kr": 12865445343.056385
+  },
+  "gain_by_grid_early": {
+   "grid_tw": 322142851.7005367,
+   "grid_kr": 12865445343.056385
+  },
+  "dchips": {
+   "chip_le": 266670.11866050086,
+   "chip_mat": -26009.89904436426
+  },
+  "dchips_early": {
+   "chip_le": 266670.11866050086,
+   "chip_mat": -26009.89904436426
+  },
+  "ceiling_uncapped": 13187588194.756922,
+  "ceiling_loose_all_weeks": 123579252125.03041,
+  "ceiling_capped": 13187588194.756908,
+  "ceiling_capped_early": 13187588194.756908,
+  "seconds": 11.7,
+  "stratum": 4
+ },
+ {
+  "episode": 102,
+  "J_agent_cents": 601868495637866,
+  "fallback_weeks": 0,
+  "lost_usd": {
+   "chip_le": 2220753645900.659,
+   "chip_mat": 947365081972.3999
+  },
+  "lost_units": {
+   "chip_le": 44010698.818960525,
+   "chip_mat": 91745526.51379658
+  },
+  "pi_mean": {
+   "chip_le": 50459.404315205335,
+   "chip_mat": 10326.008449359504
+  },
+  "contested_weeks": {
+   "grid_kr": 44,
+   "grid_tw": 10
+  },
+  "value_made_contested": {
+   "grid_kr": 381768169921.32043,
+   "grid_tw": 13404473740.997677
+  },
+  "gain_by_grid": {
+   "grid_kr": 22251180820.21925,
+   "grid_tw": 484916327.25861144
+  },
+  "gain_by_grid_early": {
+   "grid_kr": 22251180820.21925,
+   "grid_tw": 484916327.25861144
+  },
+  "dchips": {
+   "chip_le": 458597.0975418782,
+   "chip_mat": -39167.042826942554
+  },
+  "dchips_early": {
+   "chip_le": 458597.0975418782,
+   "chip_mat": -39167.042826942554
+  },
+  "ceiling_uncapped": 22736097147.47786,
+  "ceiling_loose_all_weeks": 65824185367.05089,
+  "ceiling_capped": 22736097147.477856,
+  "ceiling_capped_early": 22736097147.477856,
+  "seconds": 11.8,
+  "stratum": 4
+ }
+]

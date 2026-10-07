@@ -1,4 +1,4 @@
-Status: running full 0 dev (20 episodes: mpc_buffer, pp20, pp50)
+Status: sbf check (CPU) on pp20
 
 ## Small random 20 (entropy 148337082)
 ```

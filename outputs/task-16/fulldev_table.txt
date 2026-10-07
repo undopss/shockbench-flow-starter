@@ -1,0 +1,13 @@
+round v16_dev_full_0_1007-2206: task full, entropy 0, episodes dev, baseline mpc_buffer
+references ready in 2 s (20 episodes)
+  played mpc_buffer in 116 s: RSS 0.7363
+  played pp20 in 124 s: RSS 0.7820
+  played pp50 in 114 s: RSS 0.7804
+
+full, entropy 0, 20 episodes; diff = variant - mpc_buffer, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_buffer                0.7363  0.712  0.798  0.720  0.689  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp20                      0.7820  0.767  0.834  0.764  0.704  +0.0457  [+0.0339, +0.0564]   100.0%      0  <-- better
+pp50                      0.7804  0.763  0.836  0.764  0.705  +0.0441  [+0.0319, +0.0558]   100.0%      0  <-- better
+
+results: outputs/variants/v16_dev_full_0_1007-2206/results.json

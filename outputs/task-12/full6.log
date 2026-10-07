@@ -1,0 +1,25 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   17.3s remaining:   17.3s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:   33.9s finished
+written outputs/task-12/waste_full_0_devpick-2_2_1_1_mpc_pulse.json
+USD per episode (capped by each product's lost-sales USD; _raw uncapped in the JSON)
+  ep lvl   lost_usd shortage_usd   shed_usd      unmet          a     a_null          b     b_shed         c1         c5       cbig
+   2   1  2.747e+12  2.747e+12  2.252e+12  1.256e+12  1.120e+12  5.138e+11  5.109e+10  7.257e+09  2.058e+11  4.082e+11  6.424e+11
+   5   1  2.619e+12  2.619e+12  2.228e+12  2.136e+12  5.280e+11  2.651e+11  2.371e+10  0.000e+00  4.081e+11  7.770e+11  9.509e+11
+   0   2  2.769e+12  2.769e+12  2.369e+12  1.494e+12  7.590e+11  3.768e+11  2.009e+10  0.000e+00  1.780e+11  2.952e+11  1.020e+12
+   1   2  2.073e+12  2.073e+12  5.610e+12  1.705e+12  6.677e+11  3.244e+11  2.182e+10  0.000e+00  5.013e+10  1.019e+12  6.358e+11
+  53   3  3.172e+12  3.172e+12  3.857e+12  1.242e+12  1.113e+12  5.363e+11  1.734e+10  0.000e+00  1.965e+11  5.961e+11  4.492e+11
+  26   4  2.994e+12  2.994e+12  7.965e+12  1.590e+12  5.688e+11  2.720e+11  1.729e+10  0.000e+00  1.314e+11  5.539e+11  9.051e+11
+    mean  2.729e+12  2.729e+12  4.047e+12  1.570e+12  7.928e+11  3.814e+11  2.522e+10  1.210e+09  1.950e+11  6.082e+11  7.673e+11
+
+per fab grid, mean per episode
+grid_cn E=4386 Ehat=3.202e+04 a_null_units=1725 a_units=1894 c1_fuel=4.149e+04 c1_weeks=64.67 c5_fuel=7.514e+04 c5_weeks=30.5 disp_0=3520 shed=8.9e+04
+grid_eu E=3030 Ehat=1.264e+04 a_null_units=2143 a_units=3695 c1_fuel=1907 c1_weeks=4 c5_fuel=8.74e+04 c5_weeks=70.5 cbig_fuel=2.662e+04 cbig_weeks=1.667 disp_0=5307 shed=1.063e+05
+grid_jp E=851.3 Ehat=1.404e+04 a_null_units=546.2 a_units=958.2 c1_fuel=428.6 c1_weeks=4.333 c5_fuel=2.744e+04 c5_weeks=52.33 cbig_fuel=1.37e+05 cbig_weeks=37.83 disp_0=1.022e+04 shed=1.517e+05
+grid_kr E=1.747e+04 Ehat=2.607e+04 a_null_units=4360 a_units=1.009e+04 b_used_0=417.7 b_used_1=18.78 c1_fuel=201.8 c1_weeks=4.333 c5_fuel=972.3 c5_weeks=3.667 cbig_fuel=6.897e+04 cbig_weeks=34 disp_0=1616 disp_1=144.4 shed=6.154e+04
+grid_sea E=457.8 Ehat=1.054e+04 a_null_units=442.8 a_units=660.8 b_used_1=1510 c1_fuel=27.84 c1_weeks=0.3333 c5_fuel=3.856e+04 c5_weeks=54.33 cbig_fuel=3.254e+05 cbig_weeks=40.5 disp_0=2.689e+04 disp_1=1510 shed=3.539e+05
+grid_tw E=1.566e+04 Ehat=2.695e+04 a_null_units=6635 a_units=1.141e+04 b_used_0=0.1209 b_used_1=102.3 c1_fuel=107.4 c1_weeks=3.667 c5_fuel=854.4 c5_weeks=7 cbig_fuel=5.348e+04 cbig_weeks=41 disp_0=2804 disp_1=438.7 shed=4.315e+04
+grid_us E=9716 Ehat=1.176e+04 a_null_units=6097 a_units=1.487e+04 c1_fuel=4.756 c1_weeks=0.1667 c5_fuel=1219 c5_weeks=0.5 cbig_fuel=1.672e+05 cbig_weeks=11 disp_0=2.9e+05 disp_1=16.64 shed=1.663e+05
+
+fuel disposal by node|fuel, mean units per episode: {'grid_cn|lng': 3520.4, 'grid_eu|lng': 5306.6, 'grid_in|crude': 3076.2, 'grid_in|lng': 94486.6, 'grid_jp|lng': 10217.9, 'grid_kr|crude': 125.6, 'grid_kr|lng': 1615.5, 'grid_sea|crude': 1510.4, 'grid_sea|lng': 26894.3, 'grid_tw|crude': 438.7, 'grid_tw|lng': 2803.8, 'grid_us|crude': 16.6, 'grid_us|lng': 290031.0, 'term_in|crude': 72.7, 'term_kr|crude': 18.8}

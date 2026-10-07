@@ -1,4 +1,4 @@
-Status: running value-of-information test (Full root 0, episodes 0-5)
+Status: first VOI result (6 eps): foresight of ALL events worth ~0.05 T/episode (< 0.17 bar); extending to 20 episodes x 7 classes
 
 Plan: measure every early-warning signal type (region/dyad units, messages, pending prohibitions) on 120 Full episodes vs ground truth from omega (base rate, AUC, lead time), then estimate the value of information on Full devpick:2,2,1,1 (remove one event class that starts during the episode from omega; ceiling = how much more mpc_buffer loses to that class than the clairvoyant plan does); build only if the ceiling > 0.17 T USD/episode.
 

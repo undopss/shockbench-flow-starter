@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v_calm_dev_full_0_1007-1848: task full, entropy 0, episodes dev, baseline mpc_pulse
+references ready in 2 s (20 episodes)
+  played mpc_pulse in 159 s: RSS 0.6752
+  played rel_bonus_300 in 156 s: RSS 0.6873
+  played rel_bonus_1000 in 157 s: RSS 0.6870
+
+full, entropy 0, 20 episodes; diff = variant - mpc_pulse, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.6752  0.650  0.752  0.635  0.632  +0.0000  [+0.0000, +0.0000]     nan%      0
+rel_bonus_300             0.6873  0.665  0.759  0.649  0.642  +0.0120  [+0.0082, +0.0163]   100.0%      0  <-- better
+rel_bonus_1000            0.6870  0.664  0.760  0.648  0.641  +0.0117  [+0.0081, +0.0158]   100.0%      0  <-- better
+
+results: outputs/variants/v_calm_dev_full_0_1007-1848/results.json

@@ -1,0 +1,3 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "rel_bonus_300": {"agent": "agents/mpc_calm", "params": {"reliable_bonus": 300.0}},
+ "rel_bonus_1000": {"agent": "agents/mpc_calm", "params": {"reliable_bonus": 1000.0}}}

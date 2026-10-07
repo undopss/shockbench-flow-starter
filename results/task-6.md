@@ -1,4 +1,4 @@
-Status: reliable_bonus +0.015 on L1; trying to widen it, then Full 6
+Status: Full dev 20 done (+0.012 vs mpc_pulse); running Small filter and sbf check
 
 Plan: find where mpc_pulse/mpc_chip lose money in calm (L1) Full episodes and fix one reachable piece.
 
@@ -13,3 +13,4 @@ So far:
 Milestone (Full L1 dev episodes 2,5,7,10,14, baseline mpc_pulse):
 - fab_boost 2 / 5: +0.0003 / +0.0015, intervals hold 0 -> dead end (energy LP sees no shortfall at fab grids; CN/SEA fuel is physically capped, the oracle gets the same fuel and wins only by breaking homes-first).
 - NEW reliable_bonus (agents/mpc_calm, off by default): 300 -> +0.0146 [+0.0076, +0.0231], 1500 -> +0.0140. chip_growth 1.0: +0.0005 (no).
+- Full dev 20: mpc_calm (reliable_bonus 300) vs mpc_pulse +0.0120 [+0.0082, +0.0163]; vs mpc_chip (bonus on mpc_chip settings) +0.0794.

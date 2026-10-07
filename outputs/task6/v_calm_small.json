@@ -1,0 +1,2 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "mpc_calm": {"agent": "agents/mpc_calm"}}

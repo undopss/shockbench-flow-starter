@@ -107,3 +107,48 @@ use task 1's `variants.json` with `full random 12`. This builds references for a
 
 ### 8-10. Reserved for Andrii's ideas
 (The main Claude adds them here.)
+
+## Round 2 (2026-10-07 evening): where can mpc_pulse still win on Full?
+
+**For tasks 11-14 the baseline is `agents/mpc_pulse`** (Full dev 0.6751; its gap to clairvoyant ≈ 1.15 T USD/episode,
+~88% chip shortage, ~10% power shed). Each task is **measure first, build only if the ceiling is big**:
+1. Write a diagnostic script (`outputs/task-N/…py`) that plays `mpc_pulse` exactly as `outputs/cost_breakdown.py` does
+   (copy its `episode()`; `traj.records` are `StepRecord`s, see `shockbench_flow/dynamics/state.py`: `lots_started`,
+   `energy` per fab, `segment` per grid/fuel, `shed`, `served`, `lost`, `stock`, `disposal`, …) on **Full dev
+   `devpick:2,2,1,1`**, then on all 20 dev if it looks promising.
+2. Report the **ceiling in USD per episode** (the most this lever could save if done perfectly) and how you computed it.
+   +0.05 RSS on Full ≈ 0.17 T USD/episode. **Below ~0.17 T: stop, write the numbers, verdict "too small".**
+3. Only above that: build it (new folder `agents/<name>/` copied from `agents/mpc_pulse`, or an off-by-default option)
+   and run the funnel vs `agents/mpc_pulse`: `full 0 devpick:2,2,1,1`, then `full 0 dev` if better.
+
+How power reaches fabs (`shockbench_flow/dynamics/production.py: allocate_energy`, `sim.py` ~L330-360): each fuel
+segment gives `min(share_k·G-bar·ration, fuel on hand)`; ration = min(1, last week's stock / (psi·I-bar)) for the
+rationed fuel. `base_first` grids: homes get `y = min(y-bar, G_av)` first; fabs share what is left **pro rata to their
+requested draw `e_f·p-hat_f/R_f`**, p-hat = min(capacity·availability, wafers on hand). A fuel can't cover another
+fuel's share. Fab draw is often ~1% of a grid's load, so a 1% fuel shortfall leaves the fabs with nothing.
+
+### 11. MEASURE (+BUILD): steer scarce power to the most valuable fabs
+Fabs on one grid split leftover power in proportion to `e·p-hat/R`. We control p-hat only through **wafers on hand**.
+Measure per grid-week with leftover power < total draw: the chip value made per power unit at each fab (pi of its chip ×
+yield / e, but **only for chips whose sinks actually lose sales** in that episode: use `lost`·pi per product), and how
+much more value the same power would make if it went to the best fab(s) (up to their capacity). Sum = ceiling.
+If big: starve low-value fabs of wafers on contested grids (chip LP option).
+
+### 12. MEASURE (+BUILD): wasted power and wasted fuel
+Count, per fab grid and week: (a) power available to fabs that no fab used because they had no wafers (G_av − y − ΣE
+while fabs were wafer-limited), (b) fuel thrown away (disposal at grid/terminal fuel slots above storage, e.g. Japan
+LNG overflowing while crude is short), (c) weeks a grid was 0-1% short of full load (fabs got ~nothing for a tiny
+shortfall). Convert each into lost chip value (as in 11). Ceiling = (a)+(b)+(c) value. If big: build the fix.
+
+### 13. MEASURE (+BUILD): chips to the most expensive missing demand
+Per episode: lost sales by sink and product (units and USD = pi × lost), packaged/raw chips held at OSATs/sinks at the
+end and over time, disposal of chips, and chips delivered to sinks that had no shortage that week while another sink of
+the same product lost sales. Ceiling = USD of lost sales that chips already in the system (not new production) could
+have covered. If big: change the chip LP's routing/priorities.
+
+### 14. MEASURE (+BUILD): a cheaper pulse
+The pulse (TW/KR, `pulse_weeks` 1.5) adds power shed. Compare `mpc_pulse` with `agents/mpc_chip` +
+`{"fab_cap_mode": "observed"}` (= mpc_pulse without the pulse) per grid: shed USD, chip lots started, fab energy.
+Ceiling = the shed the pulse adds (if a smarter pulse kept the same chips with no extra shed) + the chips a pulse at
+other grids/timings could add (see task 2: JP/SEA added only ~+0.01). If big: build a pulse that only releases when
+the stored fuel covers homes + fabs for the whole pulse week and doesn't starve homes before it.

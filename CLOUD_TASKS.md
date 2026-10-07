@@ -25,6 +25,12 @@ Runner: `uv run python outputs/variants.py <small|full> <entropy|random> <episod
 - An idea is promising if its Full stage interval is above 0 (the runner prints `<-- better`).
 - **The bar:** we only care about ideas that can plausibly add **+0.05 RSS on Full**. Don't spend time on small tuning.
 
+## Never end your turn while a test runs
+
+A routine session is closed as soon as your turn ends, and **every background job dies with it**. So never "launch in
+the background and report later": wait for the runner in the foreground (e.g. a `while pgrep -f variants.py; do sleep
+60; done` loop with a long timeout, repeated as needed) until the results are written and pushed.
+
 ## Show up on the team's page right away
 
 The team watches a page that reads your branch from GitHub every 2 minutes. So **before any long work**:

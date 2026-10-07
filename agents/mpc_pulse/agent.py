@@ -48,8 +48,8 @@ PARAMS = {
     "chip_time_limit": 2.0,
     "pulse_plan": True,  # planned pulses (pplan.py): a MILP per fab grid times the terminal -> grid releases
     "pp_H": 8,  # its horizon in weeks
-    "pp_value": 1.0,  # scale on the value of fab energy (chip LP shadow price, or pi of the chips without it)
-    "pp_chip_value": True,  # use the chip LP's planned starts and their shadow values
+    "pp_value": 1.0,  # fab energy valued at this share of the chips it makes (pi of their sinks)
+    "pp_chip_value": False,  # value fab energy at the chip LP's shadow prices (tested: ~0, the LP assumes full power)
     "pp_end": 0.9,  # fuel left at the end of the window, in VOLL per unit
     "pp_time": 0.3,
     "pp_method": "enum",  # "enum": every sequence of weekly release modes over pp_enum_H weeks; "milp": scipy milp

@@ -327,11 +327,9 @@ class PulsePlanner:
                 row([(b, 1.0) for b in bs], 1.0, 1.0)
 
         A = coo_matrix((vals, (rows, cols)), shape=(r, n)).tocsr()
-        self.last_model = (np.array(cost), A, np.array(rlo), np.array(rhi), np.array(integ), np.array(lo), np.array(hi))
         res = milp(np.array(cost), constraints=LinearConstraint(A, np.array(rlo), np.array(rhi)),
                    integrality=np.array(integ), bounds=Bounds(np.array(lo), np.array(hi)),
                    options={"time_limit": self.time_limit, "mip_rel_gap": 1e-3})
-        self.last_res = res
         if res.x is None or res.status not in (0, 1):
             return None
         x = res.x

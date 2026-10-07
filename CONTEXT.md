@@ -99,12 +99,15 @@ experiment, off by default), `fab_boost` (no effect, ignore).
 - Energy horizon 20 vs 12: no effect. Tanker priorities (task 4): dead end.
 - Cost gap of mpc_pulse on Full dev: 1.15 T USD/episode (mpc: 1.66): chip shortage 88%, power shed 10% (the pulse adds ~0.12 T of shed).
 
-## Next steps (2026-10-07 evening)
+## Next steps (2026-10-08, goal: top 5 in the final)
 
-1. Round 1 on Small (running): fuel pulses (TW/KR, TW/KR/JP), energy horizon 20, chip-planner calibration.
-2. Code the big ideas: planned pulses (the energy LP chooses burst weeks), steering scarce power to high-value fabs via
-   wafer allocation, tanker priorities at straits (LNG for fab grids first).
-3. Promote winners: full6 → full20. Upload the best Full candidate before Oct 10; switch the board entry on Oct 10.
+Board (Small) 2026-10-07 23:54: we are 8th (0.7223); 5th place 0.8248, 1st 0.8823. Assume the top teams hold that on Full,
+so we need Full ≈ 0.83–0.85 (+0.1 over mpc_buffer's 0.736, ≈ −0.3 T USD per Full episode).
+1. Task 17: where mpc_buffer's remaining gap is on Full (by component, region, fab, event type).
+2. Task 15: value of the early signals (the only foresight the agent gets; the homes-first MILP says the gap is foresight).
+3. Task 16: planned pulses on the buffer, incl. CN/JP/SEA (the MILP says that fab power is reachable).
+4. Oct 9 evening: freeze the best Full candidate, add a guard that `pulse_grids` names exist (log/fallback), `sbf check`
+   small + full, upload. Oct 10 00:00–23:59 Kyiv: Botan picks the final entry by hand.
 
 ## Practical notes
 

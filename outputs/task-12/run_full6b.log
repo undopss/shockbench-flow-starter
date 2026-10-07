@@ -1,0 +1,19 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_full6b_full_0_1007-1933: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_pulse
+references ready in 1 s (6 episodes)
+  baseline mpc_pulse: reused full_0_devpick-2-2-1-1_abe97f67def222d7.json
+  played mpc_pulse in 0 s: RSS 0.7132
+  played buf2 in 37 s: RSS 0.7876
+  played buf3 in 34 s: RSS 0.7902
+  played buf4 in 31 s: RSS 0.7890
+  played buf6 in 34 s: RSS 0.7890
+
+full, entropy 0, 6 episodes; diff = variant - mpc_pulse, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.7132  0.725  0.753  0.625  0.709  +0.0000  [+0.0000, +0.0000]     nan%      0
+buf2                      0.7876  0.784  0.810  0.768  0.761  +0.0744  [+0.0701, +0.0793]   100.0%      0  <-- better
+buf3                      0.7902  0.786  0.813  0.771  0.768  +0.0770  [+0.0714, +0.0834]   100.0%      0  <-- better
+buf4                      0.7890  0.782  0.813  0.774  0.765  +0.0758  [+0.0717, +0.0804]   100.0%      0  <-- better
+buf6                      0.7890  0.782  0.813  0.774  0.765  +0.0758  [+0.0717, +0.0804]   100.0%      0  <-- better
+
+results: outputs/variants/variants_full6b_full_0_1007-1933/results.json

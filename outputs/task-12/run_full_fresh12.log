@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_fresh_full_1316948316_1007-1954: task full, entropy 1316948316, episodes 12, baseline mpc_pulse
+references ready in 240 s (12 episodes)
+  played mpc_pulse in 52 s: RSS 0.7051
+  played mpc_buffer in 54 s: RSS 0.7557
+
+full, entropy 1316948316, 12 episodes; diff = variant - mpc_pulse, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.7051  0.706  0.710  0.699      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+mpc_buffer                0.7557  0.758  0.746  0.764      -  +0.0505  [+0.0391, +0.0615]   100.0%      0  <-- better
+
+results: outputs/variants/variants_fresh_full_1316948316_1007-1954/results.json

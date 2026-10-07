@@ -71,20 +71,25 @@ def _safe(f, *a):
 def _odetail(inst, model, x):
     F, G, D, T = len(inst.fabs), len(inst.grids), len(inst.demands), model.T
     od = {"lots_started": np.zeros(F), "energy": np.zeros(F), "shed": np.zeros(G), "lost": np.zeros(D),
-          "served": np.zeros(D), "lots_w": np.zeros((T, F)), "lost_w": np.zeros((T, D))}
+          "served": np.zeros(D), "lots_w": np.zeros((T, F)), "lost_w": np.zeros((T, D)),
+          "shed_w": np.zeros((T, G)), "energy_w": np.zeros((T, F)), "xi": {}, "O": np.zeros(len(inst.stock_slots))}
     for j, key in enumerate(model.keys):
         tag = key[0]
         if tag == "p":
             od["lots_started"][key[2]] += x[j]; od["lots_w"][key[1] - 1, key[2]] += x[j]
         elif tag == "E":
-            od["energy"][key[2]] += x[j]
+            od["energy"][key[2]] += x[j]; od["energy_w"][key[1] - 1, key[2]] += x[j]
         elif tag == "ysh":
-            od["shed"][key[2]] += x[j]
+            od["shed"][key[2]] += x[j]; od["shed_w"][key[1] - 1, key[2]] += x[j]
+        elif tag == "xi":
+            od["xi"][str((key[2], key[3]))] = od["xi"].get(str((key[2], key[3])), 0.0) + float(x[j])
+        elif tag == "O":
+            od["O"][key[2]] += x[j]
         elif tag == "U":
             od["lost"][key[2]] += x[j]; od["lost_w"][key[1] - 1, key[2]] += x[j]
         elif tag == "D":
             od["served"][key[2]] += x[j]
-    od = {k: v.tolist() for k, v in od.items()}
+    od = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in od.items()}
     return od
 
 
@@ -114,6 +119,15 @@ def episode(n, spec, agent_root):
     detail["shed"] = np.sum([r.shed for r in R], axis=0).tolist()
     detail["lost_w"] = np.array([r.lost for r in R]).tolist()  # (T, D) for timing
     detail["lots_w"] = np.array([r.lots_started for r in R]).tolist()  # (T, F)
+    detail["shed_w"] = np.array([r.shed for r in R]).tolist()  # (T, G)
+    detail["energy_w"] = np.array([r.energy for r in R]).tolist()  # (T, F)
+    detail["served_load_w"] = np.array([r.served_load for r in R]).tolist()  # (T, G)
+    detail["disposal_w_chip"] = None
+    sidx = {(s.node, s.k): i for i, s in enumerate(inst.stock_slots)}
+    wslots = [sidx.get((f, inst.nodes[f].fab.input)) for f in inst.fabs]
+    detail["wafer_stock_w"] = [[float(r.stock[s]) if s is not None else 0.0 for s in wslots] for r in R]  # (T, F)
+    detail["stock_end"] = np.asarray(R[-1].stock).tolist()
+    detail["slots"] = [[inst.nodes[s.node].id, inst.commodities[s.k].id] for s in inst.stock_slots]
 
     naive_traj = rollout(inst, anchor_policy(inst, params, reps), omega, ANCHOR_REGIME, pseed, marks=marks,
                          fallback=fallback)
@@ -158,7 +172,7 @@ def main(task, entropy, neps, agent, n_jobs):
     es = EpisodeSet.build(task, eps, entropy=entropy, n_jobs=n_jobs)
     ns = [int(n) for n in es.episodes]
     root = str(Path(agent).resolve())
-    out = Path(f"outputs/task-17/gap17_{task}_{entropy}_{neps.replace(':', '-').replace(',', '-')}_{Path(agent).name}.json")
+    out = Path(f"outputs/task-17/gap17v2_{task}_{entropy}_{neps.replace(':', '-').replace(',', '-')}_{Path(agent).name}.json")
     t = time.time()
     rows = Parallel(n_jobs=n_jobs, verbose=10)(delayed(episode)(n, es._spec, root) for n in ns)
     for r, ref in zip(rows, es.references):

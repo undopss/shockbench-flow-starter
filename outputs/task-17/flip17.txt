@@ -1,0 +1,7 @@
+grid      base_load  fab draw at cap  agent shed-week median shortfall GWh  p75   oracle fabE/wk  extra fuel to cover ALL agent shed (GWh/ep)  oracle extra fab E vs agent (GWh/ep)
+grid_cn      179607             393                                706.0 1863.8          196.9                                       166882                                15033
+grid_jp       17819             181                               1089.8 3958.5           82.0                                       196750                                 6331
+grid_sea      24875             125                                624.0 8110.9           39.6                                       261534                                 3371
+grid_kr       10544             456                               2294.3 2507.9          185.1                                        94192                                 -240
+grid_tw        4954             488                               1468.5 1688.5          197.1                                        46441                                -2601
+grid_eu       51758             242                               1409.5 1566.8           67.7                                       112143                                 -454

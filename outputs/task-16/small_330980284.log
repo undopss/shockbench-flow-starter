@@ -1,0 +1,18 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants16_small_330980284_1007-2036: task small, entropy 330980284, episodes 20, baseline mpc_buffer
+references ready in 1004 s (20 episodes)
+  played mpc_buffer in 22 s: RSS 0.6961
+  played pp20 in 28 s: RSS 0.7198
+  played pp50 in 19 s: RSS 0.7198
+  played pp20_cnjpsea in 22 s: RSS 0.6991
+  played pp50_cnjpsea in 16 s: RSS 0.6991
+
+small, entropy 330980284, 20 episodes; diff = variant - mpc_buffer, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_buffer                0.6961  0.742  0.544  0.729  0.671  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp20                      0.7198  0.766  0.585  0.733  0.687  +0.0237  [+0.0081, +0.0427]    99.2%      0  <-- better
+pp50                      0.7198  0.766  0.585  0.733  0.687  +0.0237  [+0.0081, +0.0427]    99.2%      0  <-- better
+pp20_cnjpsea              0.6991  0.742  0.562  0.725  0.675  +0.0030  [-0.0033, +0.0099]    73.2%      0
+pp50_cnjpsea              0.6991  0.742  0.562  0.725  0.675  +0.0030  [-0.0033, +0.0099]    73.2%      0
+
+results: outputs/variants/variants16_small_330980284_1007-2036/results.json

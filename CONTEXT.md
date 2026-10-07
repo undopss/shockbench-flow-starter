@@ -1,6 +1,6 @@
 # Team context for Claude (cloud sessions and Andrii's AI)
 
-Maintained from Botan's local Claude memory. Last update: **2026-10-07 evening**. Read `AGENTS.md` and `docs/GUIDE.md`
+Maintained from Botan's local Claude memory. Last update: **2026-10-07 19:00**. Full test log: `EXPERIMENTS.md`. Read `AGENTS.md` and `docs/GUIDE.md`
 too. Team: Botan (Codabench `botan_krutan`) and Andrii (GitHub `undopss`, owns this fork). Short Ukrainian status for
 humans: `STATUS_UA.md`. Write anything meant for the team in Ukrainian, short and clear.
 
@@ -43,7 +43,8 @@ humans: `STATUS_UA.md`. Write anything meant for the team in Ukrainian, short an
 | `agents/heuristic` | organisers' heuristic | board 0.4283; Full dev 0.370 |
 | `agents/mine` | Andrii's demand-aware dispatch | board 0.4487; Full dev 0.352 |
 | `agents/mpc` | energy LP (H=12) + `fallback.py` (= `mine`) for every other slot | board 0.5397; **Full dev 0.5124** |
-| **`agents/mpc_chip`** | `mpc` + **chip LP** (`chips.py`) for every wafer/chip slot, + energy LP fix (the grid must burn) | **Full dev 0.5443 (+0.032 vs mpc, CI +0.009…+0.056)**. Current best on Full. Not uploaded yet |
+| **`agents/mpc_pulse`** | `mpc_chip` with the winners on by default: fuel pulse at TW/KR (`pulse_weeks` 1.5) + `fab_cap_mode: observed` | **Full dev 0.6751 (+0.131 vs mpc_chip, CI +0.097…+0.162). Codabench 967249: 0.6896, 0 fallbacks. Current final candidate.** |
+| `agents/mpc_chip` | `mpc` + **chip LP** (`chips.py`) for every wafer/chip slot, + energy LP fix (the grid must burn) | **Full dev 0.5443 (+0.032 vs mpc, CI +0.009…+0.056)**. Current best on Full. Not uploaded yet |
 | `agents/scen` | port of the organisers' `mpc_scen` | board **0.699** (Small) but **Full dev 0.42 < mpc** → not a final candidate |
 | `agents/scen_final` (branch `scen-final`) | scen without debug weeks | Small +0.006 vs scen; same Full problem |
 | `agents/calib` | speed probe | tool only |
@@ -86,6 +87,14 @@ experiment, off by default), `fab_boost` (no effect, ignore).
   (Tailscale: http://100.99.112.98:8099/experiments.html).
 - Cost breakdown of any agent vs naive vs clairvoyant: `outputs/cost_breakdown.py full 0 dev agents/<name> 3`
   (also `policy:mpc_det` for package baselines).
+
+## Results of 2026-10-07 afternoon (details in EXPERIMENTS.md)
+
+- Fuel pulse works mostly through **Korea** on Full (KR fabs ~1% → ~20%); KR alone +0.119, TW/KR +0.133, TW/KR/JP/SEA +0.139 (Full 6, with fab_cap observed).
+  Adding JP/SEA to TW/KR: +0.020 (cloud task 2). Bigger batches (2.5 weeks): worse. Automatic grid choice: no gain.
+- `fab_cap_mode: observed` alone: Full dev 20 +0.051.
+- Energy horizon 20 vs 12: no effect. Tanker priorities (task 4): dead end.
+- Cost gap of mpc_pulse on Full dev: 1.15 T USD/episode (mpc: 1.66): chip shortage 88%, power shed 10% (the pulse adds ~0.12 T of shed).
 
 ## Next steps (2026-10-07 evening)
 

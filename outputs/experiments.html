@@ -39,6 +39,7 @@ td.n{font-family:ui-monospace,Consolas,monospace;white-space:nowrap;font-variant
 <div class="wrap">
   <header><h1>Mantis Experiments</h1><div class="sub" id="gen">loading…</div></header>
   <section><h2>Running now</h2><div class="cards" id="running"></div></section>
+  <section><h2>Cloud tasks</h2><div class="tbl"><table><thead><tr><th>Task</th><th>Branch</th><th>Status</th><th>Last push</th></tr></thead><tbody id="cloud"></tbody></table></div><div class="sub" id="cloudsync"></div></section>
   <section><h2>Queued</h2><div class="tbl"><table><thead><tr><th>#</th><th>Idea</th><th>Stage</th><th>Seed</th><th>Source</th></tr></thead><tbody id="queue"></tbody></table></div></section>
   <section><h2>Finished</h2><div class="tbl"><table><thead><tr><th>Verdict</th><th>Idea</th><th>Stage</th><th>Score vs baseline</th><th>90% interval</th><th>Calm L1</th><th>Took</th><th>Finished</th></tr></thead><tbody id="done"></tbody></table></div></section>
   <footer class="sub">Each test = one idea vs the current best agent on the same episodes. Better = the whole 90% interval is above 0. Stages: small20 (filter) → full6 → full20 (decision). Page refreshes every 10 s.</footer>
@@ -59,13 +60,16 @@ async function load(){
     <div class="bar ${ind?"ind":""}"><div style="width:${pct}%"></div></div>
     <div class="meta">${esc(p.phase||"starting")}${p.total?` · ${p.done}/${p.total}`:""} · running ${dur(now-x.started)}</div>
     <div class="meta">${esc(p.last_line||"")}</div></div>`}).join(""):`<div class="empty">nothing running</div>`;
+  const c=d.cloud||{};const ct=c.tasks||[];
+  document.getElementById("cloud").innerHTML=ct.length?ct.map(t=>`<tr><td class="n">${esc(t.task)}</td><td class="meta">${esc(t.branch)}</td><td>${t.reported?'<span class="v better">reported</span>':'<span class="v unclear">working</span>'}${t.report?`<details><summary>report</summary><pre style="white-space:pre-wrap;font-size:12px">${esc(t.report)}</pre></details>`:""}</td><td class="n">${when(t.updated)}</td></tr>`).join(""):`<tr><td colspan="4" class="empty">no task branches pushed yet (a session shows up after its first push)</td></tr>`;
+  document.getElementById("cloudsync").textContent=c.synced?`GitHub checked ${when(c.synced)}${c.error?" · error: "+c.error:""}`:(c.error||"");
   document.getElementById("queue").innerHTML=d.queue.length?d.queue.map((x,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(x.title||x.id)}</b><div class="idea">${esc(x.idea)}</div></td><td>${esc(x.stage)}</td><td class="n">${esc(x.entropy)}</td><td>${esc(x.source||"")}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">queue empty</td></tr>`;
   document.getElementById("done").innerHTML=d.done.length?d.done.map(x=>{const r=x.result||{};const iv=r.interval||[];const l1=(r.levels||{})["1"],b1=(r.baseline_levels||{})["1"];
     return `<tr><td><span class="v ${esc(x.verdict)}">${esc(x.verdict)}</span></td><td><b>${esc(x.title||x.id)}</b><div class="idea">${esc(x.idea)}</div>${x.error?`<div class="meta">${esc(x.error)}</div>`:""}</td>
     <td>${esc(x.stage)}<div class="meta">seed ${esc(x.entropy)}</div></td>
     <td class="n">${f4(r.variant_rss)} vs ${f4(r.baseline_rss)}<br><b>${f4(r.diff,true)}</b></td>
     <td class="n">[${f4(iv[0],true)}, ${f4(iv[1],true)}]</td><td class="n">${l1!=null?l1.toFixed(3):"-"} vs ${b1!=null?b1.toFixed(3):"-"}</td>
-    <td class="n">${dur((x.finished||0)-(x.started||0))}</td><td class="n">${when(x.finished)}</td></tr>`}).join(""):`<tr><td colspan="8" class="empty">nothing finished yet</td></tr>`;
+    <td class="n">${x.started?dur((x.finished||0)-x.started):esc(x.source||"")}</td><td class="n">${when(x.finished)}</td></tr>`}).join(""):`<tr><td colspan="8" class="empty">nothing finished yet</td></tr>`;
 }
 load(); setInterval(load,10000);
 </script>

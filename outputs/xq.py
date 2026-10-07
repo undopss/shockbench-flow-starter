@@ -30,6 +30,73 @@ XDIR = HOME / "sbf-jobs" / "experiments"
 WWW = HOME / "sbf-jobs" / "www"
 STATUS = WWW / "status"
 MAX_RUNNING = int(os.environ.get("XQ_MAX", "2"))
+MIRROR = HOME / "cloud-mirror"  # a clone of the fork that only `cloud_sync` touches
+FORK = "https://github.com/undopss/shockbench-flow-starter.git"
+_last_sync = [0.0, {"tasks": [], "done": []}]
+
+
+def _git(*args):
+    return subprocess.run(["git", "-C", str(MIRROR), *args], capture_output=True, text=True, timeout=120).stdout
+
+
+def cloud_sync():
+    """Every 2 minutes: fetch the fork, read the task-N-* branches' results (results/task-N.md, the runner's
+    outputs/variants/*/results.json) into page rows. Read-only on GitHub."""
+    if time.time() - _last_sync[0] < 120:
+        return _last_sync[1]
+    _last_sync[0] = time.time()
+    try:
+        if not MIRROR.is_dir():
+            subprocess.run(["git", "clone", "-q", "--no-checkout", FORK, str(MIRROR)], timeout=300, check=True)
+        _git("fetch", "-q", "--prune", "origin")
+        tasks, done = [], []
+        for ref in _git("for-each-ref", "--format=%(refname:short) %(committerdate:unix)", "refs/remotes/origin/").splitlines():
+            if not ref.strip():
+                continue
+            parts = ref.split()
+            if len(parts) != 2 or "/" not in parts[0]:
+                continue
+            name, when = parts
+            branch = name.split("/", 1)[1]
+            if not branch.startswith("task-"):
+                continue
+            num = branch.split("-")[1]
+            files = _git("ls-tree", "-r", "--name-only", name).splitlines()
+            report = f"results/task-{num}.md" in files
+            tasks.append({"task": num, "branch": branch, "updated": float(when), "reported": report,
+                          "report": _git("show", f"{name}:results/task-{num}.md")[:4000] if report else ""})
+            for f in files:
+                if not (f.startswith("outputs/variants/") and f.endswith("/results.json")):
+                    continue
+                try:
+                    data = json.loads(_git("show", f"{name}:{f}"))
+                except ValueError:
+                    continue
+                res = data.get("results", {})
+                names = list(res)
+                if len(names) < 2:
+                    continue
+                b = res[names[0]]
+                for vn in names[1:]:
+                    v = res[vn]
+                    lo, hi = (v.get("interval") or [None, None])
+                    verdict = "better" if lo is not None and lo > 0 else "worse" if hi is not None and hi < 0 else "unclear"
+                    eps = str(data.get("episodes"))
+                    stage = (("full" if data.get("task") == "full" else "small") +
+                             ("6" if eps.startswith("devpick") else "20" if eps in ("20", "dev") else eps))
+                    done.append({"id": f"cloud-{branch}-{f.split('/')[2]}-{vn}", "title": f"{vn} (cloud task {num})",
+                                 "idea": f"from branch {branch}, baseline {names[0]}", "stage": stage,
+                                 "entropy": data.get("entropy"), "source": f"cloud task {num}", "state": "done",
+                                 "verdict": verdict, "finished": float(when), "started": None,
+                                 "result": {"baseline_rss": b.get("rss"), "variant_rss": v.get("rss"),
+                                            "diff": (v.get("rss") or 0) - (b.get("rss") or 0), "levels": v.get("levels"),
+                                            "baseline_levels": b.get("levels"), "fallbacks": v.get("fallback_weeks"),
+                                            "interval": v.get("interval"), "better_share": v.get("better_share")}})
+        _last_sync[1] = {"tasks": sorted(tasks, key=lambda t: int(t["task"]) if t["task"].isdigit() else 99),
+                         "done": done, "synced": time.time()}
+    except Exception as err:  # noqa: BLE001 - the page must keep working without GitHub
+        _last_sync[1] = dict(_last_sync[1], error=f"{type(err).__name__}: {err}")
+    return _last_sync[1]
 
 
 def load(name, default):
@@ -99,8 +166,10 @@ def publish(queue, running, done):
         st = job_status(x["id"])
         if st:
             x["progress"] = {k: st.get(k) for k in ("phase", "done", "total", "last_line", "updated")}
+    cloud = cloud_sync()
     data = {"generated": time.time(), "max_running": MAX_RUNNING, "queue": queue, "running": running,
-            "done": sorted(done, key=lambda d: d.get("finished", 0), reverse=True)}
+            "done": sorted(done + cloud.get("done", []), key=lambda d: d.get("finished") or 0, reverse=True),
+            "cloud": {k: v for k, v in cloud.items() if k != "done"}}
     tmp = WWW / f".experiments.json.{os.getpid()}.tmp"
     tmp.write_text(json.dumps(data, ensure_ascii=False))
     os.replace(tmp, WWW / "experiments.json")

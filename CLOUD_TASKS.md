@@ -8,7 +8,10 @@ Do task N from the list below, and only that task. Everything you need is in thi
 1. Read `CONTEXT.md` (rules, what we know, how the game works). The hard rules there apply: never guess numbers,
    never upload to Codabench, never push to `main`.
 2. `uv sync`
-3. The current best agent is `agents/mpc_chip`. Its options are in `PARAMS` at the top of `agents/mpc_chip/agent.py` and
+3. **Unpack the home server's evaluation cache** (saves 10-20 minutes per Full run; covers the Full and Small dev
+   episodes and our earlier seeds): `mkdir -p ~/.cache && tar xzf cache/sbf-cache.tgz -C ~/.cache`.
+   A new random seed still builds its own references; that is expected.
+4. The current best agent is `agents/mpc_chip`. Its options are in `PARAMS` at the top of `agents/mpc_chip/agent.py` and
    can be overridden by a `params.json` next to it. The test runner uses that to make variants without copying code.
 
 ## How to test (the same for every task)
@@ -18,7 +21,7 @@ Runner: `uv run python outputs/variants.py <small|full> <entropy|random> <episod
 - The first entry of `variants.json` is the **baseline** (always `{"agent": "agents/mpc_chip"}` unless the task says
   otherwise). Every other entry is compared with it **on the same episodes**, with a 90% paired interval.
 - Stage 1 (filter): `small random 20`. Stage 2: `full 0 devpick:2,2,1,1` (6 Full dev episodes, all four harm levels).
-  The first Full run builds the reference cache (~10-20 min); that is expected.
+  With the cache from step 3 the Full dev episodes need no reference computing.
 - An idea is promising if its Full stage interval is above 0 (the runner prints `<-- better`).
 - **The bar:** we only care about ideas that can plausibly add **+0.05 RSS on Full**. Don't spend time on small tuning.
 

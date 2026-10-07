@@ -1,0 +1,11 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   2 out of   6 | elapsed:   17.9s remaining:   35.7s
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   18.1s remaining:   18.1s
+[Parallel(n_jobs=4)]: Done   4 out of   6 | elapsed:   18.4s remaining:    9.2s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:   35.0s finished
+written /home/user/shockbench-flow-starter/outputs/task-13/raw_full_0_devpick-2211_mpc_pulse.pkl RSS {'rss': 0.7132132427710741, 'pooled': True, 'rss_all': 0.7104566263065007, 'rss_by_stratum': {1: 0.7250143869967227, 2: 0.7527935361456293, 3: 0.6252539833535259, 4: 0.7093238696319016}}
+
+real	24m43.622s
+user	93m22.396s
+sys	0m30.848s

@@ -1,0 +1,32 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   19.3s remaining:   19.3s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:   37.0s finished
+pulse: 37 s, RSS 0.7132 by level {1: 0.7250143869967227, 2: 0.7527935361456293, 3: 0.6252539833535259, 4: 0.7093238696319016}
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   17.5s remaining:   17.5s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:   32.4s finished
+nopulse: 32 s, RSS 0.6424 by level {1: 0.6157236815717209, 2: 0.7293917351700857, 3: 0.5947670048704508, 4: 0.5419886194574175}
+
+6 episodes; mean per episode; diff = pulse - nopulse
+cost components (USD):
+  freight         pulse   1.7597e+10 nopulse   1.7485e+10 diff  +1.1238e+08
+  war_risk        pulse   1.2277e+08 nopulse   1.2062e+08 diff  +2.1480e+06
+  tariff          pulse   1.1855e+10 nopulse   9.8394e+09 diff  +2.0159e+09
+  holding         pulse   3.0319e+10 nopulse   3.0094e+10 diff  +2.2450e+08
+  queue_holding   pulse   3.6279e+09 nopulse   3.6504e+09 diff  -2.2469e+07
+  shortage        pulse   2.7292e+12 nopulse   3.1083e+12 diff  -3.7911e+11
+  disposal        pulse   2.8212e+09 nopulse   2.6692e+09 diff  +1.5197e+08
+  shed            pulse   4.0467e+12 nopulse   3.9344e+12 diff  +1.1224e+11
+  salvage_credit  pulse  -5.9179e+09 nopulse  -5.9087e+09 diff  -9.1855e+06
+  TOTAL J         pulse   6.8363e+12 nopulse   7.1006e+12 diff  -2.6439e+11
+
+grid           shedUSD p  shedUSD np   d shedUSD     lots p    lots np   energy p  energy np 0-shed wk p    np
+grid_tw        1.780e+11   1.288e+11  +4.919e+10  1.133e+07  5.733e+06  1.566e+04       8480        61.8  54.8
+grid_kr        2.539e+11   1.937e+11  +6.014e+10  1.295e+07  7.321e+06  1.747e+04       9879        68.8  35.7
+grid_jp        6.259e+11   6.226e+11  +3.242e+09  6.757e+05  6.741e+05      851.3      849.4        11.2  11.0
+grid_cn        3.672e+11   3.669e+11  +2.922e+08  4.873e+06  4.338e+06       4386       3904        30.5  28.8
+grid_us        6.862e+11   6.863e+11  -7.248e+07  9.154e+06   9.87e+06       9716  1.086e+04        92.3  92.3
+grid_eu        4.386e+11   4.386e+11  +0.000e+00  2.763e+06  2.916e+06       3030       3252        27.8  27.8
+grid_sea       1.460e+12   1.460e+12  -1.637e+07  5.087e+05  5.087e+05      457.8      457.8         9.2   9.2
+grid_in        3.694e+10   3.747e+10  -5.357e+08          0          0          0          0        93.3  93.8

@@ -1,0 +1,6 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "pulse_allfab_15": {"agent": "agents/mpc_pulse", "params": {"pulse_grids": ["grid_tw","grid_kr","grid_jp","grid_sea","grid_cn","grid_eu","grid_us"]}},
+ "pulse_twkrcneu_15": {"agent": "agents/mpc_pulse", "params": {"pulse_grids": ["grid_tw","grid_kr","grid_cn","grid_eu"]}},
+ "pulse_twkr_10": {"agent": "agents/mpc_pulse", "params": {"pulse_weeks": 1.0}},
+ "pulse_twkr_12": {"agent": "agents/mpc_pulse", "params": {"pulse_weeks": 1.2}},
+ "pulse_twkr_20": {"agent": "agents/mpc_pulse", "params": {"pulse_weeks": 2.0}}}

@@ -1,0 +1,20 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_probe_full_0_1007-1925: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_pulse
+references ready in 1 s (6 episodes)
+  played mpc_pulse in 39 s: RSS 0.7132
+  played pulse_allfab_15 in 40 s: RSS 0.5639
+  played pulse_twkrcneu_15 in 39 s: RSS 0.5600
+  played pulse_twkr_10 in 34 s: RSS 0.7179
+  played pulse_twkr_12 in 34 s: RSS 0.7126
+  played pulse_twkr_20 in 38 s: RSS 0.7160
+
+full, entropy 0, 6 episodes; diff = variant - mpc_pulse, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.7132  0.725  0.753  0.625  0.709  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_allfab_15           0.5639  0.557  0.579  0.554  0.571  -0.1493  [-0.1692, -0.1281]     0.0%      0  <-- worse
+pulse_twkrcneu_15         0.5600  0.548  0.568  0.572  0.573  -0.1532  [-0.1795, -0.1268]     0.0%      0  <-- worse
+pulse_twkr_10             0.7179  0.724  0.761  0.639  0.708  +0.0047  [-0.0046, +0.0130]    75.1%      0
+pulse_twkr_12             0.7126  0.715  0.759  0.636  0.706  -0.0006  [-0.0110, +0.0086]    36.3%      0
+pulse_twkr_20             0.7160  0.733  0.745  0.638  0.693  +0.0028  [-0.0080, +0.0151]    70.3%      0
+
+results: outputs/variants/variants_probe_full_0_1007-1925/results.json

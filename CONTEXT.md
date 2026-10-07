@@ -43,7 +43,8 @@ humans: `STATUS_UA.md`. Write anything meant for the team in Ukrainian, short an
 | `agents/heuristic` | organisers' heuristic | board 0.4283; Full dev 0.370 |
 | `agents/mine` | Andrii's demand-aware dispatch | board 0.4487; Full dev 0.352 |
 | `agents/mpc` | energy LP (H=12) + `fallback.py` (= `mine`) for every other slot | board 0.5397; **Full dev 0.5124** |
-| **`agents/mpc_pulse`** | `mpc_chip` with the winners on by default: fuel pulse at TW/KR (`pulse_weeks` 1.5) + `fab_cap_mode: observed` | **Full dev 0.6751 (+0.131 vs mpc_chip, CI +0.097…+0.162). Codabench 967249: 0.6896, 0 fallbacks. Current final candidate.** |
+| **`agents/mpc_buffer`** | `mpc_pulse` + `wafer_buffer` 3 (keep 3 weeks of nameplate wafers at every fab, task 12) | **Full dev 0.7361 (+0.061 vs mpc_pulse, CI +0.049…+0.075; home and cloud agree), fresh Full +0.051. Codabench 967583: 0.7223, 0 fallbacks. CURRENT FINAL CANDIDATE.** |
+| **`agents/mpc_pulse`** | `mpc_chip` with the winners on by default: fuel pulse at TW/KR (`pulse_weeks` 1.5) + `fab_cap_mode: observed` | **Full dev 0.6751 (+0.131 vs mpc_chip, CI +0.097…+0.162). Codabench 967249: 0.6896, 0 fallbacks. Previous candidate.** |
 | `agents/mpc_chip` | `mpc` + **chip LP** (`chips.py`) for every wafer/chip slot, + energy LP fix (the grid must burn) | **Full dev 0.5443 (+0.032 vs mpc, CI +0.009…+0.056)**. Current best on Full. Not uploaded yet |
 | `agents/scen` | port of the organisers' `mpc_scen` | board **0.699** (Small) but **Full dev 0.42 < mpc** → not a final candidate |
 | `agents/scen_final` (branch `scen-final`) | scen without debug weeks | Small +0.006 vs scen; same Full problem |
@@ -98,12 +99,15 @@ experiment, off by default), `fab_boost` (no effect, ignore).
 - Energy horizon 20 vs 12: no effect. Tanker priorities (task 4): dead end.
 - Cost gap of mpc_pulse on Full dev: 1.15 T USD/episode (mpc: 1.66): chip shortage 88%, power shed 10% (the pulse adds ~0.12 T of shed).
 
-## Next steps (2026-10-07 evening)
+## Next steps (2026-10-08, goal: top 5 in the final)
 
-1. Round 1 on Small (running): fuel pulses (TW/KR, TW/KR/JP), energy horizon 20, chip-planner calibration.
-2. Code the big ideas: planned pulses (the energy LP chooses burst weeks), steering scarce power to high-value fabs via
-   wafer allocation, tanker priorities at straits (LNG for fab grids first).
-3. Promote winners: full6 → full20. Upload the best Full candidate before Oct 10; switch the board entry on Oct 10.
+Board (Small) 2026-10-07 23:54: we are 8th (0.7223); 5th place 0.8248, 1st 0.8823. Assume the top teams hold that on Full,
+so we need Full ≈ 0.83–0.85 (+0.1 over mpc_buffer's 0.736, ≈ −0.3 T USD per Full episode).
+1. Task 17: where mpc_buffer's remaining gap is on Full (by component, region, fab, event type).
+2. Task 15: value of the early signals (the only foresight the agent gets; the homes-first MILP says the gap is foresight).
+3. Task 16: planned pulses on the buffer, incl. CN/JP/SEA (the MILP says that fab power is reachable).
+4. Oct 9 evening: freeze the best Full candidate, add a guard that `pulse_grids` names exist (log/fallback), `sbf check`
+   small + full, upload. Oct 10 00:00–23:59 Kyiv: Botan picks the final entry by hand.
 
 ## Practical notes
 

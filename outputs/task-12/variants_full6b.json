@@ -1,0 +1,5 @@
+{"mpc_pulse": {"agent": "agents/mpc_pulse"},
+ "buf2": {"agent": "agents/mpc_buffer", "params": {"wafer_buffer": 2.0}},
+ "buf3": {"agent": "agents/mpc_buffer", "params": {"wafer_buffer": 3.0}},
+ "buf4": {"agent": "agents/mpc_buffer", "params": {"wafer_buffer": 4.0}},
+ "buf6": {"agent": "agents/mpc_buffer", "params": {"wafer_buffer": 6.0}}}

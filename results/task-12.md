@@ -1,4 +1,4 @@
-Status: Full 6: wafer buffer 2 weeks +0.074 vs mpc_pulse (CI +0.070..+0.079); running bigger buffers + Full dev 20
+Status: Full dev 20: wafer buffer 3 weeks +0.061 vs mpc_pulse (0.7363 vs 0.6752, CI +0.049..+0.075, 20/20 better); next: sbf check, Small + fresh-seed check
 
 Plan: measure wasted fab power (a), fuel disposal at fab grids/terminals (b), near-full-load shortfall weeks (c) for mpc_pulse on Full devpick:2,2,1,1, convert to lost chip USD, build only if >= ~0.17 T USD/episode.
 

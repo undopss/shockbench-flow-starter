@@ -180,7 +180,14 @@ class Agent:
                 stock = observation["stock.qty"]
                 for s_, si, p_i in self.tg_slots:
                     p = self.pools[p_i]
-                    if PARAMS["pulse_grids"] and self.node_ids[p["grid"]] not in PARAMS["pulse_grids"]:
+                    if PARAMS["pulse_grids"] == "auto":
+                        # grids that feed fabs and shed homes last week (homes first: their fabs got no power)
+                        gpos = self.grid_pos.get(p["grid"])
+                        shed = observation.get("last_week.shed.qty")
+                        if (not self.grid_has_fab.get(p["grid"]) or gpos is None or shed is None
+                                or not observation["last_week.shed.qty.observed"][gpos] or float(shed[gpos]) <= 1e-6):
+                            continue
+                    elif PARAMS["pulse_grids"] and self.node_ids[p["grid"]] not in PARAMS["pulse_grids"]:
                         continue
                     gpos = self.grid_pos.get(p["grid"])
                     burn = p["share"] * (float(G_bar[gpos]) if gpos is not None else p["deliverable"])

@@ -1,0 +1,102 @@
+[
+ {
+  "id": "fabcap_observed_full20",
+  "title": "Plan power-starved fabs at their real output (decision run)",
+  "idea": "Passed full6 (+0.062). 20 official Full dev episodes.",
+  "stage": "full20",
+  "task": "full",
+  "entropy": 0,
+  "episodes": "dev",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "fabcap_observed",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "fab_cap_mode": "observed"
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 3
+ },
+ {
+  "id": "pulse_obs_full6",
+  "title": "Pulse TW/KR + real fab capacity (combo)",
+  "idea": "Both Full-stage winners together: do they stack?",
+  "stage": "full6",
+  "task": "full",
+  "entropy": 0,
+  "episodes": "devpick:2,2,1,1",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_obs",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": [
+     "grid_tw",
+     "grid_kr"
+    ],
+    "fab_cap_mode": "observed"
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 3
+ },
+ {
+  "id": "pulse_auto_obs_full6",
+  "title": "Automatic pulse (fab grids with power cuts) + real fab capacity",
+  "idea": "No grid names: pulse any grid that feeds fabs and shed homes last week. Answers the overfitting worry; on Full it should reach JP/SEA.",
+  "stage": "full6",
+  "task": "full",
+  "entropy": 0,
+  "episodes": "devpick:2,2,1,1",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_auto_obs",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": "auto",
+    "fab_cap_mode": "observed"
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 3
+ },
+ {
+  "id": "pulse_auto_small20",
+  "title": "Automatic pulse (fab grids with power cuts)",
+  "idea": "Auto grid choice alone, Small filter on a fresh seed.",
+  "stage": "small20",
+  "task": "small",
+  "entropy": 967288973,
+  "episodes": "20",
+  "baseline": {
+   "name": "mpc_chip",
+   "agent": "agents/mpc_chip",
+   "params": {}
+  },
+  "variant": {
+   "name": "pulse_auto",
+   "agent": "agents/mpc_chip",
+   "params": {
+    "pulse_weeks": 1.5,
+    "pulse_grids": "auto"
+   }
+  },
+  "source": "claude@home",
+  "n_jobs": 2
+ }
+]

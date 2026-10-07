@@ -1,0 +1,60 @@
+{
+ "mpc_chip": {
+  "agent": "agents/mpc_chip"
+ },
+ "tk_lp": {
+  "agent": "agents/mpc_chip",
+  "params": {
+   "tanker_mode": "lp"
+  }
+ },
+ "tk_lp_fab1": {
+  "agent": "agents/mpc_chip",
+  "params": {
+   "tanker_mode": "lp",
+   "tanker": {
+    "min_queue": 1.0,
+    "drain_weeks": 4.0,
+    "need_weeks": 2,
+    "spare_weight": 0.1,
+    "fab_bonus": 1.0,
+    "lead_cost": 0.002,
+    "release_value": 3.0,
+    "overflow_cost": 0.5
+   }
+  }
+ },
+ "tk_lp_fab3": {
+  "agent": "agents/mpc_chip",
+  "params": {
+   "tanker_mode": "lp",
+   "tanker": {
+    "min_queue": 1.0,
+    "drain_weeks": 4.0,
+    "need_weeks": 2,
+    "spare_weight": 0.1,
+    "fab_bonus": 3.0,
+    "lead_cost": 0.002,
+    "release_value": 3.0,
+    "overflow_cost": 0.5
+   }
+  }
+ },
+ "tk_lp_fab1_eta": {
+  "agent": "agents/mpc_chip",
+  "params": {
+   "tanker_mode": "lp",
+   "tanker": {
+    "min_queue": 1.0,
+    "drain_weeks": 4.0,
+    "need_weeks": 2,
+    "spare_weight": 0.1,
+    "fab_bonus": 1.0,
+    "lead_cost": 0.002,
+    "release_value": 3.0,
+    "overflow_cost": 0.5
+   },
+   "queue_eta": true
+  }
+ }
+}

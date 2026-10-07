@@ -27,6 +27,9 @@ FallbackAgent = _fallback.Agent
 _cspec = importlib.util.spec_from_file_location("mpc_chips", HERE / "chips.py")
 _chips = importlib.util.module_from_spec(_cspec)
 _cspec.loader.exec_module(_chips)
+_tspec = importlib.util.spec_from_file_location("mpc_tankers", HERE / "tankers.py")
+_tankers = importlib.util.module_from_spec(_tspec)
+_tspec.loader.exec_module(_tankers)
 
 PARAMS = {
     "H": 12,  # planning horizon in weeks
@@ -43,6 +46,11 @@ PARAMS = {
     "fab_cap_mode": "full",  # "energy": plan power-starved fabs (grid shed last week) at their recent starts
     "chip_H": 24,  # chip planning horizon in weeks (wafer -> fab -> OSAT -> sink takes up to ~20)
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)
+    # tanker releases at chokepoints (tankers.py): "off" = the default release; "lp" = override slots chosen by an LP
+    "tanker_mode": "off",
+    "tanker": {"min_queue": 1.0, "drain_weeks": 4.0, "need_weeks": 6, "spare_weight": 0.1, "fab_bonus": 0.0,
+               "lead_cost": 0.002, "release_value": 3.0, "overflow_cost": 0.5},
+    "queue_eta": False,  # energy LP: queued tanker cargo arrives after the time its next edge needs to drain the queue
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -57,6 +65,12 @@ class Agent:
             self.ok = True
         except Exception:
             pass
+        self.tankers = None
+        if self.ok and PARAMS["tanker_mode"] == "lp":
+            try:
+                self.tankers = _tankers.TankerPlanner(config, self)
+            except Exception:
+                self.tankers = None
         self.chips = None
         try:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"])
@@ -159,6 +173,7 @@ class Agent:
         start = time.process_time()
         action = self.fallback.act(observation)
         flows = np.array(action["flows"], dtype=float)
+        self._tanker_action = None
         if self.ok:
             try:
                 planned = self._plan(observation, flows.copy(), start)
@@ -197,6 +212,10 @@ class Agent:
                 pass
         action = dict(action)
         action["flows"] = np.maximum(flows, 0.0) * observation["action_mask"]
+        if self._tanker_action is not None:
+            qty, mode = self._tanker_action
+            action["override_qty"] = np.maximum(qty, 0.0)
+            action["release_mode"] = mode
         return action
 
     def _plan(self, obs, flows, start):
@@ -235,8 +254,40 @@ class Agent:
                 continue
             off = int(arr) - week + sum(int(tau[e]) for e in rest)
             fixed_in[p_i, min(max(off, 0), H - 1)] += float(qty)
+        # burn per week, thresholds (computed early: the tanker planner needs them)
+        burn = np.zeros(P)
+        floor = np.zeros(P)
+        for p_i, p in enumerate(self.pools):
+            gpos = self.grid_pos.get(p["grid"])
+            G = float(G_bar[gpos]) if gpos is not None else p["deliverable"]
+            burn[p_i] = p["share"] * G
+            thr_i = self.psi * p["ibar"] if p["rationed"] else 0.0
+            floor[p_i] = max(thr_i + PARAMS["safety_weeks"] * burn[p_i],
+                             PARAMS["cover_frac"] * p["cover_days"] / 7.0 * burn[p_i])
+        left = None  # pair -> share of its queue the tanker plan leaves queued
+        if self.tankers is not None and "queue_lots.qty" in obs:
+            tp = PARAMS["tanker"]
+            L = int(tp["need_weeks"])
+            need = I0 + fixed_in[:, :L].sum(axis=1) < floor + L * burn
+            qty, mode, releases = self.tankers.plan(obs, need, tp)
+            self._tanker_action = (qty, mode)
+            content = {}
+            queued = obs["queue_lots.qty"].sum(axis=1)
+            for row, (chk_node, k, _l, _e) in enumerate(self.lot_keys):
+                p = self.tankers.pair_index.get((int(chk_node), int(k)))
+                if p is not None:
+                    content[p] = content.get(p, 0.0) + float(queued[row])
+            out = {}
+            for p_i, lead, x, pair in releases:
+                fixed_in[p_i, min(max(lead, 0), H - 1)] += x
+                out[pair] = out.get(pair, 0.0) + x
+            left = {p: max(0.0, 1.0 - out.get(p, 0.0) / c) if c > 0 else 1.0
+                    for p, c in content.items() if mode[p] == 1}
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
+            on_edge = {}
+            for row, (_c, _k, _l, next_edge) in enumerate(self.lot_keys):
+                on_edge[int(next_edge)] = on_edge.get(int(next_edge), 0.0) + float(queued[row])
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue
@@ -251,7 +302,17 @@ class Agent:
                 if p_i is None:
                     continue
                 off = sum(int(tau[e]) for e in route)
-                fixed_in[p_i, min(off, H - 1)] += float(queued[row])
+                qrow = float(queued[row])
+                if left is not None:
+                    pair = self.tankers.pair_index.get((int(chk_node), int(k)))
+                    if pair in left:  # the planned releases are counted above; the rest waits at least a week
+                        qrow *= left[pair]
+                        off += 1
+                if PARAMS["queue_eta"]:
+                    off += int(on_edge.get(int(next_edge), 0.0) / max(float(u[int(next_edge)]), 1e-9))
+                    if off >= H:
+                        continue
+                fixed_in[p_i, min(off, H - 1)] += qrow
 
         # burn per week, thresholds
         burn = np.zeros(P)

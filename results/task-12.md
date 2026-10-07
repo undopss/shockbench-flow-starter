@@ -1,4 +1,4 @@
-Status: Full fresh-seed check running (Full dev 20 and Small fresh 20 done: both better)
+Status: done. Wafer buffer at fabs (agents/mpc_buffer): Full dev 20 +0.061, Full fresh 12 +0.051, Small fresh 20 +0.036 vs mpc_pulse
 
 # Task 12: wasted power and wasted fuel (baseline `agents/mpc_pulse`)
 
@@ -80,7 +80,12 @@ mpc_pulse                 0.6892  0.623  0.744  0.690  0.846  +0.0000  [+0.0000,
 mpc_buffer                0.7247  0.655  0.778  0.750  0.872  +0.0355  [+0.0266, +0.0458]   100.0%      0  <-- better
 ```
 
-FULL_FRESH_PLACEHOLDER
+Full fresh seed (`full random 12`, entropy 1316948316; no level-4 episode among the 12), `mpc_buffer` = buffer 3:
+```
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_pulse                 0.7051  0.706  0.710  0.699      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+mpc_buffer                0.7557  0.758  0.746  0.764      -  +0.0505  [+0.0391, +0.0615]   100.0%      0  <-- better
+```
 
 ## sbf check (agents/mpc_buffer, buffer 3)
 
@@ -89,7 +94,7 @@ max 0.227 s (budgets 2 s / 4 s). This machine is much faster than the home serve
 
 ## Verdict
 
-**Wafer buffer at fabs: +0.061 RSS on Full dev 20 vs `mpc_pulse` (0.7363 vs 0.6752), better on 20/20 episodes.** A final
+**Wafer buffer at fabs: +0.061 RSS on Full dev 20 vs `mpc_pulse` (0.7363 vs 0.6752), better on 20/20 episodes; holds on a fresh Full seed (+0.051, 12/12) and on Small (+0.036, 20/20).** A final
 candidate (not uploaded). Choices I made alone: buffer 3 weeks (2-6 are all within noise of each other on Full 6, 3 was
 best on Full 20 by +0.003), buffer_cost 1000 (10000 gave the same result).
 

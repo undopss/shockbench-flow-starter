@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+episodes [0, 1, 2, 3, 4, 5], classes ['base', 'all'], 12 runs
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:  2.0min
+[Parallel(n_jobs=4)]: Done   7 out of  12 | elapsed:  2.0min remaining:  1.5min
+[Parallel(n_jobs=4)]: Done   9 out of  12 | elapsed:  3.0min remaining:   59.3s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:  3.4min finished
+
+base check: agent RSS per episode {0: 0.728, 1: 0.871, 2: 0.836, 3: 0.801, 4: 0.872, 5: 0.734} oracle reproduces cache: True
+
+class          dropped/ep  dAgent T dOracle T ceiling T ceiling RSS   per episode (ceiling T)
+all                  33.5     1.815     1.762     0.053       0.019   +0.262 -0.010 -0.009 +0.068 +0.023 -0.019

@@ -1,0 +1,53 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+## Per fab-grid, weeks (summed over 20 episodes): agent fab state, and where the oracle's fab energy goes
+grid      wk shed>0  agent: fab<5%cap & shed>0  fab<5% & wafers<1wk fab<5% other  oracle E in its shed weeks oracle E in agent-shed wks
+grid_cn       53.2%                      53.2%                 1.9%         0.0%                       81.6%                      48.6%
+grid_jp       77.3%                      77.3%                 0.6%         0.0%                       72.0%                      71.0%
+grid_sea      83.2%                      83.2%                 0.5%         0.0%                       87.2%                      82.0%
+grid_kr       43.4%                      43.4%                 2.6%         0.0%                       64.2%                      33.7%
+grid_tw       33.0%                      33.0%                 3.7%         0.2%                       47.3%                      25.6%
+grid_eu       44.5%                      44.5%                 3.9%         0.0%                       31.2%                      23.4%
+grid_us        6.7%                       6.7%                 7.6%         0.0%                        1.5%                       1.5%
+(share of all episode-weeks; 'oracle E in its shed weeks' = share of the oracle's fab energy at that grid delivered in weeks where the oracle itself sheds homes there, i.e. only possible through the base_first relaxation unless fuel is moved between weeks)
+
+## CN: per episode, weeks with shed > 0 (agent / oracle), mean weekly shed as % of base load, agent CN lots
+(grid: grid_cn )
+ep   0: shed weeks  32/  0, median shed in shed weeks   0.6% of base load, agent lots  29.6M, oracle  14.6M
+ep   1: shed weeks  46/101, median shed in shed weeks   2.8% of base load, agent lots  24.9M, oracle  29.9M
+ep   2: shed weeks  19/ 41, median shed in shed weeks   0.8% of base load, agent lots  34.6M, oracle  26.9M
+ep   3: shed weeks 100/100, median shed in shed weeks   1.2% of base load, agent lots   1.0M, oracle   0.4M
+ep   4: shed weeks  41/ 96, median shed in shed weeks   2.1% of base load, agent lots  23.2M, oracle  28.8M
+ep   5: shed weeks  53/ 99, median shed in shed weeks   0.6% of base load, agent lots  21.8M, oracle  25.5M
+ep   6: shed weeks  52/ 97, median shed in shed weeks   0.6% of base load, agent lots  22.2M, oracle  24.0M
+ep   7: shed weeks  84/ 99, median shed in shed weeks   0.8% of base load, agent lots   8.7M, oracle  29.1M
+ep  10: shed weeks  34/ 51, median shed in shed weeks   0.7% of base load, agent lots  26.4M, oracle  20.6M
+ep  14: shed weeks   8/  0, median shed in shed weeks   0.7% of base load, agent lots  32.9M, oracle  28.0M
+ep  26: shed weeks  72/100, median shed in shed weeks   0.8% of base load, agent lots  13.6M, oracle  15.9M
+ep  41: shed weeks 101/100, median shed in shed weeks   3.5% of base load, agent lots   1.3M, oracle  20.3M
+ep  44: shed weeks  62/101, median shed in shed weeks   0.8% of base load, agent lots  17.0M, oracle  19.4M
+ep  53: shed weeks  51/ 95, median shed in shed weeks   2.3% of base load, agent lots  22.3M, oracle  28.1M
+ep  57: shed weeks  61/ 99, median shed in shed weeks   0.7% of base load, agent lots  17.0M, oracle  24.1M
+ep  61: shed weeks  44/ 93, median shed in shed weeks   0.8% of base load, agent lots  25.8M, oracle  17.2M
+ep  69: shed weeks  33/ 40, median shed in shed weeks   0.6% of base load, agent lots  23.7M, oracle  28.7M
+ep  76: shed weeks  51/101, median shed in shed weeks   1.6% of base load, agent lots  21.9M, oracle  26.6M
+ep  80: shed weeks  85/101, median shed in shed weeks   4.6% of base load, agent lots   8.1M, oracle  28.4M
+ep 102: shed weeks  77/101, median shed in shed weeks   0.7% of base load, agent lots  11.0M, oracle  18.4M
+
+## OSAT packaging per episode (M units, mean): agent vs oracle
+  (3, 7)     agent   26.68  oracle   30.50
+  (0, 7)     agent   13.05  oracle   13.77
+  (0, 6)     agent   11.32  oracle   13.53
+  (5, 6)     agent   12.13  oracle   12.22
+  (4, 6)     agent    7.71  oracle    7.56
+  (4, 7)     agent    7.04  oracle    5.69
+  (6, 7)     agent    3.42  oracle    3.97
+  (2, 7)     agent    3.50  oracle    3.28
+  (2, 6)     agent    2.00  oracle    3.21
+  (1, 6)     agent    1.31  oracle    1.57
+  (6, 6)     agent    0.24  oracle    0.24
+
+## chip stock left at the end (agent, M units, mean) and chip disposal agent vs oracle
+  chip_le        end stock   0.62  disposed agent   2.14  oracle   0.00
+  chip_le_raw    end stock   0.14  disposed agent   1.37  oracle   0.12
+  chip_mat       end stock   3.17  disposed agent   2.59  oracle   0.00
+  chip_mat_raw   end stock   0.61  disposed agent   5.65  oracle   0.17

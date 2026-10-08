@@ -1,0 +1,32 @@
+outputs/task-18/v/bufplan_pp20: RSS 0.7820; CPU s/week max nan, median nan
+outputs/task-18/v/kappa_cneu_split: RSS 0.8050; CPU s/week max nan, median nan
+
+## Fab lots started per episode (mean over Full dev 20, millions)
+fab                      bufplan_pp20 kappa_cneu_spl    oracle
+fab_tw_leading_1                 7.52           7.47      6.40
+fab_tw_mature_1                  5.64           5.66      4.27
+fab_us_leading_1                 1.37           1.37      0.93
+fab_kr_leading_1                 1.76           1.85      0.74
+fab_kr_memory_1                 13.39          13.89     14.11
+fab_us_leading_2                 1.07           1.07      0.72
+fab_jp_memory_1                  2.90           3.34      6.77
+fab_us_leading_3                 1.28           1.28      0.54
+fab_eu_leading_1                 0.82           1.04      0.76
+fab_row_leading_1                0.47           0.60      0.61
+fab_cn_mature_1                 17.10          20.74     22.75
+fab_us_mature_1                  6.79           6.77      2.62
+fab_eu_mature_1                  6.43           8.03      4.79
+fab_sea_mature_1                 1.18           1.71      4.58
+fab_tw_mature_2                  5.51           5.54      4.12
+fab_us_mature_2                  6.90           6.88      5.03
+
+## Shed per grid (T USD per episode, mean; VOLL 4.125 M)
+grid                     bufplan_pp20 kappa_cneu_spl    oracle
+grid_tw                        0.1952         0.1940    0.1357
+grid_kr                        0.3799         0.3884    0.3551
+grid_jp                        0.8241         0.8194    0.7920
+grid_cn                        0.7356         0.7465    0.7105
+grid_us                        0.4247         0.4247    0.4200
+grid_eu                        0.4675         0.4796    0.4553
+grid_sea                       1.0743         1.0765    1.0799
+grid_in                        0.1400         0.1395    0.1070

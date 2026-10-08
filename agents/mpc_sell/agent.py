@@ -49,6 +49,7 @@ PARAMS = {
     "sell_buffer": False,  # task 19: keep the wafer buffer only at fabs whose chips the chip LP can sell
     "sell_end": False,  # task 19: no wafer buffer for lots that can't reach a sink before the episode ends
     "sell_frac": 0.9,  # a fab planned under this share of its LP capacity counts as sales-limited
+    "pp_end_cut": False,  # task 19: the pulse planner values no fab energy whose lots can't reach a sink before the end
     "chip_H": 24,  # chip planning horizon in weeks (wafer -> fab -> OSAT -> sink takes up to ~20)
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)
     "pulse_plan": True,  # planned pulses (pplan.py, from mpc_pplan): per fab grid, choose the terminal -> grid releases
@@ -81,7 +82,8 @@ class Agent:
             try:
                 self.pplan = _pplan.PulsePlanner(config, H=int(PARAMS["pp_H"]), value_scale=PARAMS["pp_value"],
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
-                                                 method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"])
+                                                 method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
+                                                 end_cut=PARAMS["pp_end_cut"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]

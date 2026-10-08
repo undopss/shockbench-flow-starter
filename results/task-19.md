@@ -1,4 +1,4 @@
-Status: running the funnel (small random 20, then full devpick:2,2,1,1)
+Status: running Full dev 20 (sell_end +0.0068 on Full 6, CI [+0.0059, +0.0079])
 
 Measured so far (Full devpick:2,2,1,1, baseline mpc_bufplan pp20 = agents/mpc_sell defaults): chips disposed 13M/episode
 (transport-limited: OSAT->sink edges run at their episode-reduced capacity). Ceiling, clairvoyant LP with fab starts

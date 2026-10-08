@@ -24,13 +24,19 @@ from scipy.sparse import coo_matrix
 
 
 class PulsePlanner:
-    def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6):
+    def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
+                 end_cut=False):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
+        # task 19 (off by default): fab energy is worth nothing in weeks whose lots can't reach a sink before the end
+        # (fab tau + OSAT tau + a shipping week each way)
+        self.end_cut = bool(end_cut)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
+        self.T = int(static["T"])
+        self.tail_lead = 2 + max((int(nodes[o]["osat"]["tau"]) for o in layout["osats"]), default=2)
         ids = [n["id"] for n in nodes]
         commodities = static["commodities"]["id"]
         edges, slots = static["edges"], static["action_slots"]
@@ -69,7 +75,8 @@ class PulsePlanner:
                     continue
                 kin = commodities.index(fab["input"])
                 fabs.append({"pos": fpos, "node": f, "e": float(fab["e"]), "win": self.stock_index.get((f, kin)),
-                             "kin": kin, "pi": raw_pi.get(commodities.index(fab["product"]), 0.0)})
+                             "kin": kin, "pi": raw_pi.get(commodities.index(fab["product"]), 0.0),
+                             "tau": int(fab.get("tau", 0))})
             if not fabs:
                 continue
             fuels, null_share = [], 0.0
@@ -190,12 +197,15 @@ class PulsePlanner:
             w = float(stock[fb["win"]]) if fb["win"] is not None and seen[fb["win"]] else 0.0
             a = arr.get((fb["node"], fb["kin"]), np.zeros(H))
             c = float(cap_eff[fb["pos"]])
+            week = int(obs["week"][0])
             for t in range(H):
                 w += a[t]
                 p = min(c, w)
                 w -= p
                 d = fb["e"] * p / R
                 ehat[t] += d
+                if self.end_cut and week + t + fb["tau"] + self.tail_lead > self.T:
+                    continue
                 vsum[t] += d * fb["pi"] * R / fb["e"]
         if ehat.max() <= 1e-9:
             return None

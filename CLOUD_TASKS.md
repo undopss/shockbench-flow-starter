@@ -298,3 +298,37 @@ they scored mpc_scen 0.731, mpc_det_safety 0.719, mpc_det 0.717 — **below** mp
    buffer/pulse logic) and, if time allows, build it as `agents/mpc_joint/` (start from `agents/mpc_fab3sell`, the
    joint part off by default) and test vs `agents/mpc_fab3sell`: `full 0 devpick:2,2,1,1` → `full 0 dev`.
    It must stay inside the CPU budget with margin, and fall back to mpc_fab3sell's action on any failure.
+
+## Round 6 (2026-10-08 evening): the power side
+Results of round 5 (read them): task 20 (the map), task 21 (**the chip LP is not the gap**: perfect information gives
+it ≤ +0.006 RSS; the chip-side ceiling with foresight is 0.156 T), task 22 (the package's joint LP `mpc_det` scores
+0.42-0.50 vs our 0.85 on Full 6: our three planners are the right design). What is left and reachable is on the
+**power side**: (a) the pulses' price in home shed, Full ≈ 0.19 T/episode (TW 0.061, KR 0.056, CN 0.052, EU 0.015,
+JP 0.012; task 20 item 2); (b) fab power at JP memory / SEA / CN, ≈ 0.18 T on Full devpick (task 21 "avail − free";
+task 20 items 3, 6). Baseline: `agents/mpc_fab3sell`. We have until Oct 10 evening, so build properly.
+
+### 23. BUILD: an honest value of fab energy in the pulse planner
+`pplan.py` maximises VOLL × homes served + V × fab energy, with V = `pp_value` (20, a hand-tuned factor) × an estimate
+of the chips the energy makes. So it buys fab power at 20x its estimated chip value and pays for it in home shed. But
+many of those chips can't be sold (task 20 item 1, task 19: OSAT→sink edges at capacity; task 21: routing ceiling).
+1. Measure first, on Full devpick: per fab grid and week, the planner's V vs the **true marginal value** of one more
+   unit of fab energy there (e.g. the chip LP's dual / re-solve with +ε fab capacity → Δ lost sales at pi; or the oracle's
+   value). Where is ×20 way too high or too low?
+2. Build `agents/mpc_pval/` (from `agents/mpc_fab3sell`, new options off by default): feed the planner a per-grid
+   (per-fab, per-week if cheap) value from the chip LP instead of `pp_value` × estimate. Keep CPU in budget (the chip
+   LP runs after the energy side now; you may reuse last week's duals).
+3. Funnel vs `agents/mpc_fab3sell`: `full 0 devpick:2,2,1,1` → `full 0 dev` → fresh Full seed 12 + `small random 20`.
+   Report shed by grid and fab lots before/after.
+
+### 24. MEASURE + BUILD: more power for the JP / SEA / CN fabs
+Task 20 item 3: fab_jp_memory_1 runs at 21% of capacity (oracle 45%), 98% of its missed lots in weeks with JP shed
+≥ 1% of base load; task 18 point 5 says JP crude can arrive ≤ ~553/week vs 891 needed (Malacca + Taiwan lanes) and JP
+gas is cut 20-25% by sanctions in some episodes. Task 21: the power side is ≈ 0.18 T on Full devpick (eps 5, 53, 26).
+1. For JP, SEA, CN: what limits the grid's output, fuel by fuel (lng / crude / nucfuel), week by week: source supply,
+   lane/chokepoint capacity (incl. kappa_tb queues), terminal storage, the rationing line psi·I-bar, or our own
+   dispatch? What does the **oracle** do differently there (which sources/lanes/fuels it uses, when it stocks up)?
+   `outputs/reachable_bound.py` (homes-first MILP) gives what is reachable with foresight; also give a no-foresight
+   estimate.
+2. If a lever ≥ 0.1 T exists (e.g. other fuels/lanes the energy LP under-uses, stocking up before known cuts, nucfuel
+   with its long lead, routing around Malacca), build it in `agents/mpc_jpow/` (from `agents/mpc_fab3sell`, off by
+   default) and run the same funnel as task 23. Don't change pplan's valuation (that's task 23); the two should combine.

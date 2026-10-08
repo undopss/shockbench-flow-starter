@@ -78,6 +78,10 @@ def play(n, spec, player):
     d["shed_w"] = np.array([r.shed for r in R]).tolist()
     d["lost_w"] = np.array([r.lost for r in R]).tolist()
     d["stock_end"] = np.asarray(R[-1].stock).tolist()
+    sidx = {(s.node, s.k): i for i, s in enumerate(inst.stock_slots)}
+    wslots = [sidx.get((f, inst.nodes[f].fab.input)) for f in inst.fabs]
+    d["wafer_stock_w"] = [[float(r.stock[s]) if s is not None else 0.0 for s in wslots] for r in R]
+    d["energy_w"] = np.array([r.energy for r in R]).tolist()
     return {"episode": n, "player": player, "J_cents": traj.J_cents, "costs": _sum_records(traj), "detail": d,
             "fallback_weeks": sum(took_fallback(r) for r in R), "inner_fallback_weeks": inner_fb,
             "cpu_max": max(cpu, default=None), "cpu_median": float(np.median(cpu)) if cpu else None,

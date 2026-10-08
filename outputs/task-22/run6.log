@@ -1,0 +1,15 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+36 jobs on [2, 5, 0, 1, 53, 26]
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  5 out of 36 | elapsed:  1.7min
+[Parallel(n_jobs=4)]: Done 10 out of 36 | elapsed:  2.6min
+[Parallel(n_jobs=4)]: Done 17 out of 36 | elapsed:  3.9min
+[Parallel(n_jobs=4)]: Done 24 out of 36 | elapsed:  5.6min
+[Parallel(n_jobs=4)]: Done 33 out of 36 | elapsed:  8.1min remaining:   44.3s
+[Parallel(n_jobs=4)]: Done 36 out of 36 | elapsed:  8.4min finished
+played in 506 s, written outputs/task-22/gap22_full_0_2-5-0-1-53-26.json
+agents/mpc_fab3sell RSS {'rss': 0.8499698487392189, 'pooled': True, 'rss_all': 0.8508555931794923, 'rss_by_stratum': {1: 0.8426984935073485, 2: 0.869398381239416, 3: 0.8381111717132965, 4: 0.8447466649346469}}
+policy:mpc_det RSS {'rss': 0.4159185005238431, 'pooled': True, 'rss_all': 0.37883946680839503, 'rss_by_stratum': {1: 0.4725346063520978, 2: 0.4026866190349017, 3: 0.36511195026748583, 4: 0.1736269525427908}}
+policy:mpc_det@L+8 RSS {'rss': 0.4466654264056722, 'pooled': True, 'rss_all': 0.4145215656285791, 'rss_by_stratum': {1: 0.48831606748186696, 2: 0.4505566992268521, 3: 0.39959772439990865, 4: 0.2228005505222192}}
+policy:mpc_det@max(26,2L) RSS {'rss': 0.5024856429883278, 'pooled': True, 'rss_all': 0.4807280176066377, 'rss_by_stratum': {1: 0.5136003475071383, 2: 0.5432498518770852, 3: 0.4593020815389495, 4: 0.3191850638440287}}
+policy:mpc_det_safety RSS {'rss': 0.41633552786453937, 'pooled': True, 'rss_all': 0.3789894532596143, 'rss_by_stratum': {1: 0.47397479421684485, 2: 0.40399992603356927, 3: 0.36190162618133953, 4: 0.17344387803478514}}

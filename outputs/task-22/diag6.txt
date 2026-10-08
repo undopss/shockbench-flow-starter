@@ -1,0 +1,38 @@
+
+agents/mpc_fab3sell: % of fab-weeks  full / wafer-limited / wafers-left-but-not-run, mean end wafer stock (weeks of cap0)
+  fab_tw_leading_1     grid_tw      29    30    41     1.25
+  fab_tw_mature_1      grid_tw      23    35    42     1.21
+  fab_us_leading_1     grid_us      31    59    10     0.68
+  fab_kr_leading_1     grid_kr      53     9    38     1.38
+  fab_kr_memory_1      grid_kr      39    25    36     0.77
+  fab_us_leading_2     grid_us      28    62    10     0.32
+  fab_jp_memory_1      grid_jp      22     3    75     2.61
+  fab_us_leading_3     grid_us      29    61    10     0.36
+  fab_eu_leading_1     grid_eu      36     8    56     1.90
+  fab_row_leading_1    grid_eu      29    15    56     1.94
+  fab_cn_mature_1      grid_cn      52     4    44     2.09
+  fab_us_mature_1      grid_us      59    31    10     0.67
+  fab_eu_mature_1      grid_eu      38     7    56     1.91
+  fab_sea_mature_1     grid_sea      5     7    88     2.97
+  fab_tw_mature_2      grid_tw      14    42    43     0.98
+  fab_us_mature_2      grid_us      58    32    10     1.06
+  ALL                               34    27    39
+
+policy:mpc_det@max(26,2L): % of fab-weeks  full / wafer-limited / wafers-left-but-not-run, mean end wafer stock (weeks of cap0)
+  fab_tw_leading_1     grid_tw      13    22    65     1.34
+  fab_tw_mature_1      grid_tw       1    37    62     0.62
+  fab_us_leading_1     grid_us      25    63    12     0.53
+  fab_kr_leading_1     grid_kr      15    59    26     0.79
+  fab_kr_memory_1      grid_kr      15    20    65     1.86
+  fab_us_leading_2     grid_us      14    75    10     0.17
+  fab_jp_memory_1      grid_jp       4    13    83     0.78
+  fab_us_leading_3     grid_us       4    88     8     0.05
+  fab_eu_leading_1     grid_eu       1    22    76     0.91
+  fab_row_leading_1    grid_eu      14    23    63     1.12
+  fab_cn_mature_1      grid_cn       0    27    72     0.62
+  fab_us_mature_1      grid_us      13    67    20     0.64
+  fab_eu_mature_1      grid_eu       1    38    61     0.31
+  fab_sea_mature_1     grid_sea      2    10    87     2.94
+  fab_tw_mature_2      grid_tw      12    25    62     0.85
+  fab_us_mature_2      grid_us      42    39    20     0.50
+  ALL                               11    39    50

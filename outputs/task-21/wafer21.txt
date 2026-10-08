@@ -1,0 +1,26 @@
+ep 2: wafer-limited deficit 0.59M lots, power-limited 0.26M
+   fab_kr_memory_1     0.00  0.00  0.03  0.12  0.21  0.11  0.00  0.00
+ep 5: wafer-limited deficit 1.25M lots, power-limited 0.95M
+   fab_kr_memory_1     0.43  0.00  0.00  0.00  0.00  0.00  0.00  0.00
+   fab_sea_mature_1    0.38  0.00  0.00  0.00  0.00  0.00  0.00  0.00
+   fab_row_leading_1   0.03  0.01  0.04  0.07  0.01  0.01  0.00  0.00
+ep 0: wafer-limited deficit 10.16M lots, power-limited 0.08M
+   fab_tw_mature_2     0.45  0.57  0.54  0.46  0.42  0.09  0.81  0.07
+   fab_kr_memory_1     0.06  0.82  0.92  0.92  0.00  0.00  0.00  0.00
+   fab_tw_leading_1    0.49  0.61  0.43  0.12  0.00  0.00  0.02  0.00
+   fab_tw_mature_1     0.00  0.28  0.26  0.20  0.11  0.13  0.22  0.05
+ep 1: wafer-limited deficit 3.86M lots, power-limited 1.30M
+   fab_kr_memory_1     0.38  0.22  0.38  0.38  0.04  0.09  0.15  0.00
+   fab_tw_leading_1    0.08  0.20  0.06  0.17  0.04  0.00  0.00  0.00
+   fab_us_mature_1     0.00  0.00  0.00  0.25  0.09  0.05  0.00  0.00
+   fab_tw_mature_2     0.00  0.00  0.00  0.04  0.08  0.11  0.00  0.00
+ep 53: wafer-limited deficit 5.66M lots, power-limited 0.22M
+   fab_tw_mature_2     0.00  0.09  0.07  0.16  0.44  0.57  0.27  0.00
+   fab_kr_memory_1     0.24  0.06  0.24  0.05  0.24  0.16  0.20  0.00
+   fab_tw_leading_1    0.11  0.01  0.14  0.18  0.11  0.19  0.21  0.00
+   fab_tw_mature_1     0.02  0.00  0.00  0.06  0.14  0.24  0.12  0.00
+ep 26: wafer-limited deficit 3.61M lots, power-limited 0.18M
+   fab_kr_memory_1     0.38  0.52  0.29  0.00  0.08  0.45  0.34  0.00
+   fab_tw_leading_1    0.12  0.04  0.20  0.25  0.01  0.00  0.00  0.00
+   fab_tw_mature_2     0.00  0.00  0.14  0.17  0.05  0.00  0.01  0.00
+   fab_us_mature_2     0.00  0.00  0.00  0.00  0.20  0.00  0.00  0.00

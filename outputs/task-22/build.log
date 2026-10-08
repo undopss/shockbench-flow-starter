@@ -1,0 +1,5 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[2, 5, 0, 1, 53, 26] 615.8904550075531
+naive rule's quantiles ready (0.2 s)
+built 616.1781933307648
+[(2, 1), (5, 1), (0, 2), (1, 2), (53, 3), (26, 4)]

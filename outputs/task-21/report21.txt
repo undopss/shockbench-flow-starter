@@ -1,0 +1,86 @@
+## 1. Shortage (lost sales) per episode, T USD: agent vs oracle LPs on the agent's trajectory
+   capped = oracle with each fab's weekly starts <= the agent's (routing ceiling)
+   avail  = oracle with each grid's weekly fab energy <= what the agent's grid had left after homes (G_av - y)
+   free   = the clairvoyant plan
+  ep   agent  capped   avail    free | a-capped  a-avail avail-free | lots M agent/capped/avail/free
+   2   2.319   2.300   2.300   2.300 |    0.019    0.019      0.000 | 111.8/69.2/69.2/69.2
+   5   2.015   1.894   1.843   1.457 |    0.121    0.172      0.386 | 93.5/84.5/84.2/100.8
+   0   2.319   2.095   1.977   1.923 |    0.225    0.342      0.053 | 92.5/72.7/69.1/74.3
+   1   1.404   1.340   1.299   1.235 |    0.064    0.105      0.064 | 102.2/90.1/91.4/95.6
+  53   2.037   1.967   1.919   1.563 |    0.071    0.118      0.356 | 88.4/77.3/78.7/96.5
+  26   2.438   2.375   2.258   2.038 |    0.063    0.180      0.220 | 62.9/53.8/55.5/59.3
+mean   2.089   1.995   1.933   1.753 |    0.094    0.156      0.180
+   shed T/ep: agent 4.163, capped 3.975, avail 3.972, free 4.005
+
+## 2. Lots started per fab (M per episode, mean) and where the agent's fab-weeks fall short of the oracle's
+   deficit weeks: oracle starts more than the agent. Reason of the agent's week: 'wafer' = its wafers on hand
+   (end of last week) were below the oracle's starts; 'power' = otherwise (it had wafers, so power or R cut it)
+fab                   agent   free  avail | deficit  wafer  power | excess | agent run% oracle run%
+fab_tw_leading_1       7.18   7.17   6.46 |    2.36   0.88   1.48 |   2.37 |    50%    50%
+fab_tw_mature_1        5.36   4.26   4.17 |    1.61   0.33   1.27 |   2.71 |    44%    35%
+fab_us_leading_1       1.22   0.94   1.02 |    0.07   0.04   0.03 |   0.35 |    67%    51%
+fab_kr_leading_1       2.30   1.36   1.87 |    0.30   0.09   0.21 |   1.23 |    62%    37%
+fab_kr_memory_1       17.08  15.16  16.41 |    3.80   1.95   1.85 |   5.72 |    54%    48%
+fab_us_leading_2       0.82   0.58   0.67 |    0.19   0.16   0.03 |   0.43 |    45%    31%
+fab_jp_memory_1        3.38   5.92   2.36 |    4.53   0.00   4.53 |   2.00 |    23%    40%
+fab_us_leading_3       1.16   0.40   0.41 |    0.03   0.02   0.01 |   0.79 |    63%    22%
+fab_eu_leading_1       1.00   0.73   0.72 |    0.25   0.00   0.25 |   0.52 |    39%    29%
+fab_row_leading_1      0.60   0.61   0.50 |    0.28   0.04   0.24 |   0.27 |    38%    39%
+fab_cn_mature_1       24.48  23.49  19.49 |    9.38   0.23   9.15 |  10.37 |    54%    52%
+fab_us_mature_1        6.45   3.22   3.23 |    0.24   0.11   0.13 |   3.47 |    70%    35%
+fab_eu_mature_1        7.77   4.17   6.07 |    1.23   0.01   1.22 |   4.83 |    41%    22%
+fab_sea_mature_1       1.33   4.60   1.22 |    4.05   0.06   3.98 |   0.77 |     9%    32%
+fab_tw_mature_2        4.99   4.20   4.27 |    1.79   0.85   0.95 |   2.57 |    41%    34%
+fab_us_mature_2        6.77   5.80   5.80 |    0.18   0.07   0.12 |   1.15 |    73%    63%
+
+## 3. Lost sales by sink x product (T USD/episode): agent, avail LP, free LP
+   sink_sea chip_le   demand  0.587  agent  0.223  avail  0.176  free  0.133  a-free  0.089
+    sink_us chip_le   demand  1.211  agent  0.691  avail  0.654  free  0.631  a-free  0.060
+    sink_cn chip_mat  demand  0.337  agent  0.178  avail  0.155  free  0.124  a-free  0.054
+    sink_jp chip_le   demand  0.338  agent  0.134  avail  0.119  free  0.106  a-free  0.028
+    sink_in chip_le   demand  0.194  agent  0.043  avail  0.026  free  0.018  a-free  0.025
+   sink_row chip_le   demand  0.395  agent  0.168  avail  0.155  free  0.150  a-free  0.017
+   sink_sea chip_mat  demand  0.137  agent  0.056  avail  0.057  free  0.039  a-free  0.017
+    sink_kr chip_le   demand  0.246  agent  0.106  avail  0.093  free  0.091  a-free  0.015
+    sink_eu chip_le   demand  0.439  agent  0.159  avail  0.180  free  0.149  a-free  0.010
+    sink_jp chip_mat  demand  0.080  agent  0.031  avail  0.024  free  0.023  a-free  0.009
+   sink_row chip_mat  demand  0.092  agent  0.067  avail  0.062  free  0.058  a-free  0.009
+    sink_kr chip_mat  demand  0.058  agent  0.022  avail  0.015  free  0.015  a-free  0.007
+    sink_in chip_mat  demand  0.045  agent  0.010  avail  0.013  free  0.008  a-free  0.002
+    sink_cn chip_le   demand  0.000  agent  0.000  avail  0.000  free  0.000  a-free  0.000
+    sink_eu chip_mat  demand  0.103  agent  0.088  avail  0.087  free  0.089  a-free -0.000
+    sink_us chip_mat  demand  0.285  agent  0.113  avail  0.118  free  0.118  a-free -0.005
+
+## 4. Chip flows by stage (M units per episode): agent vs free oracle
+  chokepoint>chokepoint chip_le_raw   agent     1.04  oracle     0.82
+  chokepoint>chokepoint chip_mat      agent     3.59  oracle     3.85
+  chokepoint>chokepoint chip_mat_raw  agent     3.70  oracle     2.41
+  chokepoint>chokepoint wafer         agent     8.54  oracle    11.08
+  chokepoint>fab     wafer         agent     9.90  oracle    14.16
+  chokepoint>osat    chip_le_raw   agent     6.01  oracle     7.80
+  chokepoint>osat    chip_mat_raw  agent     7.55  oracle     4.81
+  chokepoint>sink    chip_mat      agent    11.07  oracle    15.64
+  fab>chokepoint     chip_le_raw   agent     5.79  oracle     7.43
+  fab>chokepoint     chip_mat_raw  agent     7.51  oracle     4.26
+  fab>osat           chip_le_raw   agent    33.09  oracle    31.17
+  fab>osat           chip_mat_raw  agent    51.44  oracle    52.76
+  material>chokepoint wafer         agent     9.76  oracle    13.74
+  material>fab       wafer         agent    83.15  oracle    66.52
+  osat>chokepoint    chip_mat      agent    13.99  oracle    14.80
+  osat>sink          chip_le       agent    37.02  oracle    41.61
+  osat>sink          chip_mat      agent    43.50  oracle    47.23
+
+## 5. Timing: chip shortage by quarter (T USD/episode)
+  weeks   1-26  agent 0.427  avail 0.423  free 0.410
+  weeks  27-52  agent 0.513  avail 0.509  free 0.457
+  weeks  53-78  agent 0.555  avail 0.499  free 0.443
+  weeks  79-104 agent 0.593  avail 0.502  free 0.442
+
+## 6. The chip LP's own view (from its log)
+   planned starts (window week 0) minus realized, % of realized:
+   tw_leading_1:-69%  tw_mature_1:-87%  us_leading_1:-82%  kr_leading_1:-72%  kr_memory_1:-84%  us_leading_2:-91%  jp_memory_1:-72%  us_leading_3:-100%  eu_leading_1:-70%  row_leading_1:-53%  cn_mature_1:-54%  us_mature_1:-86%  eu_mature_1:-80%  sea_mature_1:-44%  tw_mature_2:-87%  us_mature_2:-64%
+   demand the LP assumed vs true demand (pi-weighted), by look-ahead week:
+     t+0 : assumed/true 0.994, mean |error| 0.080 of true
+     t+4 : assumed/true 0.992, mean |error| 0.091 of true
+     t+8 : assumed/true 0.992, mean |error| 0.091 of true
+     t+16: assumed/true 0.992, mean |error| 0.092 of true

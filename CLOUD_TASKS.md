@@ -279,3 +279,22 @@ and say **why** ours differs: horizon (chip_H 24 vs a 104-week plan), demand for
 the true demand), capacity assumptions (`fab_cap_mode`), the wafer buffer, end-of-window value, or something else.
 For each cause, a cheap test of how much fixing it would give (e.g. give the chip LP the true future demand or a
 longer horizon offline and measure). Bar: ≥ 0.15 T USD/episode. No building beyond those offline tests.
+
+### 22. MEASURE (+BUILD if it pays): one joint LP instead of three glued planners
+Our agent is three separate planners (fuel LP, chip LP that assumes fabs get all the power they ask for, pulse
+planner); the oracle solves fuel → power → fabs → chips → sinks in **one** LP. The package already has the joint
+version: `shockbench_flow.policies.mpc_det` (rolling `oracle.lp.build_lp` on the persistence forecast, horizon sweep
+`mpc_det[H=...]`, planning rules) and `mpc_scen` (scenarios). On Small 64 eps (Oct 6, `outputs/compare_baselines.py`)
+they scored mpc_scen 0.731, mpc_det_safety 0.719, mpc_det 0.717 — **below** mpc_fab3sell's Codabench 0.7668. Why?
+1. Run `mpc_det` (canonical H and 1-2 longer H, e.g. the H_SWEEP's largest that fits) and `mpc_det_safety` vs
+   `agents/mpc_fab3sell` on **Full devpick:2,2,1,1** (play them the way `outputs/compare_baselines.py` /
+   `cost_breakdown.py` `policy:` does). Record RSS, CPU s per week (budget 4 s on Full; the scorer is maybe ~5x faster
+   than the home FX-6100, unknown vs your machine) and the cost breakdown per component for each.
+2. **Where does the joint LP win and where does it lose vs ours** (per component, per grid shed, per fab lots, per
+   sink shortage)? E.g. does it keep CN/JP fabs powered better (it knows power and chips together) but lose on the
+   things our hacks fix (wafer buffer, pulses through base_first rationing, chokepoint queues kappa_tb, sell_end)?
+3. If its wins are big (≥ 0.15 T USD/episode on some component), say what a hybrid would look like (e.g. use the
+   joint LP's fab energy / lots as targets for our planners, or run the joint LP and patch its action with our
+   buffer/pulse logic) and, if time allows, build it as `agents/mpc_joint/` (start from `agents/mpc_fab3sell`, the
+   joint part off by default) and test vs `agents/mpc_fab3sell`: `full 0 devpick:2,2,1,1` → `full 0 dev`.
+   It must stay inside the CPU budget with margin, and fall back to mpc_fab3sell's action on any failure.

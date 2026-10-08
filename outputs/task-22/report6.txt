@@ -1,0 +1,73 @@
+
+## Cost per component, T USD per episode (mean of 6 episodes [0, 1, 2, 5, 26, 53])
+                                     oracle     mpc_fab3sell          mpc_det      mpc_det@L+8 mpc_det@max(26,2   mpc_det_safety
+freight                              0.0119           0.0179           0.0114           0.0116           0.0118           0.0114
+war_risk                             0.0001           0.0001           0.0001           0.0001           0.0001           0.0001
+tariff                               0.0073           0.0160           0.0046           0.0047           0.0048           0.0046
+holding                              0.0175           0.0336           0.0149           0.0150           0.0154           0.0149
+queue_holding                        0.0004           0.0020           0.0001           0.0001           0.0001           0.0001
+shortage                             1.7529           2.0888           3.0029           2.9844           2.9826           3.0003
+disposal                             0.0002           0.0151           0.0035           0.0035           0.0035           0.0036
+shed                                 4.0048           4.1634           4.9926           4.8824           4.6455           4.9947
+salvage_credit                      -0.0003          -0.0059          -0.0011          -0.0011          -0.0011          -0.0011
+TOTAL                                5.7947           6.3312           8.0291           7.9007           7.6626           8.0286
+gap to oracle (T): mpc_fab3sell 0.536  mpc_det 2.234  mpc_det@L+8 2.106  mpc_det@max(26,2L) 1.868  mpc_det_safety 2.234
+
+## Shed per grid, T USD per episode (energy shed x VoLL)
+                                     oracle     mpc_fab3sell          mpc_det      mpc_det@L+8 mpc_det@max(26,2   mpc_det_safety
+grid_tw                              0.1791           0.1873           0.1387           0.1404           0.1402           0.1388
+grid_kr                              0.2121           0.2498           0.2408           0.2314           0.2233           0.2415
+grid_jp                              0.6368           0.6458           0.6878           0.6872           0.6771           0.6875
+grid_cn                              0.3873           0.4416           0.5422           0.5163           0.4722           0.5419
+grid_us                              0.6793           0.6871           1.0640           1.0262           0.9515           1.0640
+grid_eu                              0.4243           0.4607           0.7974           0.7589           0.6598           0.7994
+grid_sea                             1.4506           1.4556           1.4748           1.4750           1.4745           1.4748
+grid_in                              0.0354           0.0356           0.0469           0.0469           0.0469           0.0469
+
+## Fab lots started per episode (millions)
+                                     oracle     mpc_fab3sell          mpc_det      mpc_det@L+8 mpc_det@max(26,2   mpc_det_safety
+fab_tw_leading_1                       7.17             7.18             3.57             3.56             3.54             3.59
+fab_tw_mature_1                        4.26             5.36             1.24             1.52             1.53             1.23
+fab_us_leading_1                       0.94             1.22             0.88             0.86             0.80             0.88
+fab_kr_leading_1                       1.36             2.30             0.67             0.69             0.70             0.67
+fab_kr_memory_1                       15.16            17.08             7.09             7.24             7.23             7.15
+fab_us_leading_2                       0.58             0.82             0.46             0.47             0.47             0.46
+fab_jp_memory_1                        5.92             3.38             0.76             0.93             0.93             0.74
+fab_us_leading_3                       0.40             1.16             0.28             0.29             0.30             0.28
+fab_eu_leading_1                       0.73             1.00             0.33             0.34             0.35             0.32
+fab_row_leading_1                      0.61             0.60             0.24             0.25             0.25             0.24
+fab_cn_mature_1                       23.49            24.48             7.88             7.66             7.27             7.85
+fab_us_mature_1                        3.22             6.45             2.56             2.72             2.81             2.56
+fab_eu_mature_1                        4.17             7.77             2.38             2.42             2.54             2.38
+fab_sea_mature_1                       4.60             1.33             0.41             0.49             0.52             0.41
+fab_tw_mature_2                        4.20             4.99             2.14             1.93             2.05             2.14
+fab_us_mature_2                        5.80             6.77             4.79             4.80             5.01             4.79
+TOTAL                                 82.61            91.89            35.68            36.15            36.29            35.69
+
+## Lost sales, T USD per episode, by product x sink
+                                     oracle     mpc_fab3sell          mpc_det      mpc_det@L+8 mpc_det@max(26,2   mpc_det_safety
+chip_le@us                           0.6312           0.6914           0.9062           0.9001           0.9064           0.9071
+chip_le@sea                          0.1333           0.2228           0.3834           0.3705           0.3738           0.3836
+chip_le@eu                           0.1486           0.1588           0.2615           0.2424           0.2434           0.2599
+chip_mat@cn                          0.1243           0.1781           0.2573           0.2565           0.2553           0.2581
+chip_le@row                          0.1505           0.1678           0.2094           0.2338           0.2309           0.2081
+chip_le@jp                           0.1062           0.1340           0.2055           0.2048           0.2052           0.2063
+chip_le@kr                           0.0913           0.1061           0.1609           0.1585           0.1572           0.1601
+chip_mat@us                          0.1182           0.1128           0.1593           0.1607           0.1566           0.1597
+chip_le@in                           0.0179           0.0426           0.1063           0.1063           0.1004           0.1050
+chip_mat@sea                         0.0387           0.0556           0.1062           0.1048           0.1057           0.1062
+chip_mat@eu                          0.0886           0.0885           0.0831           0.0824           0.0827           0.0835
+chip_mat@row                         0.0583           0.0668           0.0626           0.0618           0.0617           0.0621
+chip_mat@jp                          0.0226           0.0313           0.0481           0.0454           0.0474           0.0476
+chip_mat@kr                          0.0149           0.0216           0.0299           0.0329           0.0315           0.0298
+chip_mat@in                          0.0085           0.0105           0.0232           0.0236           0.0243           0.0232
+TOTAL lost USD                       1.7529           2.0888           3.0029           2.9844           2.9826           3.0003
+
+## Per episode RSS-like: total cost T USD
+                                     oracle     mpc_fab3sell          mpc_det      mpc_det@L+8 mpc_det@max(26,2   mpc_det_safety
+ep 0                                  4.239            4.869            6.809            6.586            6.210            6.804
+ep 1                                  6.948            7.248            8.629            8.511            8.227            8.625
+ep 2                                  4.360            4.781            5.318            5.283            5.288            5.313
+ep 5                                  3.851            4.440            6.281            6.215            6.047            6.277
+ep 26                                10.005           10.541           12.858           12.689           12.356           12.859
+ep 53                                 5.366            6.109            8.279            8.121            7.847            8.294

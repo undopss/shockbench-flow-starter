@@ -248,3 +248,34 @@ reach a sink before the episode ends; route raw chips before they overflow.
    `small random 20` → `full 0 devpick:2,2,1,1` → `full 0 dev` if better.
 3. Report chips disposed / ending stock / lots per fab (agent vs oracle), before vs after.
 4. `sbf check` Small and Full for the best variant (CPU max/median per week).
+
+## Round 5 (2026-10-08 afternoon): the map
+
+New facts: **`agents/mpc_fab3sell`** = task 18's best (mpc_fab3 + kappa_lp, pp_direct cn/eu, pp_split) + task 19's
+`sell_end`, all set in its `params.json`. **Codabench Small 0.7668** (200 hidden episodes); Full dev 20 ≈ 0.805-0.81.
+**Baseline for round 5: `agents/mpc_fab3sell`** (plain `{"agent": "agents/mpc_fab3sell"}`). Board: 5th place is
+0.8537 on Small, so we need **≈ +0.08-0.09**. Small tuning is useless now: we need to know where a big chunk is.
+Task 17's map was for the older mpc_buffer (CN turned out mostly fixed already), so it must be redone.
+
+### 20. MEASURE: where does mpc_fab3sell still lose points? (the map, report fast)
+Rerun task 17's breakdown on `agents/mpc_fab3sell`, **Full dev 20 and Small dev 20** (`outputs/task-17/gap17.py`,
+`report17.py`, `flow17.py`, `fabs17.py`; `outputs/cost_breakdown.py`). Gap to the clairvoyant plan, in T USD/episode
+and as RSS points:
+1. per cost component and harm level;
+2. chip shortage by product × sink, and lots per fab vs the oracle (where are we short of chips, and which fabs could
+   have made them: power-limited, wafer-limited, capacity-limited, or just not planned?);
+3. shed by grid; 4. by time (quarters of the episode, last weeks);
+5. **the list**: rank the 5-8 biggest separate leaks by T USD/episode, each with its cause in one line and whether
+   it is reachable without foresight (say how you know). This list is the deliverable.
+Note any difference between Small and Full (the board is Small, the final is Full).
+No building in this task.
+
+### 21. MEASURE: our chip LP vs the oracle's chip decisions, side by side
+82% of the gap (task 17) is chip shortage, mostly in calm conditions, so the chip planning itself may be the leak.
+On 4-6 Full dev episodes (`devpick:2,2,1,1` or a subset) compare week by week what `agents/mpc_fab3sell`'s chip LP
+(`chips.py`) decides vs the clairvoyant LP (`shockbench_flow.oracle.lp`): wafer purchases, lots started per fab,
+raw-chip routing fab→OSAT, packaged routing OSAT→sink, stock levels. Find the decisions that differ most in value
+and say **why** ours differs: horizon (chip_H 24 vs a 104-week plan), demand forecast (what the agent assumes vs
+the true demand), capacity assumptions (`fab_cap_mode`), the wafer buffer, end-of-window value, or something else.
+For each cause, a cheap test of how much fixing it would give (e.g. give the chip LP the true future demand or a
+longer horizon offline and measure). Bar: ≥ 0.15 T USD/episode. No building beyond those offline tests.

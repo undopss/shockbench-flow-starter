@@ -208,3 +208,26 @@ gap to the clairvoyant plan down further so the team knows where the next +0.1 c
    and how the gap correlates with them (is the gap mostly in episodes with event X?).
 Write the tables to `results/task-17.md` with a short "where the next 0.1 RSS is" section (≈0.33 T USD/episode).
 No building in this task.
+
+## Round 4 (2026-10-08 morning)
+
+New facts: **`agents/mpc_bufplan` with `{"pulse_plan": true, "pp_value": 20}` = Full dev 20 0.7820** (+0.046 vs
+mpc_buffer, results/task-16.md). Its planner is off by default, so the baseline for round 4 is that agent **with
+those params** in `variants.json`. Warnings are a dead end (results/task-15.md). Where the rest is: results/task-17.md.
+
+### 18. BUILD: let the CN/JP/SEA fabs run (team goal: Full ≈ 0.82-0.84)
+Task 17's biggest lever (ceiling ≈ 0.3 T USD/episode ≈ +0.09 RSS): at grid_cn / grid_jp / grid_sea the fabs run under
+5% of capacity in 80-90% of episode-weeks, because the grid has a **tiny** home shortfall every week (CN median ~0.4%
+of base load) and under base_first fabs get nothing. They never lack wafers. The oracle starts ~4x the lots there.
+Task 16's planner restricted to CN/JP/SEA gave only +0.013 on Full 6, so this is still open.
+Task 17's hint (untested): size the extra fuel to **shortfall + fab draw** (≈0.5-1% of load at CN), not to weeks of
+burn (that is why the plain pulse at CN cost −0.15 RSS in task 14). Ideas, your call: a small targeted top-up / pulse at
+these grids sized to close the shortfall plus the fab draw; letting the fuel LP value fab power at these grids (chips
+they make × pi of their sinks); planning alternating weeks (bank fuel, then one fully-powered fab week). Check what is
+physically reachable first (`outputs/reachable_bound.py`, task 17's `fabs17.py`) and say why the planner missed it.
+1. Build in a copy (`agents/mpc_fab3/`, from `agents/mpc_bufplan`, with pp20 on; new options off by default).
+2. Funnel vs baseline `{"agent": "agents/mpc_bufplan", "params": {"pulse_plan": true, "pp_value": 20}}`: CN/SEA exist
+   only on Full, so go straight to `full 0 devpick:2,2,1,1`, then `full 0 dev` if better, plus `small random 20` as a
+   no-harm check (JP is on Small).
+3. Report fab lots at CN/JP/SEA (agent vs oracle) and shed by grid, before vs after.
+4. `sbf check` Small and Full for the best variant (CPU max/median per week).

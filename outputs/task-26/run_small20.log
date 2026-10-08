@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants26_small_1372962772_1008-1530: task small, entropy 1372962772, episodes 20, baseline mpc_fab3sell
+references ready in 775 s (20 episodes)
+  played mpc_fab3sell in 33 s: RSS 0.7145
+  played imit_room in 32 s: RSS 0.7149
+  played imit_target in 34 s: RSS 0.7179
+
+small, entropy 1372962772, 20 episodes; diff = variant - mpc_fab3sell, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_fab3sell              0.7145  0.656  0.792  0.701  0.786  +0.0000  [+0.0000, +0.0000]     nan%      0
+imit_room                 0.7149  0.656  0.792  0.702  0.786  +0.0003  [-0.0000, +0.0008]    91.8%      0
+imit_target               0.7179  0.658  0.796  0.706  0.794  +0.0033  [+0.0015, +0.0055]   100.0%      0  <-- better
+
+results: outputs/variants/variants26_small_1372962772_1008-1530/results.json

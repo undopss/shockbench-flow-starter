@@ -58,6 +58,7 @@ PARAMS = {
     "pp_enum_H": 6,
     "pp_deadline": 1.5,  # CPU seconds used this week after which no more grids are planned
     "kappa_lp": False,  # task 18: queued tanker cargo drains at the chokepoint's kappa_tb, and the LP's lanes share it
+    "pp_split": False,  # task 18: a planner mode that recharges the rationed fuel and holds the others (crude)
     "pp_direct": [],  # grid ids whose direct source -> grid pipelines the planner also times (task 18; empty = off)
 }
 if (HERE / "params.json").is_file():
@@ -79,7 +80,8 @@ class Agent:
                 self.pplan = _pplan.PulsePlanner(config, H=int(PARAMS["pp_H"]), value_scale=PARAMS["pp_value"],
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
-                                                 direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"])
+                                                 direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
+                                                 split=PARAMS["pp_split"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]

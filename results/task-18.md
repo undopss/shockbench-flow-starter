@@ -1,4 +1,4 @@
-Status: running Full dev 20 (kappa_lp + pp_direct CN/EU)
+Status: running Full dev 20 round 2 (pp_split: recharge gas, hold crude)
 
 Found so far (Full devpick, outputs/task-18/diag18.py, lng18.py, crude18.py):
 - SEA: crude (3% of SEA load) can only reach grid_sea via chk_panama -> term_sea, capacity ~13/week vs 750 needed: SEA's home shortfall is physical, its fabs can't be powered without the oracle's homes-first relaxation.
@@ -16,3 +16,13 @@ kappa                     0.8287  0.828  0.850  0.805  0.794  +0.0068  [+0.0033,
 kappa_cn_eu               0.8356  0.831  0.865  0.812  0.798  +0.0138  [+0.0078, +0.0190]   100.0%      0  <-- better
 ```
 (first run, variants18.json: direct_cn +0.0076 [-0.0015, +0.0157], direct_cn_eu +0.0099 [-0.0003, +0.0189])
+
+Full dev 20, baseline mpc_bufplan pp20:
+```
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+bufplan_pp20              0.7820  0.767  0.834  0.764  0.704  +0.0000  [+0.0000, +0.0000]     nan%      0
+direct_cn_eu              0.7857  0.768  0.841  0.772  0.704  +0.0037  [-0.0012, +0.0085]    89.1%      0
+kappa                     0.7902  0.778  0.841  0.770  0.709  +0.0082  [+0.0015, +0.0170]    99.9%      0  <-- better
+kappa_cn_eu               0.7924  0.779  0.846  0.771  0.706  +0.0104  [+0.0028, +0.0187]    99.6%      0  <-- better
+```
+- Third limiter: the planner used one release mode per week for all fuels of a grid, so a gas "recharge" week also released crude that the next fab week needed. Option `pp_split`: a 5th mode (gas recharges, crude held at the terminal). diag18 replay on devpick: RSS 0.8435 vs 0.8356 (kappa_cn_eu) vs 0.817 (baseline); JP fab power share 0.44 -> 0.50, CN 0.54 -> 0.57.

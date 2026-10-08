@@ -65,7 +65,7 @@ def queue_release(obs, lot_keys, chk_pos, tb_k, H):
 
 class PulsePlanner:
     def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
-                 direct_grids=(), kappa=False):
+                 direct_grids=(), kappa=False, split=False):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -88,6 +88,7 @@ class PulsePlanner:
         self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
         self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
         self.kappa = bool(kappa)
+        self.split = bool(split)
         pools = static["commodities"].get("pool") or []
         self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
         self.direct_slots = set()
@@ -428,7 +429,10 @@ class PulsePlanner:
         3 release everything (the default).
         """
         H = min(self.enum_H, self.H)
-        modes = 4
+        # pp_split: a 5th mode when the grid has a rationed and an unrationed controlled fuel: the rationed fuel
+        # recharges (mode 2) while the others are held at the terminal for a later full week
+        split = self.split and any(fu["thr"] > 0 for fu in ctrl) and any(fu["thr"] <= 0 for fu in ctrl)
+        modes = 5 if split else 4
         N = modes ** H
         seq = (np.arange(N)[:, None] // (modes ** np.arange(H)[None, :])) % modes  # (N, H), week 0 = digit 0
         u = obs["graph_now.u"]
@@ -441,7 +445,7 @@ class PulsePlanner:
         value = np.zeros(N)
         r0 = [None] * F
         for t in range(H):
-            m = seq[:, t]
+            m_all = seq[:, t]
             av = []
             pre_all = []
             rel_all = []
@@ -451,6 +455,7 @@ class PulsePlanner:
                 ration = np.ones(N) if thr <= 0 else np.minimum(1.0, I[j] / thr)
                 cap_t = cap * ration
                 have = I[j] + fu["aG"][t] + fly[j]
+                m = np.where(m_all == 4, 2 if thr > 0 else 0, m_all)
                 limit = np.minimum(T[j], float(u[fu["edge"]]))
                 want = np.where(m == 0, 0.0,
                        np.where(m == 1, np.maximum(cap_t - have, 0.0),
@@ -481,6 +486,7 @@ class PulsePlanner:
             load = np.where(g > 0, (y + E) / np.maximum(g, 1e-12), 0.0)
             value += y + V[t] * E
             m_next = seq[:, t + 1] if t + 1 < H else np.ones(N, dtype=int)
+            m_next = np.where(m_next == 4, 2, m_next)  # pipes carry the rationed fuel
             for j, fu in enumerate(ctrl):
                 I[j] = np.minimum(pre_all[j] - av[j] * load, fu["storG"])
                 T[j] = np.minimum(T[j] - rel_all[j] + fu["aT"][t], fu["storT"])
@@ -511,7 +517,7 @@ class PulsePlanner:
         best = value.max()
         # among (near-)ties prefer the default (release everything) in week 0, then the smaller digit sum
         cand = np.flatnonzero(value >= best - 1e-9 * max(1.0, abs(best)))
-        default = cand[seq[cand, 0] == modes - 1]
+        default = cand[seq[cand, 0] == 3]
         b = int(default[0]) if len(default) else int(cand[0])
         out = {fu["slot"]: float(r0[j][b]) for j, fu in enumerate(ctrl)}
         out.update({s_: float(r[b]) for s_, r in d0.items()})

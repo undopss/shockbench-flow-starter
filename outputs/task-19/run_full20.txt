@@ -1,0 +1,13 @@
+round variants19c_full_0_1008-1113: task full, entropy 0, episodes dev, baseline bufplan_pp20
+references ready in 1 s (20 episodes)
+  played bufplan_pp20 in 124 s: RSS 0.7820
+  played sell_end in 124 s: RSS 0.7864
+  played sell_both in 184 s: RSS 0.7850
+
+full, entropy 0, 20 episodes; diff = variant - bufplan_pp20, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+bufplan_pp20              0.7820  0.767  0.834  0.764  0.704  +0.0000  [+0.0000, +0.0000]     nan%      0
+sell_end                  0.7864  0.773  0.837  0.767  0.709  +0.0044  [+0.0029, +0.0059]   100.0%      0  <-- better
+sell_both                 0.7850  0.774  0.835  0.760  0.707  +0.0030  [+0.0003, +0.0056]    96.7%      0  <-- better
+
+results: outputs/variants/variants19c_full_0_1008-1113/results.json

@@ -1,0 +1,15 @@
+round variants19_small_1005861973_1008-1103: task small, entropy 1005861973, episodes 20, baseline bufplan_pp20
+references ready in 32 s (20 episodes)
+  played bufplan_pp20 in 25 s: RSS 0.7462
+  played sell_end in 24 s: RSS 0.7488
+  played sell_buffer in 33 s: RSS 0.7460
+  played sell_both in 29 s: RSS 0.7479
+
+small, entropy 1005861973, 20 episodes; diff = variant - bufplan_pp20, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+bufplan_pp20              0.7462  0.722  0.782  0.737      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+sell_end                  0.7488  0.719  0.792  0.737      -  +0.0026  [-0.0010, +0.0062]    88.4%      0
+sell_buffer               0.7460  0.721  0.782  0.737      -  -0.0002  [-0.0024, +0.0017]    45.5%      0
+sell_both                 0.7479  0.719  0.791  0.735      -  +0.0017  [-0.0023, +0.0058]    77.5%      0
+
+results: outputs/variants/variants19_small_1005861973_1008-1103/results.json

@@ -1,0 +1,52 @@
+=== base
+  TOTAL chip_mat_raw  disposed   5.08  end stock   1.12   value at pi 0.053 T + end 0.012 T
+  TOTAL chip_mat      disposed   3.07  end stock   4.46   value at pi 0.032 T + end 0.046 T
+  TOTAL chip_le       disposed   3.17  end stock   0.75   value at pi 0.160 T + end 0.038 T
+  TOTAL chip_le_raw   disposed   1.55  end stock   0.37   value at pi 0.078 T + end 0.019 T
+  wafers disposed 1.45M
+
+## lots started per fab (M / episode): agent, agent in last 10 weeks, oracle (task 17), mean fab output use
+    fab_tw_leading_1 agent   7.97  last10  0.65  oracle   7.17
+     fab_tw_mature_1 agent   5.84  last10  0.52  oracle   4.26
+    fab_us_leading_1 agent   1.35  last10  0.10  oracle   0.94
+    fab_kr_leading_1 agent   2.38  last10  0.17  oracle   1.36
+     fab_kr_memory_1 agent  18.32  last10  1.30  oracle  15.16
+    fab_us_leading_2 agent   0.90  last10  0.06  oracle   0.58
+     fab_jp_memory_1 agent   3.01  last10  0.22  oracle   5.92
+    fab_us_leading_3 agent   1.26  last10  0.09  oracle   0.40
+    fab_eu_leading_1 agent   0.82  last10  0.08  oracle   0.73
+   fab_row_leading_1 agent   0.47  last10  0.05  oracle   0.61
+     fab_cn_mature_1 agent  16.59  last10  1.89  oracle  23.49
+     fab_us_mature_1 agent   7.03  last10  0.59  oracle   3.22
+     fab_eu_mature_1 agent   6.36  last10  0.65  oracle   4.17
+    fab_sea_mature_1 agent   1.14  last10  0.00  oracle   4.60
+     fab_tw_mature_2 agent   5.39  last10  0.47  oracle   4.20
+     fab_us_mature_2 agent   7.34  last10  0.56  oracle   5.80
+
+## lost sales by sink x product (T USD/episode)
+=== sellend
+  TOTAL chip_mat_raw  disposed   4.92  end stock   0.57   value at pi 0.051 T + end 0.006 T
+  TOTAL chip_mat      disposed   3.07  end stock   4.41   value at pi 0.032 T + end 0.046 T
+  TOTAL chip_le       disposed   3.17  end stock   0.75   value at pi 0.160 T + end 0.038 T
+  TOTAL chip_le_raw   disposed   1.51  end stock   0.14   value at pi 0.076 T + end 0.007 T
+  wafers disposed 1.45M
+
+## lots started per fab (M / episode): agent, agent in last 10 weeks, oracle (task 17), mean fab output use
+    fab_tw_leading_1 agent   7.34  last10  0.06  oracle   7.17
+     fab_tw_mature_1 agent   5.38  last10  0.07  oracle   4.26
+    fab_us_leading_1 agent   1.22  last10  0.00  oracle   0.94
+    fab_kr_leading_1 agent   2.22  last10  0.01  oracle   1.36
+     fab_kr_memory_1 agent  16.98  last10  0.08  oracle  15.16
+    fab_us_leading_2 agent   0.82  last10  0.00  oracle   0.58
+     fab_jp_memory_1 agent   2.87  last10  0.09  oracle   5.92
+    fab_us_leading_3 agent   1.15  last10  0.00  oracle   0.40
+    fab_eu_leading_1 agent   0.73  last10  0.00  oracle   0.73
+   fab_row_leading_1 agent   0.42  last10  0.00  oracle   0.61
+     fab_cn_mature_1 agent  15.41  last10  0.74  oracle  23.49
+     fab_us_mature_1 agent   6.45  last10  0.01  oracle   3.22
+     fab_eu_mature_1 agent   5.77  last10  0.04  oracle   4.17
+    fab_sea_mature_1 agent   1.14  last10  0.00  oracle   4.60
+     fab_tw_mature_2 agent   4.96  last10  0.05  oracle   4.20
+     fab_us_mature_2 agent   6.79  last10  0.02  oracle   5.80
+
+## lost sales by sink x product (T USD/episode)

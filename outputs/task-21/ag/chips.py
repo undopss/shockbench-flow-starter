@@ -46,6 +46,7 @@ class ChipPlanner:
         self.sell_buffer, self.sell_end, self.sell_frac = bool(sell_buffer), bool(sell_end), float(sell_frac)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
+        self.comm_ids = list(static["commodities"]["id"])
         nodes = inst["nodes"]
         self.H = H
         self.T = int(static["T"])
@@ -323,6 +324,12 @@ class ChipPlanner:
             sidx = self.supply_index.get((p["node"], p["k"]))
             per_week = float(supply[sidx]) if sidx is not None and supply_seen[sidx] else 0.0
             hi[off_m + mi * H: off_m + mi * H + H] = max(per_week, 0.0)
+            if ORACLE is not None and OPTS.get("true_supply") and sidx is not None:
+                SU = ORACLE["supply"]
+                gidx = ORACLE["slot_of"].get((p["node"], p["k"]))
+                if gidx is not None:
+                    for t in range(H):
+                        hi[off_m + mi * H + t] = max(float(SU[min(week - 1 + t, SU.shape[0] - 1), gidx]), 0.0)
 
         # ---- balance rows: I[t] - I[t-1] + d[t] + out[t] + start/pack/serve[t] - in[t] - lift[t] = fixed[t] (+I0)
         rows, cols, vals = [], [], []
@@ -405,7 +412,14 @@ class ChipPlanner:
         for fi in range(nB):
             f = self.fabs[fi]
             c0 = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
-            want = min(self.wafer_buffer * max(c0, 0.0), 0.95 * self.pos[f["in"]]["cap"])
+            wb = self.wafer_buffer
+            if ORACLE is not None and OPTS.get("buf_weeks_fab"):
+                wb = float(OPTS["buf_weeks_fab"].get(str(f["pos"]), wb))
+            want = min(wb * max(c0, 0.0), 0.95 * self.pos[f["in"]]["cap"])
+            bc = self.buffer_cost
+            if ORACLE is not None and OPTS.get("buf_le_weight"):
+                if "chip_le" in self.comm_ids[self.pos[f["out"]]["k"]]:
+                    bc *= float(OPTS["buf_le_weight"])
             if want <= 0:
                 continue
             for t in range(H):
@@ -414,7 +428,7 @@ class ChipPlanner:
                 rows += [r, r]; cols += [off_I + f["in"] * H + t, off_b + fi * H + t]; vals += [-1.0, -1.0]
                 b.append(-want)
                 buf_rows.append((r, fi, t))
-                cost[off_b + fi * H + t] = self.buffer_cost
+                cost[off_b + fi * H + t] = bc
                 r += 1
         A_ub = coo_matrix((vals, (rows, cols)), shape=(r, n)).tocsr()
         b = np.array(b, dtype=float)

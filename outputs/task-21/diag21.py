@@ -48,7 +48,8 @@ def play(n, spec, agent_root, opts, base_lots):
     mod = sys.modules.get(cls.__module__)
     chips = mod._chips
     chips.ORACLE = {"demand": np.asarray(marks.demand), "u": np.asarray(marks.u), "o": np.asarray(marks.o),
-                    "prohibited": np.asarray(marks.prohibited),
+                    "prohibited": np.asarray(marks.prohibited), "supply": np.asarray(marks.supply),
+                    "slot_of": {(s.node, s.k): i for i, s in enumerate(inst.stock_slots)},
                     "lots": np.asarray(base_lots) if base_lots is not None else None}
     chips.OPTS = dict(opts)
     chips.LOG.clear()

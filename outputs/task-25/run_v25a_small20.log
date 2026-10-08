@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v25a_small_159869646_1008-1434: task small, entropy 159869646, episodes 20, baseline mpc_fab3sell
+references ready in 870 s (20 episodes)
+  played mpc_fab3sell in 22 s: RSS 0.7995
+  played sfcap in 27 s: RSS 0.8234
+  played sfcap_sw15 in 20 s: RSS 0.8139
+
+small, entropy 159869646, 20 episodes; diff = variant - mpc_fab3sell, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_fab3sell              0.7995  0.827  0.750  0.789  0.791  +0.0000  [+0.0000, +0.0000]     nan%      0
+sfcap                     0.8234  0.852  0.776  0.796  0.809  +0.0238  [+0.0144, +0.0344]   100.0%      0  <-- better
+sfcap_sw15                0.8139  0.844  0.763  0.788  0.806  +0.0143  [+0.0040, +0.0255]    99.5%      0  <-- better
+
+results: outputs/variants/v25a_small_159869646_1008-1434/results.json

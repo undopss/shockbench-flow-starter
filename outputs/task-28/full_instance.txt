@@ -1,0 +1,238 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+T 104 params Params(psi=0.6, alpha_max=1.25, tau_alpha=52.0, upsilon=0.9, fleet_share=(0.05, 0.06), fleet_measure=(99190.46426159334, 16522177.933544759), top_tariff=0.25, forecast_shares=(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+nodes by type Counter({'fab': 16, 'source': 10, 'terminal': 8, 'grid': 8, 'material': 8, 'sink': 8, 'chokepoint': 7, 'osat': 7})
+
+COMMODITIES id unit pool v override disp
+0 lng GWh fuel tb 41252.7726 True 4125.27726
+1 crude GWh fuel tb 38455.527020785215 True 3845.5527020785216
+2 nucfuel GWh fuel tb 206263.86299999998 False 20626.3863
+3 wafer wafer-eq 300 mm ct 3000.0 False 300.0
+4 chip_le_raw wafer-eq 300 mm ct 20000.0 False 2000.0
+5 chip_mat_raw wafer-eq 300 mm ct 4000.0 False 400.0
+6 chip_le wafer-eq 300 mm ct 20000.0 False 2000.0
+7 chip_mat wafer-eq 300 mm ct 4000.0 False 400.0
+
+DEMANDS node k dbar pi backlog phi sigma shock
+sink_us chip_le 229987.93 50480.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_us chip_mat 263142.45 10360.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_eu chip_le 82795.65 50520.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_eu chip_mat 94731.28 10400.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_cn chip_le 0.0 50440.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_cn chip_mat 315770.94 10280.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_jp chip_le 64396.62 50440.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_jp chip_mat 73679.89 10320.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_kr chip_le 45997.59 50440.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_kr chip_mat 52628.49 10320.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_sea chip_le 110394.21 50400.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_sea chip_mat 126308.38 10280.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_in chip_le 36798.07 50440.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_in chip_mat 42102.79 10320.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_row chip_le 73596.14 50520.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+sink_row chip_mat 84205.58 10400.0 False 0.5 0.1 (1.0, 1.0, 1.0)
+
+FABS
+fab_tw_leading_1 FabAttrs(cap0=138261.0, e=0.002, grid=25, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_tw_mature_1 FabAttrs(cap0=117747.5, e=0.0009, grid=25, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_us_leading_1 FabAttrs(cap0=17652.333333333332, e=0.002, grid=29, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_kr_leading_1 FabAttrs(cap0=35693.0, e=0.002, grid=26, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_kr_memory_1 FabAttrs(cap0=304995.0, e=0.00126, grid=26, cls='memory', input=3, product=4, tau=8, w_scr=2)
+fab_us_leading_2 FabAttrs(cap0=17652.333333333332, e=0.002, grid=29, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_jp_memory_1 FabAttrs(cap0=143894.0, e=0.00126, grid=27, cls='memory', input=3, product=4, tau=8, w_scr=2)
+fab_us_leading_3 FabAttrs(cap0=17652.333333333332, e=0.002, grid=29, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_eu_leading_1 FabAttrs(cap0=24587.0, e=0.002, grid=30, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_row_leading_1 FabAttrs(cap0=15131.0, e=0.002, grid=30, cls='leading', input=3, product=4, tau=8, w_scr=2)
+fab_cn_mature_1 FabAttrs(cap0=436681.0, e=0.0009, grid=28, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_us_mature_1 FabAttrs(cap0=89093.5, e=0.0009, grid=29, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_eu_mature_1 FabAttrs(cap0=180189.0, e=0.0009, grid=30, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_sea_mature_1 FabAttrs(cap0=138970.0, e=0.0009, grid=31, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_tw_mature_2 FabAttrs(cap0=117747.5, e=0.0009, grid=25, cls='mature', input=3, product=5, tau=6, w_scr=2)
+fab_us_mature_2 FabAttrs(cap0=89093.5, e=0.0009, grid=29, cls='mature', input=3, product=5, tau=6, w_scr=2)
+
+OSATS
+osat_my OsatAttrs(thr=786424.0617861244, tau=2, packages={4: 6, 5: 7})
+osat_vn OsatAttrs(thr=38058.80455933654, tau=2, packages={4: 6})
+osat_ph OsatAttrs(thr=196098.0654341892, tau=2, packages={4: 6, 5: 7})
+osat_cn OsatAttrs(thr=667833.1321621452, tau=2, packages={5: 7})
+osat_tw OsatAttrs(thr=279940.2198856237, tau=2, packages={4: 6, 5: 7})
+osat_kr OsatAttrs(thr=261848.0418594896, tau=2, packages={4: 6})
+osat_sg OsatAttrs(thr=126097.67431309124, tau=2, packages={4: 6, 5: 7})
+
+GRIDS
+grid_tw GridAttrs(base_load=4954.01326923077, deliverable=5442.4807692307695, shares={0: 0.4, 1: 0.02, None: 0.58}, days_cover={0: 11.0}, ibar={0: 3420.9879120879127}, rationed=0, voll=4125277.26, priority='base_first')
+grid_kr GridAttrs(base_load=10544.3203, deliverable=11000.0, shares={0: 0.25, 1: 0.02, 2: 0.3, None: 0.43000000000000005}, days_cover={0: 10.0, 2: 364.0}, ibar={0: 3928.5714285714284, 2: 171600.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_jp GridAttrs(base_load=17818.69356, deliverable=18000.0, shares={0: 0.3, 1: 0.05, 2: 0.08, None: 0.5700000000000001}, days_cover={0: 14.0, 2: 364.0}, ibar={0: 10800.0, 2: 74880.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_cn GridAttrs(base_load=179606.9871, deliverable=180000.0, shares={0: 0.03, 1: 0.01, 2: 0.05, None: 0.91}, days_cover={0: 14.0, 2: 364.0}, ibar={0: 10800.0, 2: 468000.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_us GridAttrs(base_load=79733.7177, deliverable=80000.0, shares={0: 0.4, 1: 0.01, 2: 0.18, None: 0.41000000000000003}, days_cover={0: 14.0, 2: 364.0}, ibar={0: 64000.00000000001, 2: 748800.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_eu GridAttrs(base_load=51758.3939, deliverable=52000.0, shares={0: 0.17, 1: 0.02, 2: 0.23, None: 0.58}, days_cover={0: 14.0, 2: 364.0}, ibar={0: 17680.000000000004, 2: 621920.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_sea GridAttrs(base_load=24874.927, deliverable=25000.0, shares={0: 0.3, 1: 0.03, None: 0.67}, days_cover={0: 14.0}, ibar={0: 15000.0}, rationed=0, voll=4125277.26, priority='base_first')
+grid_in GridAttrs(base_load=36000.0, deliverable=36000.0, shares={0: 0.03, 1: 0.01, 2: 0.03, None: 0.93}, days_cover={0: 14.0, 2: 364.0}, ibar={0: 2160.0, 2: 56160.0}, rationed=0, voll=4125277.26, priority='base_first')
+
+STOCK SLOTS node k storage holding salvage supply
+src_qa_lng lng 23540.17747315837 0.0 0.0 5885.044368289592
+src_gulf_crude crude 13193.014572283157 0.0 0.0 3298.253643070789
+src_us_lng lng 178648.84700909903 0.0 0.0 44662.21175227476
+src_us_crude crude 13494.248076923077 0.0 0.0 3373.5620192307692
+src_au_lng lng 79927.07919316026 0.0 0.0 19981.769798290065
+src_ru_gas lng 15550.547714543536 0.0 0.0 3887.636928635884
+src_ru_crude crude 3206.9854277168415 0.0 0.0 801.7463569292104
+src_no_gas lng 28068.31014850032 0.0 0.0 7017.07753712508
+src_kz_uranium nucfuel 102950.0 0.0 0.0 25737.5
+src_ru_enrichment nucfuel 102950.0 0.0 0.0 25737.5
+chk_hormuz lng None 0.0 500.0 0.0
+chk_hormuz crude None 0.0 500.0 0.0
+chk_hormuz wafer None 0.0 1.0 0.0
+chk_malacca lng None 0.0 1000.0 0.0
+chk_malacca crude None 0.0 1000.0 0.0
+chk_malacca wafer None 0.0 2.0 0.0
+chk_malacca chip_le_raw None 0.0 4.0 0.0
+chk_malacca chip_mat_raw None 0.0 4.0 0.0
+chk_malacca chip_mat None 0.0 3.0 0.0
+chk_suez lng None 0.0 1000.0 0.0
+chk_suez crude None 0.0 1000.0 0.0
+chk_suez wafer None 0.0 1.0 0.0
+chk_suez chip_le_raw None 0.0 2.0 0.0
+chk_suez chip_mat_raw None 0.0 2.0 0.0
+chk_suez chip_mat None 0.0 5.0 0.0
+chk_cape lng None 0.0 1200.0 0.0
+chk_cape crude None 0.0 1200.0 0.0
+chk_cape wafer None 0.0 1.4 0.0
+chk_cape chip_le_raw None 0.0 2.4 0.0
+chk_cape chip_mat_raw None 0.0 2.4 0.0
+chk_taiwan lng None 0.0 1500.0 0.0
+chk_taiwan crude None 0.0 1500.0 0.0
+chk_taiwan wafer None 0.0 1.0 0.0
+chk_taiwan chip_le_raw None 0.0 2.0 0.0
+chk_taiwan chip_mat_raw None 0.0 2.0 0.0
+chk_taiwan chip_mat None 0.0 3.0 0.0
+chk_panama lng None 0.0 500.0 0.0
+chk_panama crude None 0.0 500.0 0.0
+chk_turkish crude None 0.0 500.0 0.0
+chk_turkish wafer None 0.0 1.0 0.0
+term_tw lng 8629.814430769233 33.398879355 1500.0 0.0
+term_tw crude 2186.761657692308 31.134186299520334 2000.0 0.0
+term_kr lng 10954.43203 33.398879355 1000.0 0.0
+term_kr crude 889.1135939999999 31.134186299520334 2000.0 0.0
+term_jp lng 21578.243227199997 33.398879355 500.0 0.0
+term_jp crude 3609.0653220000004 31.134186299520334 2000.0 0.0
+term_cn lng 10157.76575341285 33.398879355 500.0 0.0
+term_cn crude 7198.4279484 31.134186299520334 500.0 0.0
+term_us crude 3198.9348707999998 31.134186299520334 500.0 0.0
+term_eu lng 7288.301934677699 33.398879355 1000.0 0.0
+term_eu crude 4158.0671512 31.134186299520334 1000.0 0.0
+term_sea lng 29984.99124 33.398879355 500.0 0.0
+term_sea crude 15003.75219 31.134186299520334 2000.0 0.0
+term_in lng 203877.95852194366 33.398879355 1000.0 0.0
+term_in crude 1440.0 31.134186299520334 1000.0 0.0
+grid_tw lng 8629.814430769233 33.398879355 1500.0 0.0
+grid_tw crude 431.49072153846157 31.134186299520334 2000.0 0.0
+grid_kr lng 10954.43203 33.398879355 1000.0 0.0
+grid_kr crude 876.3545624 31.134186299520334 2000.0 0.0
+grid_kr nucfuel 343446.067038 166.99439677499998 4000.0 0.0
+grid_jp lng 21610.8783864 33.398879355 500.0 0.0
+grid_jp crude 3596.3738712 31.134186299520334 2000.0 0.0
+grid_jp nucfuel 149786.10812736 166.99439677499998 4000.0 0.0
+grid_cn lng 21603.606986796964 33.398879355 500.0 0.0
+grid_cn crude 7198.4279484 31.134186299520334 500.0 0.0
+grid_cn nucfuel 936035.371161 166.99439677499998 4000.0 0.0
+grid_us lng 128042.605168 33.398879355 500.0 0.0
+grid_us crude 3198.9348707999998 31.134186299520334 500.0 0.0
+grid_us nucfuel 1497686.2754652 166.99439677499998 4000.0 0.0
+grid_eu lng 35374.735256389016 33.398879355 500.0 0.0
+grid_eu crude 4158.0671512 31.134186299520334 1000.0 0.0
+grid_eu nucfuel 1243940.0249254 166.99439677499998 4000.0 0.0
+grid_sea lng 30007.50438 33.398879355 500.0 0.0
+grid_sea crude 2998.499124 31.134186299520334 2000.0 0.0
+grid_in lng 4320.0 33.398879355 1000.0 0.0
+grid_in crude 1440.0 31.134186299520334 1000.0 0.0
+grid_in nucfuel 112320.0 166.99439677499998 4000.0 0.0
+mat_jp_wafer wafer 1779942.1666666667 0.0 0.0 444985.5416666667
+mat_jp_resist wafer 954291.3333333333 0.0 0.0 238572.8333333333
+mat_kr_wafer wafer 930670.0833333333 0.0 0.0 232667.5208333333
+mat_de_wafer wafer 1540852.9166666665 0.0 0.0 385213.2291666666
+mat_ua_neon wafer 1107516.6666666667 0.0 0.0 276879.1666666667
+mat_cn_neon wafer 1009406.75 0.0 0.0 252351.6875
+mat_helium wafer 775864.6666666667 0.0 0.0 193966.1666666667
+mat_cn_gage wafer 1326655.4166666665 0.0 0.0 331663.8541666666
+fab_tw_leading_1 wafer 497739.60000000003 2.4288461538461537 1.0 0.0
+fab_tw_leading_1 chip_le_raw 497739.6 16.192307692307693 1.0 0.0
+fab_tw_mature_1 wafer 423891.0 2.4288461538461537 1.0 0.0
+fab_tw_mature_1 chip_mat_raw 423891.0 3.2384615384615385 1.0 0.0
+fab_us_leading_1 wafer 63548.399999999994 2.4288461538461537 2.0 0.0
+fab_us_leading_1 chip_le_raw 63548.4 16.192307692307693 2.0 0.0
+fab_kr_leading_1 wafer 128494.8 2.4288461538461537 1.0 0.0
+fab_kr_leading_1 chip_le_raw 128494.8 16.192307692307693 1.0 0.0
+fab_kr_memory_1 wafer 1097982.0 2.4288461538461537 1.0 0.0
+fab_kr_memory_1 chip_le_raw 1097982.0 16.192307692307693 1.0 0.0
+fab_us_leading_2 wafer 63548.399999999994 2.4288461538461537 2.0 0.0
+fab_us_leading_2 chip_le_raw 63548.4 16.192307692307693 2.0 0.0
+fab_jp_memory_1 wafer 518018.4 2.4288461538461537 1.0 0.0
+fab_jp_memory_1 chip_le_raw 518018.4 16.192307692307693 1.0 0.0
+fab_us_leading_3 wafer 63548.399999999994 2.4288461538461537 2.0 0.0
+fab_us_leading_3 chip_le_raw 63548.4 16.192307692307693 2.0 0.0
+fab_eu_leading_1 wafer 88513.2 2.4288461538461537 1.0 0.0
+fab_eu_leading_1 chip_le_raw 88513.2 16.192307692307693 1.0 0.0
+fab_row_leading_1 wafer 54471.6 2.4288461538461537 1.0 0.0
+fab_row_leading_1 chip_le_raw 54471.60000000011 16.192307692307693 1.0 0.0
+fab_cn_mature_1 wafer 1572051.6 2.4288461538461537 1.0 0.0
+fab_cn_mature_1 chip_mat_raw 1572051.5999999999 3.2384615384615385 1.0 0.0
+fab_us_mature_1 wafer 320736.60000000003 2.4288461538461537 2.0 0.0
+fab_us_mature_1 chip_mat_raw 320736.6 3.2384615384615385 2.0 0.0
+fab_eu_mature_1 wafer 648680.4 2.4288461538461537 1.0 0.0
+fab_eu_mature_1 chip_mat_raw 648680.4000000001 3.2384615384615385 1.0 0.0
+fab_sea_mature_1 wafer 500292.0 2.4288461538461537 2.0 0.0
+fab_sea_mature_1 chip_mat_raw 500292.0 3.2384615384615385 2.0 0.0
+fab_tw_mature_2 wafer 423891.0 2.4288461538461537 1.0 0.0
+fab_tw_mature_2 chip_mat_raw 423891.0 3.2384615384615385 1.0 0.0
+fab_us_mature_2 wafer 320736.60000000003 2.4288461538461537 2.0 0.0
+fab_us_mature_2 chip_mat_raw 320736.6 3.2384615384615385 2.0 0.0
+osat_my chip_le_raw 1021626.1775872663 16.192307692307693 2.0 0.0
+osat_my chip_mat_raw 1243275.1203567723 3.2384615384615385 3.0 0.0
+osat_my chip_le 1021626.1775872662 16.192307692307693 2.0 0.0
+osat_my chip_mat 1243275.1203567723 3.2384615384615385 3.0 0.0
+osat_vn chip_le_raw 109609.35713088926 16.192307692307693 3.0 0.0
+osat_vn chip_le 109609.35713088924 16.192307692307693 3.0 0.0
+osat_ph chip_le_raw 239085.1775944431 16.192307692307693 3.0 0.0
+osat_ph chip_mat_raw 325677.2508560219 3.2384615384615385 2.0 0.0
+osat_ph chip_le 239085.17759444308 16.192307692307693 3.0 0.0
+osat_ph chip_mat 325677.2508560219 3.2384615384615385 2.0 0.0
+osat_cn chip_mat_raw 1923359.4206269782 3.2384615384615385 2.0 0.0
+osat_cn chip_mat 1923359.4206269784 3.2384615384615385 2.0 0.0
+osat_tw chip_le_raw 423769.7356918786 16.192307692307693 2.0 0.0
+osat_tw chip_mat_raw 382458.0975787177 3.2384615384615385 2.0 0.0
+osat_tw chip_le 423769.7356918786 16.192307692307693 2.0 0.0
+osat_tw chip_mat 382458.0975787176 3.2384615384615385 2.0 0.0
+osat_kr chip_le_raw 754122.3605553304 16.192307692307693 2.0 0.0
+osat_kr chip_le 754122.3605553306 16.192307692307693 2.0 0.0
+osat_sg chip_le_raw 27651.99144019265 16.192307692307693 2.0 0.0
+osat_sg chip_mat_raw 335509.31058150996 3.2384615384615385 3.0 0.0
+osat_sg chip_le 27651.991440192654 16.192307692307693 2.0 0.0
+osat_sg chip_mat 335509.31058150996 3.2384615384615385 3.0 0.0
+sink_us chip_le 919951.7142857143 16.192307692307693 10.0 0.0
+sink_us chip_mat 1052569.8 3.2384615384615385 4.0 0.0
+sink_eu chip_le 331182.6171428575 16.192307692307693 18.0 0.0
+sink_eu chip_mat 378925.12799999997 3.2384615384615385 6.0 0.0
+sink_cn chip_le 1.0 16.192307692307693 0.0 0.0
+sink_cn chip_mat 1263083.76 3.2384615384615385 3.0 0.0
+sink_jp chip_le 257586.47999999992 16.192307692307693 6.0 0.0
+sink_jp chip_mat 294719.54400000017 3.2384615384615385 3.0 0.0
+sink_kr chip_le 183990.34285714285 16.192307692307693 6.0 0.0
+sink_kr chip_mat 210513.96000000002 3.2384615384615385 3.0 0.0
+sink_sea chip_le 441576.82285714283 16.192307692307693 6.0 0.0
+sink_sea chip_mat 505233.50399999996 3.2384615384615385 3.0 0.0
+sink_in chip_le 147192.27428571432 16.192307692307693 10.0 0.0
+sink_in chip_mat 168411.168 3.2384615384615385 4.0 0.0
+sink_row chip_le 294384.54857142863 16.192307692307693 18.0 0.0
+sink_row chip_mat 336822.336 3.2384615384615385 6.0 0.0
+
+EDGES modes Counter({'sea': 194, 'air': 132, 'pipeline': 27, 'grid': 16}) alt_of 126
+lanes 114 alt lanes 48
+action slots 395 override slots 54
+chk_hormuz ChokepointAttrs(mu=(7346.638409088305, 155172.93333333335), k_c=1.3, cls='hormuz', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0)})
+chk_malacca ChokepointAttrs(mu=(5233.331452338547, 809381.8033333332), k_c=1.3, cls='malacca', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537), 4: (16.192307692307693, 16.192307692307693, 16.192307692307693), 5: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385), 7: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0), 4: (0.0, 0.5, 2.0), 5: (0.0, 0.5, 2.0), 7: (0.0, 0.5, 2.0)})
+chk_suez ChokepointAttrs(mu=(949.7205715709558, 619721.4899999999), k_c=1.3, cls='suez_red_sea', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537), 4: (16.192307692307693, 16.192307692307693, 16.192307692307693), 5: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385), 7: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0), 4: (0.0, 0.5, 2.0), 5: (0.0, 0.5, 2.0), 7: (0.0, 0.5, 2.0)})
+chk_cape ChokepointAttrs(mu=(284.9161714712867, 128729.525), k_c=1.3, cls='cape', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537), 4: (16.192307692307693, 16.192307692307693, 16.192307692307693), 5: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0), 4: (0.0, 0.5, 2.0), 5: (0.0, 0.5, 2.0)})
+chk_taiwan ChokepointAttrs(mu=(3650.064319471415, 961273.3338471103), k_c=1.3, cls='taiwan_strait', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537), 4: (16.192307692307693, 16.192307692307693, 16.192307692307693), 5: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385), 7: (3.2384615384615385, 3.2384615384615385, 3.2384615384615385)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0), 4: (0.0, 0.5, 2.0), 5: (0.0, 0.5, 2.0), 7: (0.0, 0.5, 2.0)})
+chk_panama ChokepointAttrs(mu=(2173.7948110648476, 0.0), k_c=1.3, cls='panama', queue_holding={0: (273.870810711, 2003.9327612999998, 7180.7590613249995), 1: (146.33067560774558, 529.2811670918456, 1618.9776875750574)}, war_risk_cost={0: (0.0, 1723.0, 6893.0), 1: (0.0, 369.24510722533813, 1480.3576707357306)})
+chk_turkish ChokepointAttrs(mu=(138.20680741059888, 221503.33333333334), k_c=1.3, cls='turkish_straits', queue_holding={1: (146.33067560774558, 529.2811670918456, 1618.9776875750574), 3: (2.4288461538461537, 2.4288461538461537, 2.4288461538461537)}, war_risk_cost={1: (0.0, 369.24510722533813, 1480.3576707357306), 3: (0.0, 0.5, 2.0)})
+prohibitions_at_reset 8
+grid priorities Counter({'base_first': 8})

@@ -1,0 +1,39 @@
+salvage if every non-supply slot ends at I^max: 0.01772 T
+
+GRID headroom: G-bar - y-bar vs fab nameplate draw (GWh/wk)
+  grid_tw  G-bar      5442 y-bar      4954 headroom     488 fab draw    488 at alpha 1.25    611  shares {'lng': 0.4, 'crude': 0.02, None: 0.58}
+      lng      burn    2177.0/wk  I0        3441 (  1.6 wk)  I^max        8630 (  4.0 wk)  psi*Ibar      2053
+      crude    burn     108.8/wk  I0           1 (  0.0 wk)  I^max         431 (  4.0 wk)  psi*Ibar         0
+  grid_kr  G-bar     11000 y-bar     10544 headroom     456 fab draw    456 at alpha 1.25    570  shares {'lng': 0.25, 'crude': 0.02, 'nucfuel': 0.3, None: 0.43000000000000005}
+      lng      burn    2750.0/wk  I0        3940 (  1.4 wk)  I^max       10954 (  4.0 wk)  psi*Ibar      2357
+      crude    burn     220.0/wk  I0           1 (  0.0 wk)  I^max         876 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn    3300.0/wk  I0      171723 ( 52.0 wk)  I^max      343446 (104.1 wk)  psi*Ibar    102960
+  grid_jp  G-bar     18000 y-bar     17819 headroom     181 fab draw    181 at alpha 1.25    227  shares {'lng': 0.3, 'crude': 0.05, 'nucfuel': 0.08, None: 0.5700000000000001}
+      lng      burn    5400.0/wk  I0       10805 (  2.0 wk)  I^max       21611 (  4.0 wk)  psi*Ibar      6480
+      crude    burn     900.0/wk  I0           1 (  0.0 wk)  I^max        3596 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn    1440.0/wk  I0       74893 ( 52.0 wk)  I^max      149786 (104.0 wk)  psi*Ibar     44928
+  grid_cn  G-bar    180000 y-bar    179607 headroom     393 fab draw    393 at alpha 1.25    491  shares {'lng': 0.03, 'crude': 0.01, 'nucfuel': 0.05, None: 0.91}
+      lng      burn    5400.0/wk  I0       10802 (  2.0 wk)  I^max       21604 (  4.0 wk)  psi*Ibar      6480
+      crude    burn    1800.0/wk  I0           0 (  0.0 wk)  I^max        7198 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn    9000.0/wk  I0      468018 ( 52.0 wk)  I^max      936035 (104.0 wk)  psi*Ibar    280800
+  grid_us  G-bar     80000 y-bar     79734 headroom     266 fab draw    266 at alpha 1.25    333  shares {'lng': 0.4, 'crude': 0.01, 'nucfuel': 0.18, None: 0.41000000000000003}
+      lng      burn   32000.0/wk  I0       64021 (  2.0 wk)  I^max      128043 (  4.0 wk)  psi*Ibar     38400
+      crude    burn     800.0/wk  I0           0 (  0.0 wk)  I^max        3199 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn   14400.0/wk  I0      748843 ( 52.0 wk)  I^max     1497686 (104.0 wk)  psi*Ibar    449280
+  grid_eu  G-bar     52000 y-bar     51758 headroom     242 fab draw    242 at alpha 1.25    302  shares {'lng': 0.17, 'crude': 0.02, 'nucfuel': 0.23, None: 0.58}
+      lng      burn    8840.0/wk  I0       17687 (  2.0 wk)  I^max       35375 (  4.0 wk)  psi*Ibar     10608
+      crude    burn    1040.0/wk  I0           0 (  0.0 wk)  I^max        4158 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn   11960.0/wk  I0      621970 ( 52.0 wk)  I^max     1243940 (104.0 wk)  psi*Ibar    373152
+  grid_sea G-bar     25000 y-bar     24875 headroom     125 fab draw    125 at alpha 1.25    156  shares {'lng': 0.3, 'crude': 0.03, None: 0.67}
+      lng      burn    7500.0/wk  I0       15004 (  2.0 wk)  I^max       30008 (  4.0 wk)  psi*Ibar      9000
+      crude    burn     750.0/wk  I0           0 (  0.0 wk)  I^max        2998 (  4.0 wk)  psi*Ibar         0
+  grid_in  G-bar     36000 y-bar     36000 headroom       0 fab draw      0 at alpha 1.25      0  shares {'lng': 0.03, 'crude': 0.01, 'nucfuel': 0.03, None: 0.93}
+      lng      burn    1080.0/wk  I0        2160 (  2.0 wk)  I^max        4320 (  4.0 wk)  psi*Ibar      1296
+      crude    burn     360.0/wk  I0           0 (  0.0 wk)  I^max        1440 (  4.0 wk)  psi*Ibar         0
+      nucfuel  burn    1080.0/wk  I0       56160 ( 52.0 wk)  I^max      112320 (104.0 wk)  psi*Ibar     33696
+
+supply of fuel per week (sources) vs burn
+  lng      supply       81434/wk   nominal burn       65147/wk
+  crude    supply        7474/wk   nominal burn        5979/wk
+  nucfuel  supply       51475/wk   nominal burn       41180/wk
+  wafer    supply     2356300/wk   nominal burn           0/wk

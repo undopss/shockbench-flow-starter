@@ -70,8 +70,13 @@ def main(task, entropy, episodes, variants_file, n_jobs="3"):
         if folder.exists():
             shutil.rmtree(folder)
         shutil.copytree(spec["agent"], folder, ignore=shutil.ignore_patterns("__pycache__", "params.json"))
+        # no "params": keep the agent's own params.json (it used to be dropped, so a folder like agents/mpc_fab3sell
+        # played its PARAMS defaults instead of its tuned options)
+        own = Path(spec["agent"]) / "params.json"
         if spec.get("params"):
             (folder / "params.json").write_text(json.dumps(spec["params"]))
+        elif own.is_file():
+            shutil.copy(own, folder / "params.json")
         t = time.time()
         cached = None
         if name == names[0]:  # the baseline: played once per (agent files + params, task, root, episodes)

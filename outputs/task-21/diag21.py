@@ -200,7 +200,7 @@ def main(cmd, tag, *rest):
             (root / "params.json").write_text(json.dumps(p))
         base = {}
         if opts.get("true_fabcap"):
-            for r in json.loads((HERE / "play_base.json").read_text()):
+            for r in json.loads((HERE / f"play_{opts.pop('fabcap_from', 'nolim')}.json").read_text()):
                 base[r["episode"]] = r["lots_w"]
         t = time.time()
         rows = Parallel(n_jobs=n_jobs, verbose=5)(delayed(play)(n, es._spec, str(root), opts, base.get(n)) for n in ns)

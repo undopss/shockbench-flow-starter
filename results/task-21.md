@@ -1,3 +1,3 @@
-Status: running baseline play (Full devpick 6)
+Status: running offline chip-LP tests (true demand / caps / fab starts / H52 / no buffer) + oracle bounds, Full devpick 6
 
-Plan: replay mpc_fab3sell on Full devpick:2,2,1,1, log its chip-LP decisions per week, compare with the clairvoyant LP (lots per fab, wafers, routing, stocks), oracle LPs capped at the agent power/lots, then offline tests (true demand / true capacities / true fab starts / longer horizon).
+Base play of mpc_fab3sell (hooked copy) on Full devpick:2,2,1,1: RSS 0.850, 0 fallbacks.

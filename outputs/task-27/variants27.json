@@ -1,0 +1,8 @@
+{"mpc_fab3sell": {"agent": "agents/mpc_fab3sell"},
+ "clim_off": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true}},
+ "reopen": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "clim_reopen": true}},
+ "reopen_derate": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "clim_reopen": true, "clim_derate": true}},
+ "risk_safety": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "clim_safety": 1.0}},
+ "all_clim": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "clim_reopen": true, "clim_derate": true, "clim_safety": 1.0}},
+ "sw5": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "safety_weeks": 5.0}},
+ "sw1": {"agent": "agents/mpc_clim", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "safety_weeks": 1.0}}}

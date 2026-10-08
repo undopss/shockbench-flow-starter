@@ -1,5 +1,6 @@
-Status: measuring (closure_end checked)
+Status: built agents/mpc_clim, waiting for reference cache, then Small 20 + Full 6
 
-Plan: measure disruption statistics on >=200 own-root training episodes, then build agents/mpc_clim (risk-based safety stocks / lane derating, off by default) and run the funnel vs mpc_fab3sell.
+Plan: measure disruption statistics on 300 own-root episodes (Full and Small), build agents/mpc_clim (climate options off by default) and run the funnel vs mpc_fab3sell.
 
-Finding 1: `closure_end` is **never shown** in the scored regime (`standard`, theta.chi = False): 0 observed entries in 5 Full + 5 Small gym episodes with 428 + 232 closed chokepoint-weeks (`outputs/task-27/ce_probe.py`). Part (a) is impossible.
+- (a) `closure_end` is **never shown** in the scored regime (`standard`, theta.chi = False): 0 observed entries in 5 Full + 5 Small gym episodes with 428 + 232 closed chokepoint-weeks. Impossible to use.
+- (b) statistics done (outputs/task-27/climate_*_300.txt, hazard.txt). Energy sources never lose supply; open straits almost never close (≤2% within 12 weeks); a freshly closed big strait reopens within 4 weeks ~50% of the time, after 3+ weeks closed only ~10-20%.

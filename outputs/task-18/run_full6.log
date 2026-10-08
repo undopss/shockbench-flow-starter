@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants18_full_0_1008-1008: task full, entropy 0, episodes devpick:2,2,1,1, baseline bufplan_pp20
+references ready in 1 s (6 episodes)
+  played bufplan_pp20 in 52 s: RSS 0.8219
+  played direct_cn in 51 s: RSS 0.8295
+  played direct_cn_eu in 44 s: RSS 0.8318
+
+full, entropy 0, 6 episodes; diff = variant - bufplan_pp20, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+bufplan_pp20              0.8219  0.828  0.836  0.795  0.786  +0.0000  [+0.0000, +0.0000]     nan%      0
+direct_cn                 0.8295  0.823  0.857  0.808  0.800  +0.0076  [-0.0015, +0.0157]    94.0%      0
+direct_cn_eu              0.8318  0.825  0.855  0.821  0.799  +0.0099  [-0.0003, +0.0189]    94.0%      0
+
+results: outputs/variants/variants18_full_0_1008-1008/results.json

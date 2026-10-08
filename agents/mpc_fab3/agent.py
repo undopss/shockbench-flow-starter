@@ -57,6 +57,7 @@ PARAMS = {
     "pp_method": "enum",  # "enum": every sequence of weekly release modes over pp_enum_H weeks; "milp": scipy milp
     "pp_enum_H": 6,
     "pp_deadline": 1.5,  # CPU seconds used this week after which no more grids are planned
+    "kappa_lp": False,  # task 18: queued tanker cargo drains at the chokepoint's kappa_tb, and the LP's lanes share it
     "pp_direct": [],  # grid ids whose direct source -> grid pipelines the planner also times (task 18; empty = off)
 }
 if (HERE / "params.json").is_file():
@@ -78,7 +79,7 @@ class Agent:
                 self.pplan = _pplan.PulsePlanner(config, H=int(PARAMS["pp_H"]), value_scale=PARAMS["pp_value"],
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
-                                                 direct_grids=PARAMS["pp_direct"])
+                                                 direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -150,6 +151,8 @@ class Agent:
             if g in node_ids:
                 self.grid_has_fab[node_ids.index(g)] = 1.0
         chokepoint_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
+        pools = static["commodities"].get("pool") or []
+        self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
         self.stock_index = {tuple(row): i for i, row in enumerate(layout["stock_slots"])}
         self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
 
@@ -276,10 +279,27 @@ class Agent:
                 continue
             off = int(arr) - week + sum(int(tau[e]) for e in rest)
             fixed_in[p_i, min(max(off, 0), H - 1)] += float(qty)
+        queue_tb = {}  # chokepoint position -> tanker cargo queued there (kappa_lp)
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
+            drain = _pplan.queue_release(obs, self.lot_keys, self.chk_node_pos, self.tb_k, H) if PARAMS["kappa_lp"] else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
+                    continue
+                if row in drain:
+                    pos = self.chk_node_pos.get(chk_node)
+                    if pos is not None:
+                        queue_tb[pos] = queue_tb.get(pos, 0.0) + float(queued[row])
+                    lane = self.lane_index.get(lane_key, lane_key) if not isinstance(lane_key, (int, np.integer)) else lane_key
+                    rest = self.lane_rest.get((lane, next_edge), []) if lane is not None else []
+                    route = [next_edge] + rest
+                    p_i = self.feeds.get((self.edges["head"][route[-1]], int(k)))
+                    if p_i is None:
+                        continue
+                    lead_q = sum(int(tau[e]) for e in route)
+                    for o, qd in enumerate(drain[row]):
+                        if o + lead_q < H and qd > 0:
+                            fixed_in[p_i, o + lead_q] += float(qd)
                     continue
                 pos = self.chk_node_pos.get(chk_node)
                 if pos is not None and open_now[pos] < 0.5:
@@ -419,6 +439,28 @@ class Agent:
                     rows.append(r); cols.append(j * H + t); vals.append(1.0)
                 rhs_ub.append(float(u[e]))
                 r += 1
+        # tanker throughput (kappa_lp): the LP's lanes through a chokepoint share its kappa_tb each week (what already
+        # waits there drains at that rate, in fixed_in above). "backlog": new cargo also waits behind the queue
+        if PARAMS["kappa_lp"]:
+            kap = obs["graph_now.kappa.tb"]
+            by_chk = {}
+            for j, ls in enumerate(self.lp_slots):
+                if ls["k"] in self.tb_k:
+                    for q in ls["chk"]:
+                        by_chk.setdefault(q, []).append(j)
+            for q, js in by_chk.items():
+                kc = float(kap[q])
+                for t in range(H):
+                    if PARAMS["kappa_lp"] == "backlog":
+                        for j in js:
+                            for tt in range(t + 1):
+                                rows.append(r); cols.append(j * H + tt); vals.append(1.0)
+                        rhs_ub.append(max(0.0, (t + 1) * kc - queue_tb.get(q, 0.0)))
+                    else:
+                        for j in js:
+                            rows.append(r); cols.append(j * H + t); vals.append(1.0)
+                        rhs_ub.append(kc)
+                    r += 1
         # source supply: cumulative shipments <= stock + supply per week
         by_source = {}
         for j, ls in enumerate(self.lp_slots):

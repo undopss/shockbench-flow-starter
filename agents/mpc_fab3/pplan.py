@@ -23,9 +23,49 @@ from scipy.optimize import Bounds, LinearConstraint, milp
 from scipy.sparse import coo_matrix
 
 
+def queue_release(obs, lot_keys, chk_pos, tb_k, H):
+    """{lot row: array H} of the quantity each queued tanker lot row releases in week + o (task 18, ``kappa_lp``).
+
+    The simulator's default release (chokepoint.py, (10)) drains a chokepoint's queue FIFO by cohort (the week the lots
+    reached it), pro rata inside a cohort, at most kappa_tb a week for the tanker pool. A closed chokepoint (open < 0.5)
+    releases nothing. Rows of other pools are left out (the caller keeps its old rule for them).
+    """
+    q = obs["queue_lots.qty"]
+    kap = obs["graph_now.kappa.tb"]
+    open_now = np.where(obs["graph_now.open.observed"] == 1, obs["graph_now.open"], 1.0)
+    by_chk = {}
+    for row, (chk_node, k, _lane, _next) in enumerate(lot_keys):
+        if int(k) in tb_k and q[row].sum() > 0:
+            by_chk.setdefault(chk_node, []).append(row)
+    out = {}
+    for chk_node, rows in by_chk.items():
+        pos = chk_pos.get(chk_node)
+        kc = float(kap[pos]) if pos is not None else np.inf
+        if pos is not None and open_now[pos] < 0.5:
+            kc = 0.0
+        sub = q[rows]  # rows x cohorts
+        cols = [c for c in range(sub.shape[1]) if sub[:, c].sum() > 0]
+        rem = {c: float(sub[:, c].sum()) for c in cols}
+        sched = np.zeros((len(rows), H))
+        for w in range(H):
+            budget = kc
+            for c in cols:
+                if budget <= 0:
+                    break
+                if rem[c] <= 0:
+                    continue
+                take = min(budget, rem[c])
+                sched[:, w] += sub[:, c] * (take / float(sub[:, c].sum()))
+                rem[c] -= take
+                budget -= take
+        for i, row in enumerate(rows):
+            out[row] = sched[i]
+    return out
+
+
 class PulsePlanner:
     def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
-                 direct_grids=()):
+                 direct_grids=(), kappa=False):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -47,6 +87,9 @@ class PulsePlanner:
         self.lot_keys = layout.get("lot_keys")
         self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
         self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
+        self.kappa = bool(kappa)
+        pools = static["commodities"].get("pool") or []
+        self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
         self.direct_slots = set()
         self.other_use = {}  # (source, k) -> the energy LP's other shipments from that source per week (set by the agent)
         self.direct_arr = {}  # direct slot -> the energy LP's planned arrivals through it (set by the agent)
@@ -149,8 +192,17 @@ class PulsePlanner:
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             open_now = np.where(obs["graph_now.open.observed"] == 1, obs["graph_now.open"], 1.0)
             queued = obs["queue_lots.qty"].sum(axis=1)
+            drain = queue_release(obs, self.lot_keys, self.chk_pos, self.tb_k, H) if self.kappa else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
+                    continue
+                if row in drain:
+                    lane = self.lane_index.get(lane_key, lane_key) if not isinstance(lane_key, (int, np.integer)) else lane_key
+                    rest = self.lane_rest.get((lane, next_edge), []) if lane is not None else []
+                    route = [next_edge] + rest
+                    lead = sum(int(tau[e]) for e in route)
+                    for o, qd in enumerate(drain[row]):
+                        add(self.edges["head"][route[-1]], int(k), o + lead, float(qd))
                     continue
                 pos = self.chk_pos.get(chk_node)
                 if pos is not None and open_now[pos] < 0.5:

@@ -24,7 +24,8 @@ from scipy.sparse import coo_matrix
 
 
 class PulsePlanner:
-    def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6):
+    def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
+                 direct_grids=()):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -45,6 +46,10 @@ class PulsePlanner:
         self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])} if "id" in lanes else {}
         self.lot_keys = layout.get("lot_keys")
         self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
+        self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
+        self.direct_slots = set()
+        self.other_use = {}  # (source, k) -> the energy LP's other shipments from that source per week (set by the agent)
+        self.direct_arr = {}  # direct slot -> the energy LP's planned arrivals through it (set by the agent)
 
         # chip value per raw chip: the best pi among the sinks of the packaged chip it becomes
         sk = static["sinks"]
@@ -98,6 +103,22 @@ class PulsePlanner:
                         fu.update(term=tail, tslot=self.stock_index[(tail, k)], slot=s, edge=edge,
                                   storT=float(nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
                                               or np.inf))
+            # task 18 (``direct_grids``): the rationed fuel's direct source -> grid pipelines are timed too (CN gets most of
+            # its gas straight from src_ru_gas, which the terminal pulse cannot hold back). The source's stock plays the
+            # terminal; a release lands after the pipe's tau (1 week on Full), so it is sized for that week
+            if ids[g] in direct_grids:
+                for s, (edge, k) in enumerate(zip(slots["edge"], slots["k"])):
+                    tail, head = edges["tail"][edge], edges["head"][edge]
+                    if head != g or nodes[tail].get("type") != "source":
+                        continue
+                    for fu in fuels:
+                        if fu["k"] == k and fu["thr"] > 0 and self.stock_index.get((tail, k)) is not None \
+                                and (tail, k) in self.supply_index:
+                            stor = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
+                            fu.setdefault("pipes", []).append({
+                                "slot": s, "edge": edge, "src": tail, "sslot": self.stock_index[(tail, k)],
+                                "sidx": self.supply_index[(tail, k)], "stor": float(stor or np.inf)})
+                            self.direct_slots.add(s)
             if not any(fu["slot"] is not None for fu in fuels):
                 continue
             self.grids.append({"node": g, "gpos": gpos, "voll": float(spec.get("voll", 4e6)), "fuels": fuels,
@@ -221,11 +242,22 @@ class PulsePlanner:
                 continue
             T = float(stock[fu["tslot"]]) if seen[fu["tslot"]] else 0.0
             aT = arr.get((fu["term"], fu["k"]), np.zeros(H))
-            ctrl.append(dict(fu, cap=cap, I0=I, T0=T, aG=aG, aT=aT))
+            pipes = []
+            for pp in fu.get("pipes", []):
+                if not mask[pp["slot"]] or int(obs["graph_now.tau"][pp["edge"]]) != 1:
+                    continue
+                aG = aG - self.direct_arr.get(pp["slot"], np.zeros(H))[:H]  # replaced by the planner's releases
+                pipes.append(dict(pp, S0=float(stock[pp["sslot"]]) if seen[pp["sslot"]] else 0.0,
+                                  sup=float(obs["graph_now.supply.avail"][pp["sidx"]]),
+                                  oth=self.other_use.get((pp["src"], fu["k"]), np.zeros(H))[:H]))
+            pipes.sort(key=lambda pp: -float(u[pp["edge"]]))
+            ctrl.append(dict(fu, cap=cap, I0=I, T0=T, aG=np.maximum(aG, 0.0), aT=aT, dpipes=pipes))
         if not ctrl:
             return None
         if self.method == "enum":
             return self._enum(gr, ctrl, base, ehat, ybar, V, obs)
+        if any(fu["dpipes"] for fu in ctrl):
+            return None  # the MILP models terminals only
 
         # ---- MILP variables
         n = 0
@@ -351,6 +383,9 @@ class PulsePlanner:
         F = len(ctrl)
         T = [np.full(N, fu["T0"]) for fu in ctrl]
         I = [np.full(N, fu["I0"]) for fu in ctrl]
+        fly = [np.zeros(N) for _ in ctrl]  # direct pipes: released last week, lands this week
+        S = [[np.full(N, pp["S0"]) for pp in fu["dpipes"]] for fu in ctrl]
+        d0 = {}
         value = np.zeros(N)
         r0 = [None] * F
         for t in range(H):
@@ -363,7 +398,7 @@ class PulsePlanner:
                 thr = fu["thr"]
                 ration = np.ones(N) if thr <= 0 else np.minimum(1.0, I[j] / thr)
                 cap_t = cap * ration
-                have = I[j] + fu["aG"][t]
+                have = I[j] + fu["aG"][t] + fly[j]
                 limit = np.minimum(T[j], float(u[fu["edge"]]))
                 want = np.where(m == 0, 0.0,
                        np.where(m == 1, np.maximum(cap_t - have, 0.0),
@@ -393,15 +428,39 @@ class PulsePlanner:
             E = np.minimum(ehat[t], np.maximum(g - y, 0.0))
             load = np.where(g > 0, (y + E) / np.maximum(g, 1e-12), 0.0)
             value += y + V[t] * E
+            m_next = seq[:, t + 1] if t + 1 < H else np.ones(N, dtype=int)
             for j, fu in enumerate(ctrl):
                 I[j] = np.minimum(pre_all[j] - av[j] * load, fu["storG"])
                 T[j] = np.minimum(T[j] - rel_all[j] + fu["aT"][t], fu["storT"])
                 if t == 0:
                     r0[j] = rel_all[j]
-        value += self.end_value * sum(T[j] + I[j] for j in range(F))
+                if not fu["dpipes"]:
+                    continue
+                # pipes: this week's release lands next week, sized by next week's mode (the terminal tops up after)
+                thr = fu["thr"]
+                cap_n = fu["cap"] * (np.ones(N) if thr <= 0 else np.minimum(1.0, I[j] / thr))
+                have_n = I[j] + (fu["aG"][t + 1] if t + 1 < H else 0.0)
+                lims = []
+                for p_i, pp in enumerate(fu["dpipes"]):
+                    S[j][p_i] = np.maximum(S[j][p_i] - (float(pp["oth"][t]) if t < len(pp["oth"]) else 0.0), 0.0)
+                    lims.append(np.minimum(S[j][p_i], float(u[pp["edge"]])))
+                want = np.where(m_next == 0, 0.0,
+                       np.where(m_next == 1, np.maximum(cap_n - have_n, 0.0),
+                       np.where(m_next == 2, np.maximum(cap_n + thr - have_n, 0.0), sum(lims))))
+                fly[j] = np.zeros(N)
+                for p_i, pp in enumerate(fu["dpipes"]):
+                    rel = np.minimum(want, lims[p_i])
+                    want = want - rel
+                    fly[j] = fly[j] + rel
+                    S[j][p_i] = np.minimum(S[j][p_i] - rel + pp["sup"], pp["stor"])
+                    if t == 0:
+                        d0[pp["slot"]] = rel
+        value += self.end_value * sum(T[j] + I[j] + fly[j] + sum(S[j]) for j in range(F))
         best = value.max()
         # among (near-)ties prefer the default (release everything) in week 0, then the smaller digit sum
         cand = np.flatnonzero(value >= best - 1e-9 * max(1.0, abs(best)))
         default = cand[seq[cand, 0] == modes - 1]
         b = int(default[0]) if len(default) else int(cand[0])
-        return {fu["slot"]: float(r0[j][b]) for j, fu in enumerate(ctrl)}
+        out = {fu["slot"]: float(r0[j][b]) for j, fu in enumerate(ctrl)}
+        out.update({s_: float(r[b]) for s_, r in d0.items()})
+        return out

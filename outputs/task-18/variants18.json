@@ -1,0 +1,3 @@
+{"bufplan_pp20": {"agent": "agents/mpc_bufplan", "params": {"pulse_plan": true, "pp_value": 20}},
+ "direct_cn": {"agent": "agents/mpc_fab3", "params": {"pp_direct": ["grid_cn"]}},
+ "direct_cn_eu": {"agent": "agents/mpc_fab3", "params": {"pp_direct": ["grid_cn", "grid_eu"]}}}

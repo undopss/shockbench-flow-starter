@@ -57,6 +57,7 @@ PARAMS = {
     "pp_method": "enum",  # "enum": every sequence of weekly release modes over pp_enum_H weeks; "milp": scipy milp
     "pp_enum_H": 6,
     "pp_deadline": 1.5,  # CPU seconds used this week after which no more grids are planned
+    "pp_direct": [],  # grid ids whose direct source -> grid pipelines the planner also times (task 18; empty = off)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -76,7 +77,8 @@ class Agent:
             try:
                 self.pplan = _pplan.PulsePlanner(config, H=int(PARAMS["pp_H"]), value_scale=PARAMS["pp_value"],
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
-                                                 method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"])
+                                                 method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
+                                                 direct_grids=PARAMS["pp_direct"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -185,6 +187,9 @@ class Agent:
     def act(self, observation):
         start = time.process_time()
         self.planned_arrivals = None
+        if self.pplan is not None:
+            self.pplan.other_use = {}
+            self.pplan.direct_arr = {}
         action = self.fallback.act(observation)
         flows = np.array(action["flows"], dtype=float)
         if self.ok:
@@ -445,11 +450,23 @@ class Agent:
             # the plan's future shipments, by destination, for the pulse planner (this week's included: not in the
             # pipeline yet)
             planned = {}
+            direct = self.pplan.direct_slots
+            other = {}  # (source, k) -> shipments per week of the LP's slots the planner does not control
+            direct_arr = {}  # direct slot -> its planned arrivals (the planner replaces them with its own)
             for j, ls in enumerate(self.lp_slots):
                 key = (self.edges["head"][ls["route"][-1]], ls["k"])
                 for t in range(H):
                     o = t + lead[j]
-                    if o < H and x[j * H + t] > 1e-9:
-                        planned.setdefault(key, np.zeros(H))[o] += x[j * H + t]
+                    q = x[j * H + t]
+                    if q <= 1e-9:
+                        continue
+                    if o < H:
+                        planned.setdefault(key, np.zeros(H))[o] += q
+                        if ls["slot"] in direct:
+                            direct_arr.setdefault(ls["slot"], np.zeros(H))[o] += q
+                    if ls["slot"] not in direct:
+                        other.setdefault((ls["source"], ls["k"]), np.zeros(H))[t] += q
             self.planned_arrivals = planned
+            self.pplan.other_use = other
+            self.pplan.direct_arr = direct_arr
         return flows

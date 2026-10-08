@@ -412,3 +412,19 @@ allocate_energy`: fixed fuel shares, base_first, rationing line psi·I-bar → o
 3. Deliverable: `results/task-28.md` with a ranked table "mechanic | rule (file:line) | we do now | idea | ceiling T |
    needs foresight?". No building in this task. Baseline numbers: use `agents/mpc_fab3sell` with its own params.json
    (the runner bug is fixed in `outputs/variants.py`; if you use another play path, check it loads params.json).
+
+### 26 (rerun). Finish the imitation task
+The first task-26 session hit the account's usage limit mid-run. Continue on its branch:
+`git fetch origin task-26-imit && git checkout task-26-imit` (`agents/mpc_imit`, `outputs/task-26/variants26.json`).
+What it found before it stopped (from its log, partly not pushed): Full devpick 6 imit_room +0.0035, imit_target +0.0005;
+Small random 20 imit_target +0.0033, imit_room +0.0003; **Full dev 20 (vs the real mpc_fab3sell 0.8099): imit_room 0.8228,
+imit_target 0.8212** (intervals not recorded). Do, in order, pushing after each:
+1. rerun `full 0 dev` with variants26.json (record the tables), plus a variant with **both** rules on (imit_room + imit_target);
+2. a **fresh Full seed, 12 episodes** (the overfitting guard; pick a new random root and write it down), same variants;
+3. `small 0 dev` as a no-harm check; 4. `sbf check` Small and Full for the best variant (CPU max/median);
+5. finish `results/task-26.md`: what each rule does (in plain words), the tables, verdict. Full is what counts.
+**Wait for every run in the foreground** (see "Never end your turn while a test runs").
+
+### 28 (rerun). Rule lawyer — finish it
+The first task-28 session hit the usage limit right after starting. Continue on `task-28-rulelawyer` if it has useful
+work (`git fetch origin task-28-rulelawyer`), otherwise start it from `cloud`. Same instructions as task 28 above.

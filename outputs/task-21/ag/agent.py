@@ -213,7 +213,8 @@ class Agent:
                     for s, q in plan.items():
                         flows[s] = q
             except Exception:
-                pass
+                import traceback
+                _chips.LOG.append({"error": traceback.format_exc()})
         if PARAMS["pulse_weeks"] > 0 and self.ok:
             try:
                 G_bar = observation["graph_now.grid.G_bar"]

@@ -1,0 +1,6 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:   31.9s remaining:   31.9s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:  1.0min finished
+kshare: played in 61 s; RSS {'rss': 0.8536252178796718, 'pooled': True, 'rss_all': 0.8533467017243236, 'rss_by_stratum': {1: 0.8463395643975946, 2: 0.8791613881258276, 3: 0.8350708266533265, 4: 0.8374605069144238}}; fallback weeks 0
+  shortage T/ep 2.0785  shed 4.1649  total 6.3223

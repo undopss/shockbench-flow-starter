@@ -1,0 +1,36 @@
+LP's planned fill over its window vs realized fill over the same weeks (pi-weighted per sink x product):
+    sink_us chip_le   LP plans  42.7%   realized  42.0%
+   sink_sea chip_le   LP plans  62.3%   realized  60.6%
+    sink_eu chip_le   LP plans  62.5%   realized  63.8%
+   sink_row chip_le   LP plans  59.2%   realized  57.9%
+    sink_jp chip_le   LP plans  61.4%   realized  59.3%
+    sink_cn chip_mat  LP plans  52.2%   realized  45.1%
+    sink_us chip_mat  LP plans  59.9%   realized  59.9%
+    sink_kr chip_le   LP plans  58.7%   realized  56.7%
+    sink_in chip_le   LP plans  81.5%   realized  77.1%
+   sink_sea chip_mat  LP plans  57.1%   realized  59.1%
+    sink_eu chip_mat  LP plans  41.9%   realized  12.9%
+   sink_row chip_mat  LP plans  51.7%   realized  25.4%
+    sink_jp chip_mat  LP plans  80.1%   realized  59.9%
+    sink_kr chip_mat  LP plans  69.0%   realized  62.6%
+    sink_in chip_mat  LP plans  88.0%   realized  76.8%
+    sink_cn chip_le   LP plans   nan%   realized   nan%
+  ALL (pi-weighted)   LP plans  56.3%   realized  53.2%
+
+week-0 fab cap in the LP vs planned starts vs realized starts (mean per week, k lots):
+  fab_tw_leading_1     LP cap    104.2  LP start     21.5  realized     69.1  nameplate    138.3
+  fab_tw_mature_1      LP cap     88.8  LP start      6.8  realized     51.5  nameplate    117.7
+  fab_us_leading_1     LP cap     16.1  LP start      2.1  realized     11.8  nameplate     17.7
+  fab_kr_leading_1     LP cap     29.2  LP start      6.2  realized     22.1  nameplate     35.7
+  fab_kr_memory_1      LP cap    264.0  LP start     26.6  realized    164.2  nameplate    305.0
+  fab_us_leading_2     LP cap     16.2  LP start      0.7  realized      7.9  nameplate     17.7
+  fab_jp_memory_1      LP cap     50.3  LP start      9.0  realized     32.5  nameplate    143.9
+  fab_us_leading_3     LP cap     16.2  LP start      0.0  realized     11.1  nameplate     17.7
+  fab_eu_leading_1     LP cap     13.6  LP start      2.9  realized      9.7  nameplate     24.6
+  fab_row_leading_1    LP cap      8.2  LP start      2.7  realized      5.8  nameplate     15.1
+  fab_cn_mature_1      LP cap    318.1  LP start    107.4  realized    235.4  nameplate    436.7
+  fab_us_mature_1      LP cap     81.6  LP start      8.8  realized     62.0  nameplate     89.1
+  fab_eu_mature_1      LP cap     98.4  LP start     14.8  realized     74.7  nameplate    180.2
+  fab_sea_mature_1     LP cap     23.3  LP start      7.2  realized     12.8  nameplate    139.0
+  fab_tw_mature_2      LP cap     88.6  LP start      6.4  realized     47.9  nameplate    117.7
+  fab_us_mature_2      LP cap     81.3  LP start     23.4  realized     65.1  nameplate     89.1

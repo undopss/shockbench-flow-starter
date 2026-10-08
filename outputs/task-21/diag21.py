@@ -21,7 +21,8 @@ import numpy as np
 from joblib import Parallel, delayed
 
 HERE = Path(__file__).resolve().parent
-EPS = "devpick:2,2,1,1"
+import os
+EPS = os.environ.get("EPS21", "devpick:2,2,1,1")
 sys.path.insert(0, str(HERE.parent))
 
 
@@ -79,6 +80,8 @@ def play(n, spec, agent_root, opts, base_lots):
     wslots = [sidx.get((f, N[f].fab.input)) for f in inst.fabs]
     chip_slots = [i for i, s in enumerate(inst.stock_slots) if getattr(N[s.node], "type", None) in ("material", "fab", "osat", "sink")
                   and ("chip" in K[s.k].id or "wafer" in K[s.k].id)]
+    chk_slots = [i for i, s in enumerate(inst.stock_slots) if getattr(N[s.node], "type", None) == "chokepoint"
+                 and ("chip" in K[s.k].id or "wafer" in K[s.k].id)]
     flows = {}  # stage|tail|head|k -> weekly
     for t, r in enumerate(R):
         for (e, k, lane), q in r.x.items():
@@ -103,7 +106,9 @@ def play(n, spec, agent_root, opts, base_lots):
         "chip_slots": [[N[inst.stock_slots[i].node].id, K[inst.stock_slots[i].k].id] for i in chip_slots],
         "chip_stock_w": [[float(r.stock[i]) for i in chip_slots] for r in R],
         "chip_disp_w": [[float(r.disposal[i]) for i in chip_slots] for r in R],
-        "flows": flows, "log": log, "R_w": np.asarray(marks.R).tolist(),
+        "flows": flows, "log": log,
+        "chk_slots": [[N[inst.stock_slots[i].node].id, K[inst.stock_slots[i].k].id] for i in chk_slots],
+        "chk_queue_w": [[float(r.stock[i]) for i in chk_slots] for r in R], "R_w": np.asarray(marks.R).tolist(),
         "seconds": round(time.perf_counter() - t0, 1),
     }
 

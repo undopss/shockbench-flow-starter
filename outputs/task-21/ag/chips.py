@@ -47,6 +47,7 @@ class ChipPlanner:
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         self.comm_ids = list(static["commodities"]["id"])
+        self.ct_k = {k for k, p in enumerate(static["commodities"]["pool"]) if p == "ct"}
         nodes = inst["nodes"]
         self.H = H
         self.T = int(static["T"])
@@ -180,10 +181,48 @@ class ChipPlanner:
             rest = self.lane_rest.get((int(lane), int(edge)), []) if lane_seen else []
             dest = self.edges["head"][rest[-1]] if rest else self.edges["head"][int(edge)]
             arrive(self.pos_index.get((dest, int(k))), int(arr) - week + sum(int(tau[e]) for e in rest), float(qty))
+        drain_q = {}  # chokepoint node -> (H,) container cargo the existing queue releases each week (chip_kappa)
+        if ORACLE is not None and OPTS.get("chip_kappa") and self.lot_keys is not None and "queue_lots.qty" in obs:
+            q = obs["queue_lots.qty"]
+            kap = obs["graph_now.kappa.ct"]
+            by_chk = {}
+            for row, (chk_node, k, _l, _n) in enumerate(self.lot_keys):
+                if int(k) in self.ct_k and q[row].sum() > 0:
+                    by_chk.setdefault(chk_node, []).append(row)
+            for chk_node, rws in by_chk.items():
+                pos = self.chk_pos.get(chk_node)
+                kc = float(kap[pos]) if pos is not None else np.inf
+                if pos is not None and open_now[pos] < 0.5:
+                    kc = 0.0
+                sub = q[rws]
+                cols_ = [cc for cc in range(sub.shape[1]) if sub[:, cc].sum() > 0]
+                rem = {cc: float(sub[:, cc].sum()) for cc in cols_}
+                sched = np.zeros((len(rws), H))
+                for w in range(H):
+                    budget = kc
+                    for cc in cols_:
+                        if budget <= 0:
+                            break
+                        if rem[cc] <= 0:
+                            continue
+                        take = min(budget, rem[cc])
+                        sched[:, w] += sub[:, cc] * (take / float(sub[:, cc].sum()))
+                        rem[cc] -= take
+                        budget -= take
+                drain_q[chk_node] = sched.sum(axis=0)
+                for i, row in enumerate(rws):
+                    chk_node_, k, lane_key, next_edge = self.lot_keys[row]
+                    lane = self.lane_index.get(lane_key) if isinstance(lane_key, str) else lane_key
+                    route = [next_edge] + (self.lane_rest.get((lane, next_edge), []) if lane is not None else [])
+                    dest = self.edges["head"][route[-1]]
+                    rt = sum(int(tau[e]) for e in route)
+                    for w in range(H):
+                        if sched[i, w] > 0:
+                            arrive(self.pos_index.get((dest, int(k))), w + rt, float(sched[i, w]))
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
-                if queued[row] <= 0:
+                if queued[row] <= 0 or (chk_node in drain_q and int(k) in self.ct_k):
                     continue
                 pos = self.chk_pos.get(chk_node)
                 if pos is not None and open_now[pos] < 0.5:
@@ -398,6 +437,21 @@ class ChipPlanner:
                     rows.append(r); cols.append(j * H + t); vals.append(1.0)
                 b.append(float(u[e]))
                 r += 1
+        if ORACLE is not None and OPTS.get("chip_kappa"):
+            kap = obs["graph_now.kappa.ct"]
+            by_chk = {}
+            for j, ls in enumerate(self.lp_slots):
+                for qn in ls["chk"]:
+                    if qn in self.chk_pos:
+                        by_chk.setdefault(qn, []).append(j)
+            for qn, js in by_chk.items():
+                kc = float(kap[self.chk_pos[qn]])
+                for t in range(H):
+                    for j in js:
+                        rows.append(r); cols.append(j * H + t); vals.append(1.0)
+                    used = float(drain_q[qn][t]) if (qn in drain_q and OPTS.get("chip_kappa") == "net") else 0.0
+                    b.append(max(kc - used, 0.0))
+                    r += 1
         # an OSAT's throughput is shared by its packaged commodities
         for oi, o in enumerate(self.osats):
             qs = [q for q, (oo, _p) in enumerate(pairs) if oo == oi]

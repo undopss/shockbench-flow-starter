@@ -1,0 +1,17 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v25f_full_0_1008-1532: task full, entropy 0, episodes devpick:2,2,1,1, baseline fab3sell
+references ready in 1 s (6 episodes)
+  baseline fab3sell: reused full_0_devpick-2-2-1-1_2065715aeb5d1870.json
+  played fab3sell in 0 s: RSS 0.8500
+  played floor1 in 52 s: RSS 0.8554
+  played floor1_ct in 54 s: RSS 0.8559
+  played floor1_sfcap in 46 s: RSS 0.8526
+
+full, entropy 0, 6 episodes; diff = variant - fab3sell, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+fab3sell                  0.8500  0.843  0.869  0.838  0.845  +0.0000  [+0.0000, +0.0000]     nan%      0
+floor1                    0.8554  0.844  0.877  0.852  0.841  +0.0054  [+0.0034, +0.0076]   100.0%      0  <-- better
+floor1_ct                 0.8559  0.844  0.881  0.848  0.841  +0.0060  [+0.0040, +0.0082]   100.0%      0  <-- better
+floor1_sfcap              0.8526  0.839  0.876  0.851  0.840  +0.0027  [+0.0005, +0.0051]   100.0%      0  <-- better
+
+results: outputs/variants/v25f_full_0_1008-1532/results.json

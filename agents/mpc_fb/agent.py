@@ -65,6 +65,8 @@ PARAMS = {
     # task 25 (closed loop; all off by default = mpc_fab3sell exactly)
     "fb_sf_cap": False,  # the fuel LP's shortfall is at most the week's burn (else it books phantom fuel to meet its floors)
     "fb_kappa_ct": False,  # the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
+    "fb_floor_gain": 0.0,  # > 0: raise each pool's floor by gain x its learned shortfall of real vs planned stock 4 weeks out
+    "fb_prior": 4.0,  # weeks of zero error the running estimate starts from (shrinks early corrections toward 0)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -94,6 +96,9 @@ class Agent:
             except Exception:
                 self.pplan = None
         self.planned_arrivals = None
+        self.fb_pred4 = {}  # week -> the fuel LP's pool stocks planned for the end of week + 4
+        self.fb_err = None  # per pool: sum of (real - planned) stock 4 weeks out, and the count
+        self.fb_n = 0
         self.chips = None
         try:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"],
@@ -349,6 +354,15 @@ class Agent:
                 off = sum(int(tau[e]) for e in route)
                 fixed_in[p_i, min(off, H - 1)] += float(queued[row])
 
+        # closed loop (fb_floor_gain): compare the stock planned 4 weeks ago for the end of last week with the real one
+        if self.fb_err is None:
+            self.fb_err = np.zeros(P)
+        pred = self.fb_pred4.pop(week - 5, None)
+        if pred is not None:
+            self.fb_err += I0 - pred
+            self.fb_n += 1
+        fb_raise = np.maximum(0.0, -self.fb_err / (self.fb_n + PARAMS["fb_prior"])) * PARAMS["fb_floor_gain"]
+
         # burn per week, thresholds
         burn = np.zeros(P)
         floor = np.zeros(P)
@@ -361,7 +375,7 @@ class Agent:
             burn[p_i] = p["share"] * G
             thr[p_i] = self.psi * p["ibar"] if p["rationed"] else 0.0
             floor[p_i] = max(thr[p_i] + PARAMS["safety_weeks"] * burn[p_i],
-                             PARAMS["cover_frac"] * p["cover_days"] / 7.0 * burn[p_i])
+                             PARAMS["cover_frac"] * p["cover_days"] / 7.0 * burn[p_i]) + fb_raise[p_i]
             cap[p_i] = max(p["cap"], floor[p_i] + burn[p_i])
             voll[p_i] = p["voll"] * (1.0 + PARAMS["fab_boost"] * self.grid_has_fab.get(p["grid"], 0.0))
 
@@ -523,6 +537,8 @@ class Agent:
         if res.status != 0:
             return None
         x = res.x
+        if H > 4:
+            self.fb_pred4[week] = np.array([x[off_I + p_i * H + 4] for p_i in range(P)])
         self.fuel_pred = {"I": [float(x[off_I + p_i * H]) for p_i in range(P)],
                           "sf": [float(x[off_sf + p_i * H]) for p_i in range(P)],
                           "o": [float(x[off_o + p_i * H]) for p_i in range(P)],

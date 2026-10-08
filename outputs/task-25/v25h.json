@@ -1,0 +1,4 @@
+{"fab3sell": {"agent": "agents/mpc_fab3sell"},
+ "floor5_ct": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_floor_gain": 5.0, "fb_kappa_ct": true}},
+ "floor8_ct": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_floor_gain": 8.0, "fb_kappa_ct": true}},
+ "floor5": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_floor_gain": 5.0}}}

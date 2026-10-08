@@ -1,0 +1,19 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v25b_full_0_1008-1450: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_fab3sell
+references ready in 1 s (6 episodes)
+  baseline mpc_fab3sell: reused full_0_devpick-2-2-1-1_78d295e08dc890b3.json
+  played mpc_fab3sell in 0 s: RSS 0.8219
+  played sfcap in 53 s: RSS 0.8489
+  played sfcap_sw45 in 51 s: RSS 0.8507
+  played sfcap_sc05 in 48 s: RSS 0.8494
+  played sfcap_rc2 in 51 s: RSS 0.8499
+
+full, entropy 0, 6 episodes; diff = variant - mpc_fab3sell, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_fab3sell              0.8219  0.828  0.836  0.795  0.786  +0.0000  [+0.0000, +0.0000]     nan%      0
+sfcap                     0.8489  0.841  0.875  0.829  0.841  +0.0270  [+0.0186, +0.0345]   100.0%      0  <-- better
+sfcap_sw45                0.8507  0.838  0.870  0.853  0.838  +0.0288  [+0.0200, +0.0366]   100.0%      0  <-- better
+sfcap_sc05                0.8494  0.842  0.873  0.832  0.848  +0.0275  [+0.0159, +0.0378]   100.0%      0  <-- better
+sfcap_rc2                 0.8499  0.841  0.875  0.833  0.841  +0.0280  [+0.0196, +0.0354]   100.0%      0  <-- better
+
+results: outputs/variants/v25b_full_0_1008-1450/results.json

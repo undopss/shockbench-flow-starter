@@ -1,0 +1,5 @@
+{"mpc_fab3sell": {"agent": "agents/mpc_fab3sell"},
+ "sfcap": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_sf_cap": true}},
+ "sfcap_sw45": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_sf_cap": true, "safety_weeks": 4.5}},
+ "sfcap_sc05": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_sf_cap": true, "safety_cost": 0.5}},
+ "sfcap_rc2": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_sf_cap": true, "ration_cost": 2.0}}}

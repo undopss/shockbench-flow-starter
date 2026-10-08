@@ -1,0 +1,76 @@
+small root 2626: 40 oracle, 40 agent, 40 common episodes
+
+## Grid fuel: end-of-week stock in weeks of burn (share*G_bar); grid slot / terminals; p10 p50 p90
+   and share of weeks the grid's rationed fuel ends under psi*Ibar (ration next week)
+  grid_tw/lng      oracle        grid    0.42    0.82    1.83 | term    0.40    0.87    1.34 under 72.6%  (I-thr)/burn   -0.52   -0.12    0.84
+  grid_tw/lng      mpc_fab3sell  grid    0.04    0.96    3.04 | term    0.45    1.15    2.86 under 38.6%  (I-thr)/burn   -0.91    0.01    2.10
+  grid_tw/crude    oracle        grid    0.00   -0.00    2.97 | term    0.00    0.95    3.39
+  grid_tw/crude    mpc_fab3sell  grid    0.00    0.00    3.57 | term    0.00    2.00    8.01
+  grid_kr/lng      oracle        grid    0.13    0.72    1.33 | term    0.15    0.81    1.00 under 80.4%  (I-thr)/burn   -0.73   -0.14    0.41
+  grid_kr/lng      mpc_fab3sell  grid    0.00    0.86    2.28 | term    0.30    0.91    1.92 under 48.3%  (I-thr)/burn   -0.86    0.00    1.39
+  grid_kr/crude    oracle        grid    0.00    0.00    2.02 | term    0.22    1.00    3.21
+  grid_kr/crude    mpc_fab3sell  grid    0.00    0.07    2.34 | term    0.11    1.00    2.20
+  grid_kr/nucfuel  oracle        grid   13.00   34.00   52.01 | term    0.00    0.00    0.00
+  grid_kr/nucfuel  mpc_fab3sell  grid   24.01   44.00   52.03 | term    0.00    0.00    0.00
+  grid_jp/lng      oracle        grid    0.00    0.42    1.20 | term    0.00    0.32    1.00 under 67.0%  (I-thr)/burn   -1.20   -0.78    0.00
+  grid_jp/lng      mpc_fab3sell  grid    0.00    0.42    2.89 | term    0.00    0.35    1.20 under 61.6%  (I-thr)/burn   -1.20   -0.78    1.65
+  grid_jp/crude    oracle        grid    0.00    0.00    0.41 | term    0.08    0.56    1.28
+  grid_jp/crude    mpc_fab3sell  grid    0.00    0.00    2.46 | term    0.04    0.56    1.20
+  grid_jp/nucfuel  oracle        grid   13.00   34.00   52.00 | term    0.00    0.00    0.00
+  grid_jp/nucfuel  mpc_fab3sell  grid   21.00   44.00   52.01 | term    0.00    0.00    0.00
+  grid_eu/lng      oracle        grid    0.07    0.75    1.20 | term    0.04    0.56    1.44 under 83.5%  (I-thr)/burn   -1.15   -0.45    0.00
+  grid_eu/lng      mpc_fab3sell  grid    0.04    0.75    2.88 | term    0.03    0.62    1.11 under 58.0%  (I-thr)/burn   -1.17   -0.45    1.58
+  grid_eu/crude    oracle        grid    0.00    0.00    0.00 | term    0.00    0.30    1.00
+  grid_eu/crude    mpc_fab3sell  grid    0.00    0.00    3.21 | term    0.00    0.30    1.20
+  grid_eu/nucfuel  oracle        grid   13.33   34.00   52.00 | term    0.00    0.00    0.00
+  grid_eu/nucfuel  mpc_fab3sell  grid   20.02   44.00   52.00 | term    0.00    0.00    0.00
+
+## Shed share of base load per grid (mean over weeks), weeks with shed > 0.1%
+  grid_tw    oracle: mean  5.12% weeks>0.1% 33.8% | mpc_fab3sell: mean  7.18% weeks>0.1% 29.3% |
+  grid_kr    oracle: mean  6.10% weeks>0.1% 56.9% | mpc_fab3sell: mean  7.24% weeks>0.1% 44.0% |
+  grid_jp    oracle: mean 15.50% weeks>0.1% 88.1% | mpc_fab3sell: mean 15.78% weeks>0.1% 83.4% |
+  grid_eu    oracle: mean  8.52% weeks>0.1% 60.9% | mpc_fab3sell: mean  8.80% weeks>0.1% 60.0% |
+
+## Fabs: utilisation lots/fabcap (mean, share of weeks >90%, <10%), lag-1 autocorr; wafer stock in weeks of cap
+  fab_tw_leading_1   oracle        util 33.7% >90% 12.3% <10% 45.2% ac1  0.84 | wafers/cap   -0.00    0.00    0.90
+  fab_tw_leading_1   mpc_fab3sell  util 36.7% >90% 17.5% <10% 46.0% ac1  0.51 | wafers/cap    0.00    0.00    2.11
+  fab_tw_mature_1    oracle        util 17.2% >90%  6.4% <10% 69.8% ac1  0.75 | wafers/cap    0.00    0.00    1.50
+  fab_tw_mature_1    mpc_fab3sell  util 17.5% >90%  9.7% <10% 75.0% ac1  0.51 | wafers/cap    0.00    0.00    2.03
+  fab_kr_memory_1    oracle        util 33.2% >90%  8.8% <10% 45.3% ac1  0.89 | wafers/cap    0.00    0.00    1.02
+  fab_kr_memory_1    mpc_fab3sell  util 32.1% >90% 18.9% <10% 54.3% ac1  0.31 | wafers/cap    0.00    0.60    3.13
+  fab_jp_memory_1    oracle        util 25.0% >90% 18.8% <10% 66.8% ac1  0.67 | wafers/cap    0.00    0.00    0.90
+  fab_jp_memory_1    mpc_fab3sell  util 13.1% >90% 11.3% <10% 86.5% ac1  0.04 | wafers/cap    0.00    2.45    3.60
+  fab_eu_leading_1   oracle        util 22.4% >90% 10.1% <10% 64.7% ac1  0.82 | wafers/cap    0.00    0.36    1.15
+  fab_eu_leading_1   mpc_fab3sell  util 22.9% >90%  9.0% <10% 70.0% ac1  0.74 | wafers/cap    0.00    0.74    3.53
+  fab_eu_mature_1    oracle        util 19.1% >90%  4.0% <10% 63.9% ac1  0.87 | wafers/cap    0.00   -0.00    1.11
+  fab_eu_mature_1    mpc_fab3sell  util 22.9% >90%  9.8% <10% 68.8% ac1  0.75 | wafers/cap    0.00    1.61    3.21
+
+## Fuel burnt per grid segment, mean per week (G of the segment), and fuel shipped out of each source
+  grid_tw    lng      oracle:    1730.5 mpc_fab3sell:    1691.5
+  grid_tw    crude    oracle:      58.1 mpc_fab3sell:      59.9
+  grid_kr    lng      oracle:    1931.6 mpc_fab3sell:    1868.8
+  grid_kr    crude    oracle:     195.2 mpc_fab3sell:     159.7
+  grid_kr    nucfuel  oracle:    3267.4 mpc_fab3sell:    3263.8
+  grid_jp    lng      oracle:    2927.2 mpc_fab3sell:    2921.9
+  grid_jp    crude    oracle:     553.4 mpc_fab3sell:     490.3
+  grid_jp    nucfuel  oracle:    1429.5 mpc_fab3sell:    1430.0
+  grid_eu    lng      oracle:    5275.8 mpc_fab3sell:    5157.2
+  grid_eu    crude    oracle:     572.9 mpc_fab3sell:     571.8
+  grid_eu    nucfuel  oracle:   11796.7 mpc_fab3sell:   11797.8
+  bypass.tb.src_gulf_crude.chk_malacca     crude    oracle:       2.4 mpc_fab3sell:       1.6
+  pipe.tb.src_kz_uranium.grid_eu           nucfuel  oracle:     586.5 mpc_fab3sell:    5340.3
+  pipe.tb.src_kz_uranium.grid_jp           nucfuel  oracle:      77.9 mpc_fab3sell:     691.2
+  pipe.tb.src_kz_uranium.grid_kr           nucfuel  oracle:     225.6 mpc_fab3sell:    1856.2
+  sea.tb.src_au_lng.term_jp                lng      oracle:    1863.1 mpc_fab3sell:    2032.9
+  sea.tb.src_au_lng.term_kr                lng      oracle:     718.4 mpc_fab3sell:     790.8
+  sea.tb.src_gulf_crude.chk_hormuz         crude    oracle:     635.1 mpc_fab3sell:     649.2
+  sea.tb.src_qa_lng.chk_hormuz             lng      oracle:    2833.3 mpc_fab3sell:    3307.5
+  sea.tb.src_ru_gas.term_jp                lng      oracle:     190.9 mpc_fab3sell:     218.2
+  sea.tb.src_us_crude.chk_panama           crude    oracle:      43.1 mpc_fab3sell:      53.4
+  sea.tb.src_us_crude.term_eu              crude    oracle:     512.8 mpc_fab3sell:     572.1
+  sea.tb.src_us_lng.chk_panama             lng      oracle:     653.4 mpc_fab3sell:     785.7
+  sea.tb.src_us_lng.term_eu                lng      oracle:    3700.4 mpc_fab3sell:    4001.2
+
+## Cost J (T USD) mean
+  oracle: 2.3823
+  mpc_fab3sell: 2.6349

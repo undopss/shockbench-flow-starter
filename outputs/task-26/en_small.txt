@@ -1,0 +1,18 @@
+small 40 episodes; per grid mean per week: G total, homes y, fabs E, unused, shed; as % of y_bar
+  grid_tw   oracle        G  97.09% y  94.88% E  2.21% unused  0.00% shed  5.12% | weeks unused>0.5%  0.0%
+  grid_tw   mpc_fab3sell  G  95.19% y  92.82% E  2.37% unused  0.00% shed  7.18% | weeks unused>0.5%  0.0%
+  grid_kr   oracle        G  95.10% y  93.90% E  1.20% unused  0.00% shed  6.10% | weeks unused>0.5%  0.0%
+  grid_kr   mpc_fab3sell  G  93.92% y  92.76% E  1.16% unused  0.00% shed  7.24% | weeks unused>0.5%  0.0%
+  grid_jp   oracle        G  84.75% y  84.50% E  0.25% unused  0.00% shed 15.50% | weeks unused>0.5%  0.0%
+  grid_jp   mpc_fab3sell  G  84.35% y  84.22% E  0.13% unused  0.00% shed 15.78% | weeks unused>0.5%  0.0%
+  grid_eu   oracle        G  91.56% y  91.48% E  0.08% unused -0.00% shed  8.52% | weeks unused>0.5%  0.0%
+  grid_eu   mpc_fab3sell  G  91.29% y  91.20% E  0.09% unused -0.00% shed  8.80% | weeks unused>0.5%  0.0%
+
+fuel disposed per week (stock slots of energy commodities), mean
+  term_tw              lng      oracle       0.0  mpc_fab3sell       1.0
+  grid_tw              lng      oracle       0.0  mpc_fab3sell      19.1
+  grid_tw              crude    oracle       0.0  mpc_fab3sell       2.7
+  grid_kr              lng      oracle       0.0  mpc_fab3sell       6.6
+  grid_kr              crude    oracle       0.0  mpc_fab3sell       2.5
+  grid_jp              lng      oracle       0.0  mpc_fab3sell      29.2
+  grid_eu              lng      oracle       0.0  mpc_fab3sell      69.0

@@ -64,7 +64,6 @@ PARAMS = {
     "pp_direct": [],  # grid ids whose direct source -> grid pipelines the planner also times (task 18; empty = off)
     # task 25 (closed loop; all off by default = mpc_fab3sell exactly)
     "fb_sf_cap": False,  # the fuel LP's shortfall is at most the week's burn (else it books phantom fuel to meet its floors)
-    "fb_kappa_ct": False,  # the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -98,7 +97,7 @@ class Agent:
         try:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"],
                                             wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
-                                            sell_end=PARAMS["sell_end"], kappa_ct=PARAMS["fb_kappa_ct"])
+                                            sell_end=PARAMS["sell_end"])
         except Exception:
             pass
 

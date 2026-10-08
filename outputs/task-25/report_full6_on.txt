@@ -1,0 +1,140 @@
+6 episodes: [2, 5, 0, 1, 53, 26]
+CPU per week: max 0.35 s, median 0.213 s
+
+== clip: requested vs executed, by slot class (sum over episodes)
+  fab->chokepoint:chip_le_raw          requested        5860520/ep  executed        5845524/ep   0.9974
+  fab->chokepoint:chip_mat_raw         requested        7465547/ep  executed        7448893/ep   0.9978
+  fab->osat:chip_le_raw                requested       33374316/ep  executed       33363653/ep   0.9997
+  fab->osat:chip_mat_raw               requested       50515729/ep  executed       50426064/ep   0.9982
+  material->chokepoint:wafer           requested        9764379/ep  executed        9761055/ep   0.9997
+  material->fab:wafer                  requested       82791067/ep  executed       82690365/ep   0.9988
+  osat->chokepoint:chip_mat            requested       13884213/ep  executed       13874319/ep   0.9993
+  osat->sink:chip_le                   requested       37060994/ep  executed       37049659/ep   0.9997
+  osat->sink:chip_mat                  requested       42933250/ep  executed       42872720/ep   0.9986
+  source->chokepoint:crude             requested         198231/ep  executed         198231/ep   1.0000
+  source->chokepoint:lng               requested         421093/ep  executed         421054/ep   0.9999
+  source->grid:lng                     requested        4680581/ep  executed        4680581/ep   1.0000
+  source->grid:nucfuel                 requested        3100058/ep  executed        3099402/ep   0.9998
+  source->terminal:crude               requested         200972/ep  executed         200668/ep   0.9985
+  source->terminal:lng                 requested        1332706/ep  executed        1331806/ep   0.9993
+  terminal->grid:crude                 requested        2629559/ep  executed         410565/ep   0.1561
+  terminal->grid:lng                   requested        3706607/ep  executed        1847416/ep   0.4984
+  most clipped slots (units/ep):
+    term_in->grid_in:crude                                                 req      1578720 exe        42246 (0.027)
+    term_in->grid_in:lng                                                   req      1578720 exe       208157 (0.132)
+    term_jp->grid_jp:crude                                                 req       266135 exe        27997 (0.105)
+    term_jp->grid_jp:lng                                                   req       374605 exe       151980 (0.406)
+    term_eu->grid_eu:crude                                                 req       192396 exe        30403 (0.158)
+    term_us->grid_us:crude                                                 req       228073 exe        70434 (0.309)
+    term_eu->grid_eu:lng                                                   req       235218 exe        78154 (0.332)
+    term_cn->grid_cn:lng                                                   req       122390 exe        32657 (0.267)
+
+== fuel LP (week-0 prediction vs record), per pool, mean over episodes
+  grid       fuel       burn/wk real/pred burn LP sf wks  sf/burn real short wks stock bias (wks of burn)
+  grid_tw    crude          108          0.627      34.8    0.316           74.8                     0.06
+  grid_tw    lng           2160          0.731      58.0    0.467           84.2                    -0.20
+  grid_kr    crude          219          0.766      66.8    0.580           60.5                    -0.35
+  grid_kr    lng           2732          0.761      71.5    0.664           64.3                    -0.43
+  grid_kr    nucfuel       3279          0.998       0.0    0.000           32.3                     0.00
+  grid_jp    crude          896          0.577      73.5    0.692           68.3                    -0.27
+  grid_jp    lng           5377          0.787      43.8    0.395           38.8                    -0.20
+  grid_jp    nucfuel       1434          0.999       0.0    0.000            2.7                     0.00
+  grid_cn    crude         1800          0.708      67.5    0.573           51.5                    -0.28
+  grid_cn    lng           5400          0.869      53.5    0.482           29.7                    -0.37
+  grid_cn    nucfuel       9000          1.000       0.2    0.001            0.2                    -0.00
+  grid_us    crude          793          1.000       0.0    0.000           35.5                     0.00
+  grid_us    lng          31733          1.000       0.0    0.000           35.3                    -0.08
+  grid_us    nucfuel      14280          0.929       9.2    0.088           42.7                    -0.02
+  grid_eu    crude         1035          0.506      77.5    0.744           63.8                    -0.25
+  grid_eu    lng           8796          0.950      56.8    0.415           27.5                    -0.38
+  grid_eu    nucfuel      11901          1.000       0.0    0.000            6.2                     0.00
+  grid_sea   crude          750          0.213      87.8    0.836           87.5                    -0.05
+  grid_sea   lng           7500          0.611      42.8    0.412           45.7                    -0.03
+  grid_in    crude          360          0.999       0.3    0.001            0.5                    -0.11
+  grid_in    lng           1080          0.999       0.5    0.003            0.5                    -0.84
+  grid_in    nucfuel       1080          0.929       9.2    0.088            7.7                    -0.02
+
+== fuel LP, 5 weeks ahead (weeks w..w+4): stock at the end vs real, shortfall vs real (weeks of burn)
+  grid_tw    crude    stock bias     0.36  mae    1.14  real short - LP short     0.37
+  grid_tw    lng      stock bias    -1.13  mae    1.19  real short - LP short    -0.23
+  grid_kr    crude    stock bias    -1.44  mae    1.56  real short - LP short     0.19
+  grid_kr    lng      stock bias    -0.89  mae    0.96  real short - LP short    -0.55
+  grid_kr    nucfuel  stock bias     0.01  mae    0.04  real short - LP short     0.01
+  grid_jp    crude    stock bias    -1.85  mae    1.86  real short - LP short    -0.66
+  grid_jp    lng      stock bias    -0.54  mae    0.66  real short - LP short    -0.45
+  grid_jp    nucfuel  stock bias     0.01  mae    0.03  real short - LP short     0.01
+  grid_cn    crude    stock bias    -1.35  mae    1.37  real short - LP short    -0.17
+  grid_cn    lng      stock bias    -1.08  mae    1.22  real short - LP short    -0.87
+  grid_cn    nucfuel  stock bias     0.00  mae    0.00  real short - LP short     0.00
+  grid_us    crude    stock bias    -0.49  mae    0.53  real short - LP short     0.00
+  grid_us    lng      stock bias    -0.21  mae    0.21  real short - LP short     0.00
+  grid_us    nucfuel  stock bias    -0.06  mae    0.12  real short - LP short    -0.06
+  grid_eu    crude    stock bias    -1.19  mae    1.21  real short - LP short    -1.12
+  grid_eu    lng      stock bias    -0.85  mae    0.87  real short - LP short    -0.27
+  grid_eu    nucfuel  stock bias     0.00  mae    0.03  real short - LP short     0.00
+  grid_sea   crude    stock bias    -0.92  mae    0.94  real short - LP short    -0.19
+  grid_sea   lng      stock bias    -0.35  mae    0.35  real short - LP short    -0.08
+  grid_in    crude    stock bias    -0.68  mae    1.13  real short - LP short    -0.01
+  grid_in    lng      stock bias    -3.81  mae    3.88  real short - LP short    -0.03
+  grid_in    nucfuel  stock bias    -0.06  mae    0.06  real short - LP short    -0.06
+
+== pulse planner: week-0 prediction vs record, per grid (sum over weeks, mean over episodes)
+  grid_tw    homes pred       468145 real       468211 | fab E pred     24433 real     24369 draw     40183 | E pred>0 but real<10%: 0.2 wks | modes hold/fill/fill+line/all/split [96, 95, 171, 145, 116]
+  grid_kr    homes pred      1018349 real      1018748 | fab E pred     26560 real     26402 draw     37828 | E pred>0 but real<10%: 0.5 wks | modes hold/fill/fill+line/all/split [58, 112, 80, 302, 62]
+  grid_jp    homes pred      1639566 real      1638084 | fab E pred      4251 real      4221 draw     18198 | E pred>0 but real<10%: 0.2 wks | modes hold/fill/fill+line/all/split [30, 17, 6, 494, 56]
+  grid_cn    homes pred     18212664 real     18212664 | fab E pred     20721 real     20721 draw     39353 | E pred>0 but real<10%: 0.0 wks | modes hold/fill/fill+line/all/split [153, 11, 0, 436, 12]
+  grid_us    homes pred      7535351 real      7539592 | fab E pred     18549 real     18309 draw     21057 | E pred>0 but real<10%: 1.0 wks | modes hold/fill/fill+line/all/split [5, 0, 0, 574, 0]
+  grid_eu    homes pred      5107213 real      5106836 | fab E pred     10260 real     10181 draw     23628 | E pred>0 but real<10%: 0.3 wks | modes hold/fill/fill+line/all/split [169, 21, 4, 333, 78]
+  grid_sea   homes pred      2234150 real      2234150 | fab E pred      1196 real      1196 draw     12685 | E pred>0 but real<10%: 0.0 wks | modes hold/fill/fill+line/all/split [129, 20, 73, 383, 19]
+
+== chip LP: week-0 prediction vs record (sum over weeks, mean over episodes)
+  sink_us    chip_le   served pred     10342102 real     10344458  miss       +2356 =    +0.12 B USD
+  sink_us    chip_mat  served pred     16656222 real     16571019  miss      -85203 =    -0.88 B USD
+  sink_eu    chip_le   served pred      5572421 real      5551415  miss      -21007 =    -1.06 B USD
+  sink_eu    chip_mat  served pred      1427982 real      1420980  miss       -7002 =    -0.07 B USD
+  sink_cn    chip_mat  served pred     15117440 real     15112733  miss       -4707 =    -0.05 B USD
+  sink_jp    chip_le   served pred      4082641 real      4068261  miss      -14380 =    -0.73 B USD
+  sink_jp    chip_mat  served pred      4733502 real      4704750  miss      -28752 =    -0.30 B USD
+  sink_kr    chip_le   served pred      2794591 real      2789398  miss       -5194 =    -0.26 B USD
+  sink_kr    chip_mat  served pred      3499854 real      3490646  miss       -9208 =    -0.10 B USD
+  sink_sea   chip_le   served pred      7208242 real      7196164  miss      -12079 =    -0.61 B USD
+  sink_sea   chip_mat  served pred      7739136 real      7716965  miss      -22171 =    -0.23 B USD
+  sink_in    chip_le   served pred      3018492 real      3011577  miss       -6916 =    -0.35 B USD
+  sink_in    chip_mat  served pred      3388262 real      3378106  miss      -10156 =    -0.10 B USD
+  sink_row   chip_le   served pred      4507444 real      4493598  miss      -13846 =    -0.70 B USD
+  sink_row   chip_mat  served pred      2422263 real      2391859  miss      -30404 =    -0.32 B USD
+  total served miss (real - pred) x pi: -0.0056 T USD/ep
+  5 weeks ahead (sum over windows w..w+4): served pred vs real, demand forecast vs real
+    sink_us    chip_le   served real/pred  1.001  demand real/forecast  1.002
+    sink_us    chip_mat  served real/pred  0.989  demand real/forecast  1.005
+    sink_eu    chip_le   served real/pred  0.992  demand real/forecast  1.010
+    sink_eu    chip_mat  served real/pred  0.265  demand real/forecast  1.007
+    sink_cn    chip_mat  served real/pred  0.841  demand real/forecast  1.001
+    sink_jp    chip_le   served real/pred  0.993  demand real/forecast  1.002
+    sink_jp    chip_mat  served real/pred  0.773  demand real/forecast  1.010
+    sink_kr    chip_le   served real/pred  0.994  demand real/forecast  1.017
+    sink_kr    chip_mat  served real/pred  0.903  demand real/forecast  1.019
+    sink_sea   chip_le   served real/pred  1.004  demand real/forecast  1.013
+    sink_sea   chip_mat  served real/pred  1.029  demand real/forecast  1.015
+    sink_in    chip_le   served real/pred  0.980  demand real/forecast  1.006
+    sink_in    chip_mat  served real/pred  0.881  demand real/forecast  1.003
+    sink_row   chip_le   served real/pred  0.982  demand real/forecast  1.016
+    sink_row   chip_mat  served real/pred  0.497  demand real/forecast  1.007
+    total 5-week served miss x pi, per window: -0.0059 T USD (sum over ~100 windows / 100)
+  fab_tw_leading_1     lots started pred      2279418 real      7382943  real/pred     3.24
+  fab_tw_mature_1      lots started pred       808711 real      5526991  real/pred     6.83
+  fab_us_leading_1     lots started pred       224426 real      1222556  real/pred     5.45
+  fab_kr_leading_1     lots started pred       596600 real      2321117  real/pred     3.89
+  fab_kr_memory_1      lots started pred      2843597 real     17269909  real/pred     6.07
+  fab_us_leading_2     lots started pred        76934 real       822981  real/pred    10.70
+  fab_jp_memory_1      lots started pred       874086 real      3350171  real/pred     3.83
+  fab_us_leading_3     lots started pred          706 real      1155076  real/pred  1635.87
+  fab_eu_leading_1     lots started pred       277396 real      1001940  real/pred     3.61
+  fab_row_leading_1    lots started pred       271438 real       602252  real/pred     2.22
+  fab_cn_mature_1      lots started pred     11712938 real     23023831  real/pred     1.97
+  fab_us_mature_1      lots started pred       910222 real      6452950  real/pred     7.09
+  fab_eu_mature_1      lots started pred      1535568 real      7747004  real/pred     5.05
+  fab_sea_mature_1     lots started pred       747130 real      1329311  real/pred     1.78
+  fab_tw_mature_2      lots started pred       668507 real      5143393  real/pred     7.69
+  fab_us_mature_2      lots started pred      2467823 real      6774386  real/pred     2.75
+  chip-position disposal pred 54609299 real 15008575 per ep

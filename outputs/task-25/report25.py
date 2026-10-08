@@ -38,6 +38,14 @@ for (g, k), fs in pools.items():
           f"{np.mean([f['sf_weeks'] for f in fs]):9.1f} {np.mean([f['sf_over_burn'] for f in fs]):8.3f} "
           f"{np.mean([f['real_short_weeks'] for f in fs]):14.1f} {np.mean([f['stock_bias'] for f in fs]) / max(b, 1e-9):24.2f}")
 
+print("\n== fuel LP, 5 weeks ahead (weeks w..w+4): stock at the end vs real, shortfall vs real (weeks of burn)")
+for (g, k), fs in pools.items():
+    b = np.mean([f["burn"] for f in fs])
+    if "stock4_bias" in fs[0]:
+        print(f"  {g:10s} {k:8s} stock bias {np.mean([f['stock4_bias'] for f in fs]) / max(b, 1e-9):8.2f}  "
+              f"mae {np.mean([f['stock4_mae'] for f in fs]) / max(b, 1e-9):7.2f}  "
+              f"real short - LP short {np.mean([f['short4_bias'] for f in fs]) / max(b, 1e-9):8.2f}")
+
 print("\n== pulse planner: week-0 prediction vs record, per grid (sum over weeks, mean over episodes)")
 pp = {}
 for r in rows:
@@ -64,6 +72,20 @@ for (s, k), (p_, r_, pi) in sk.items():
     if p_ + r_ > 0:
         print(f"  {s:10s} {k:9s} served pred {p_ / n:12.0f} real {r_ / n:12.0f}  miss {(r_ - p_) / n:+11.0f} = {(r_ - p_) * pi / n / 1e9:+8.2f} B USD")
 print(f"  total served miss (real - pred) x pi: {tot / n / 1e12:+.4f} T USD/ep")
+if "pred5" in rows[0]["chip_sink"][0]:
+    print("  5 weeks ahead (sum over windows w..w+4): served pred vs real, demand forecast vs real")
+    s5 = {}
+    for r in rows:
+        for s in r["chip_sink"]:
+            a = s5.setdefault((s["sink"], s["k"]), [0.0] * 4 + [s["pi"]])
+            for i, key in enumerate(("pred5", "real5", "dem5_pred", "dem5_real")):
+                a[i] += s[key]
+    tot5 = 0.0
+    for (s, k), (p5, r5, dp, dr, pi) in s5.items():
+        tot5 += (r5 - p5) * pi
+        if p5 + r5 > 0:
+            print(f"    {s:10s} {k:9s} served real/pred {r5 / max(p5, 1e-9):6.3f}  demand real/forecast {dr / max(dp, 1e-9):6.3f}")
+    print(f"    total 5-week served miss x pi, per window: {tot5 / n / 1e12 / 100:+.4f} T USD (sum over ~100 windows / 100)")
 fb = {}
 for r in rows:
     for f in r["chip_fab"]:

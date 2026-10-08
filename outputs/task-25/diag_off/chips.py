@@ -28,7 +28,7 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
-                 buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, kappa_ct=False):
+                 buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9):
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
@@ -38,9 +38,6 @@ class ChipPlanner:
         # wafer_buffer weeks of those planned starts; sell_end drops the buffer in weeks whose lots can't reach a sink
         # before the episode ends (fab tau + OSAT tau + two shipping weeks)
         self.sell_buffer, self.sell_end, self.sell_frac = bool(sell_buffer), bool(sell_end), float(sell_frac)
-        # task 25 (off by default): container lots queued at a chokepoint drain FIFO at its kappa_ct (all chip LP
-        # commodities are container cargo), and the LP's new shipments through it wait behind that queue
-        self.kappa_ct = bool(kappa_ct)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -120,13 +117,8 @@ class ChipPlanner:
             if src is None or dst is None:
                 continue
             chk = list(lanes["chokepoints"][lane]) if lane is not None else []
-            # edges up to and including the one into each chokepoint of the route (its reach time)
-            pre = {}
-            for i_e, e_ in enumerate(route):
-                if self.edges["head"][e_] in chk:
-                    pre[self.edges["head"][e_]] = route[:i_e + 1]
             self.lp_slots.append({"slot": s, "k": k, "route": route, "src": src, "dst": dst, "first": route[0],
-                                  "chk": chk, "pre": pre})
+                                  "chk": chk})
         self.slots = [ls["slot"] for ls in self.lp_slots]
         self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
         self.lane_rest = {}
@@ -135,8 +127,6 @@ class ChipPlanner:
                 self.lane_rest[(li, e)] = list(route[j + 1:])
         self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])}
         self.lot_keys = layout.get("lot_keys")
-        pools = static["commodities"].get("pool") or []
-        self.ct_k = {k for k, p in enumerate(pools) if p == "ct"}
         # weeks from an OSAT receiving raw chips to a sink receiving the package: OSAT tau + one shipping week each way
         self.tail_lead = 2 + max((o["tau"] for o in self.osats), default=2)
 
@@ -149,41 +139,6 @@ class ChipPlanner:
                 if week - self.recent_weeks <= started < week:
                     tot += float(qty)
         return tot / max(1, min(self.recent_weeks, week - 1))
-
-    def _ct_release(self, obs, H):
-        """{lot row: array H} of what each queued container lot row releases in week + o (FIFO by cohort, pro rata
-        inside a cohort, kappa_ct a week; a closed chokepoint releases nothing), as pplan.queue_release for tankers."""
-        q = obs["queue_lots.qty"]
-        kap = obs["graph_now.kappa.ct"]
-        open_now = np.where(obs["graph_now.open.observed"] == 1, obs["graph_now.open"], 1.0)
-        by_chk = {}
-        for row, (chk_node, k, _lane, _next) in enumerate(self.lot_keys):
-            if int(k) in self.ct_k and q[row].sum() > 0:
-                by_chk.setdefault(chk_node, []).append(row)
-        out = {}
-        for chk_node, rows in by_chk.items():
-            pos = self.chk_pos.get(chk_node)
-            kc = float(kap[pos]) if pos is not None else np.inf
-            if pos is not None and open_now[pos] < 0.5:
-                kc = 0.0
-            sub = q[rows]
-            cols = [c for c in range(sub.shape[1]) if sub[:, c].sum() > 0]
-            rem = {c: float(sub[:, c].sum()) for c in cols}
-            sched = np.zeros((len(rows), H))
-            for w in range(H):
-                budget = kc
-                for c in cols:
-                    if budget <= 0:
-                        break
-                    if rem[c] <= 0:
-                        continue
-                    take = min(budget, rem[c])
-                    sched[:, w] += sub[:, c] * (take / float(sub[:, c].sum()))
-                    rem[c] -= take
-                    budget -= take
-            for i, row in enumerate(rows):
-                out[row] = sched[i]
-        return out
 
     # ------------------------------------------------------------------------------------------------------------
     def plan(self, obs):
@@ -219,28 +174,18 @@ class ChipPlanner:
             rest = self.lane_rest.get((int(lane), int(edge)), []) if lane_seen else []
             dest = self.edges["head"][rest[-1]] if rest else self.edges["head"][int(edge)]
             arrive(self.pos_index.get((dest, int(k))), int(arr) - week + sum(int(tau[e]) for e in rest), float(qty))
-        queue0 = {}  # chokepoint position -> container cargo queued there (kappa_ct)
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
-            drain = self._ct_release(obs, H) if self.kappa_ct else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue
                 pos = self.chk_pos.get(chk_node)
-                if row in drain and pos is not None:
-                    queue0[pos] = queue0.get(pos, 0.0) + float(queued[row])
-                if pos is not None and open_now[pos] < 0.5 and row not in drain:
+                if pos is not None and open_now[pos] < 0.5:
                     continue
                 lane = self.lane_index.get(lane_key) if isinstance(lane_key, str) else lane_key
                 route = [next_edge] + (self.lane_rest.get((lane, next_edge), []) if lane is not None else [])
                 dest = self.edges["head"][route[-1]]
-                lead_q = sum(int(tau[e]) for e in route)
-                if row in drain:
-                    for o, qd in enumerate(drain[row]):
-                        if qd > 0:
-                            arrive(self.pos_index.get((dest, int(k))), o + lead_q, float(qd))
-                    continue
-                arrive(self.pos_index.get((dest, int(k))), lead_q, float(queued[row]))
+                arrive(self.pos_index.get((dest, int(k))), sum(int(tau[e]) for e in route), float(queued[row]))
         for node, k, qty, out, seen in zip(obs["wip.node"], obs["wip.k"], obs["wip.qty"], obs["wip.out_week"],
                                            obs["wip.qty.observed"]):
             if seen:
@@ -429,30 +374,6 @@ class ChipPlanner:
                     rows.append(r); cols.append(off_o + q * H + t); vals.append(1.0)
                 b.append(max(thr, 0.0))
                 r += 1
-        # kappa_ct: new shipments through a chokepoint join its queue: what reaches it by week t (cumulative) fits in
-        # (t + 1) weeks of its container throughput after the cargo already waiting there
-        if self.kappa_ct and "graph_now.kappa.ct" in obs:
-            kap = obs["graph_now.kappa.ct"]
-            by_chk = {}
-            for j, ls in enumerate(self.lp_slots):
-                for chk_node, pre in ls["pre"].items():
-                    q = self.chk_pos.get(chk_node)
-                    if q is not None:
-                        by_chk.setdefault(q, []).append((j, sum(int(tau[e]) for e in pre)))
-            for q, js in by_chk.items():
-                kc = float(kap[q])
-                if not np.isfinite(kc):
-                    continue
-                for t in range(H):
-                    any_term = False
-                    for j, off in js:
-                        for tt in range(0, t - off + 1):
-                            rows.append(r); cols.append(j * H + tt); vals.append(1.0)
-                            any_term = True
-                    if not any_term:
-                        continue
-                    b.append(max(0.0, (t + 1) * kc - queue0.get(q, 0.0)))
-                    r += 1
         # wafer buffer: I[in_f, t] + short[f, t] >= wafer_buffer * nameplate (limited by storage)
         buf_rows = []  # (row, fab index, t)
         for fi in range(nB):

@@ -123,6 +123,20 @@ def analyse(inst, ag, recs, logs):
             seg[p_i, w - 1] = r.segment.get((gord.get(p["grid"]), p["k"]), 0.0)
             sfp[p_i, w - 1] = lg["fuel"]["sf"][p_i]
             brn[p_i, w - 1] = lg["fuel"]["burn"][p_i]
+    # 4 weeks ahead: the LP's stock at the end of week w+4 vs the real one; shortfall over weeks w..w+4 vs real
+    # burn short of the LP's burn over those weeks
+    st4 = np.zeros((P, T)) * np.nan
+    sh4 = np.zeros((P, T)) * np.nan
+    for w in range(1, T - 3):
+        lg = logs.get(w)
+        if lg is None or lg["fuel"] is None or "I4" not in lg["fuel"]:
+            continue
+        for p_i, p in enumerate(ag.pools):
+            real = sum(float(recs[w + 3].stock[i]) for i in feeds.get(p_i, []))
+            st4[p_i, w - 1] = real - lg["fuel"]["I4"][p_i]
+            gi = gord.get(p["grid"])
+            short = sum(lg["fuel"]["burn"][p_i] - recs[w - 1 + t].segment.get((gi, p["k"]), 0.0) for t in range(5))
+            sh4[p_i, w - 1] = short - lg["fuel"]["sf4"][p_i]
     res["fuel"] = []
     for p_i, p in enumerate(ag.pools):
         b = np.nanmean([lg["fuel"]["burn"][p_i] for lg in logs.values() if lg["fuel"]]) if logs else np.nan
@@ -136,6 +150,8 @@ def analyse(inst, ag, recs, logs):
                             "sf_weeks": int(np.nansum(sfp[p_i] > 1e-6 * max(b, 1))),
                             "sf_over_burn": float(np.nansum(sfp[p_i]) / max(np.nansum(brn[p_i]), 1e-9)),
                             "real_short_weeks": int(np.nansum(seg[p_i] < 0.999 * brn[p_i])),
+                            "stock4_bias": float(np.nanmean(st4[p_i])), "stock4_mae": float(np.nanmean(np.abs(st4[p_i]))),
+                            "short4_bias": float(np.nanmean(sh4[p_i])),
                             "series_stock": [None if np.isnan(v) else float(v) for v in stock_miss[p_i]],
                             "series_out": [None if np.isnan(v) else float(v) for v in out_miss[p_i]]})
 
@@ -175,9 +191,19 @@ def analyse(inst, ag, recs, logs):
                     continue
                 pred += lg["chip"]["sv"][j]
                 real += float(recs[w - 1].served[sk["row"]])
+            p4 = r4 = d4p = d4r = 0.0
+            for w in range(1, T - 3):
+                lg = logs.get(w)
+                if not lg or not lg["chip"] or "sv4" not in lg["chip"]:
+                    continue
+                p4 += lg["chip"]["sv4"][j]
+                d4p += lg["chip"]["dem4"][j]
+                r4 += sum(float(recs[w - 1 + t].served[sk["row"]]) for t in range(5))
+                d4r += sum(float(recs[w - 1 + t].demand[sk["row"]]) for t in range(5))
             p = ch.pos[sk["pos"]]
             res["chip_sink"].append({"sink": node_ids[p["node"]], "k": ag._kname[p["k"]], "pi": sk["pi"],
-                                     "pred": pred, "real": real})
+                                     "pred": pred, "real": real, "pred5": p4, "real5": r4, "dem5_pred": d4p,
+                                     "dem5_real": d4r})
         for fi, f in enumerate(ch.fabs):
             pred = real = 0.0
             for w in range(1, T + 1):

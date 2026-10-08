@@ -8,7 +8,8 @@
                "devpick:a,b,c,d" (root 0 only: the first a/b/c/d dev episodes of harm levels 1/2/3/4)
     variants   a JSON file {"name": {"agent": "agents/mpc_chip", "params": {...}}, ...}; the FIRST entry is the
                baseline every other one is compared with. "params" (optional) is written to the copy's params.json,
-               so one agent folder serves many variants.
+               so one agent folder serves many variants; without "params" the agent's own params.json is kept
+               (before task 25 it was dropped, so {"agent": "agents/mpc_fab3sell"} ran with the code defaults).
     n_jobs     worker processes (default 3)
 
 Each variant is copied to outputs/variants/<round>/<name>/ and played with EpisodeSet.play (the scorer's path). Prints
@@ -72,6 +73,8 @@ def main(task, entropy, episodes, variants_file, n_jobs="3"):
         shutil.copytree(spec["agent"], folder, ignore=shutil.ignore_patterns("__pycache__", "params.json"))
         if spec.get("params"):
             (folder / "params.json").write_text(json.dumps(spec["params"]))
+        elif (Path(spec["agent"]) / "params.json").is_file():  # no "params": the agent's own params.json (task 25)
+            shutil.copy(Path(spec["agent"]) / "params.json", folder / "params.json")
         t = time.time()
         cached = None
         if name == names[0]:  # the baseline: played once per (agent files + params, task, root, episodes)

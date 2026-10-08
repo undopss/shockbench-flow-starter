@@ -1,0 +1,24 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants27_full_0_1008-1447: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_fab3sell
+references ready in 2 s (6 episodes)
+  played mpc_fab3sell in 116 s: RSS 0.8219
+  played clim_off in 128 s: RSS 0.8500
+  played reopen in 128 s: RSS 0.8481
+  played reopen_derate in 128 s: RSS 0.8482
+  played risk_safety in 127 s: RSS 0.8557
+  played all_clim in 125 s: RSS 0.8552
+  played sw5 in 125 s: RSS 0.8584
+  played sw1 in 130 s: RSS 0.8268
+
+full, entropy 0, 6 episodes; diff = variant - mpc_fab3sell, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_fab3sell              0.8219  0.828  0.836  0.795  0.786  +0.0000  [+0.0000, +0.0000]     nan%      0
+clim_off                  0.8500  0.843  0.869  0.838  0.845  +0.0281  [+0.0178, +0.0372]   100.0%      0  <-- better
+reopen                    0.8481  0.840  0.868  0.838  0.841  +0.0262  [+0.0140, +0.0370]   100.0%      0  <-- better
+reopen_derate             0.8482  0.836  0.872  0.841  0.841  +0.0263  [+0.0171, +0.0344]   100.0%      0  <-- better
+risk_safety               0.8557  0.845  0.876  0.857  0.828  +0.0338  [+0.0244, +0.0421]   100.0%      0  <-- better
+all_clim                  0.8552  0.842  0.878  0.856  0.831  +0.0333  [+0.0234, +0.0421]   100.0%      0  <-- better
+sw5                       0.8584  0.845  0.873  0.872  0.838  +0.0365  [+0.0316, +0.0409]   100.0%      0  <-- better
+sw1                       0.8268  0.835  0.837  0.792  0.831  +0.0050  [-0.0062, +0.0175]    76.5%      0
+
+results: outputs/variants/variants27_full_0_1008-1447/results.json

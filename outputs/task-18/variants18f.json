@@ -1,0 +1,2 @@
+{"bufplan_pp20": {"agent": "agents/mpc_bufplan", "params": {"pulse_plan": true, "pp_value": 20}},
+ "kce_split": {"agent": "agents/mpc_fab3", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true}}}

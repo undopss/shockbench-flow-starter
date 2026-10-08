@@ -1,0 +1,2 @@
+{"mpc_fab3sell": {"agent": "agents/mpc_fab3sell"},
+ "sfcap": {"agent": "agents/mpc_fb", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "fb_sf_cap": true}}}

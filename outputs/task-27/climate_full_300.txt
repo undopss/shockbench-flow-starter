@@ -1,0 +1,116 @@
+full: 300 episodes x 104 weeks (own root 27027)
+
+chokepoints: shock = open o < 1 (o = 0: closed)
+  item                          shock%  st/ep  meanL  medL  depth  P(end<=1,2,4,8,12 w | in shock)
+  chk_hormuz closed               8.9%   0.32    5.5   2.0      -     4%    6%    9%   13%   16%
+  chk_hormuz partial/closed      14.0%   0.45    6.1   2.0      -     4%    6%    9%   13%   16%
+  chk_hormuz kappa_tb cut        13.9%   0.45    5.9   2.0   0.63     4%    6%    9%   13%   16%
+  chk_malacca closed             13.0%   0.31    3.8   2.0      -     3%    5%    7%   10%   13%
+  chk_malacca partial/closed     19.2%   0.46    4.3   2.0      -     3%    5%    7%   11%   14%
+  chk_malacca kappa_tb cut       19.1%   0.47    4.1   2.0   0.66     3%    5%    7%   10%   13%
+  chk_suez closed                 8.9%   0.29    4.0   1.0      -     4%    6%    9%   12%   15%
+  chk_suez partial/closed        12.4%   0.44    4.5   2.0      -     4%    7%   10%   14%   17%
+  chk_suez kappa_tb cut          12.2%   0.43    4.2   2.0   0.69     4%    7%   10%   13%   16%
+  chk_cape closed                 0.5%   0.29    1.9   1.0      -    54%   76%   89%   96%   99%
+  chk_cape partial/closed         1.0%   0.44    2.2   2.0      -    45%   76%   91%   98%   99%
+  chk_cape kappa_tb cut           0.9%   0.44    2.0   2.0   0.62    49%   78%   92%   98%   99%
+  chk_taiwan closed              17.3%   0.38    7.6   2.0      -     2%    3%    5%    8%   10%
+  chk_taiwan partial/closed      22.2%   0.49    7.4   2.0      -     2%    4%    6%    9%   11%
+  chk_taiwan kappa_tb cut        22.1%   0.49    7.1   2.0   0.69     2%    4%    6%    8%   11%
+  chk_panama closed               0.5%   0.32    1.7   1.0      -    59%   83%   96%  100%  100%
+  chk_panama partial/closed       1.0%   0.46    2.2   2.0      -    45%   79%   96%  100%  100%
+  chk_panama kappa_tb cut         0.9%   0.46    2.0   2.0   0.61    50%   81%   97%  100%  100%
+  chk_turkish closed              0.4%   0.25    1.7   1.0      -    60%   80%   94%  100%  100%
+  chk_turkish partial/closed      0.8%   0.41    2.2   2.0      -    46%   81%   94%  100%  100%
+  chk_turkish kappa_tb cut        0.8%   0.40    2.0   2.0   0.58    50%   82%   95%  100%  100%
+
+energy sources: supply < 0.9 x median
+  item                          shock%  st/ep  meanL  medL  depth  P(end<=1,2,4,8,12 w | in shock)
+  src_qa_lng/lng                  0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_gulf_crude/crude            0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_us_lng/lng                  0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_us_crude/crude              0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_au_lng/lng                  0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_ru_gas/lng                  0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_ru_crude/crude              0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_no_gas/lng                  0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_kz_uranium/nucfuel          0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+  src_ru_enrichment/nucfuel       0.0%   0.00    nan   nan      -   nan%  nan%  nan%  nan%  nan%
+
+grids: G_bar < 0.9 x median
+  item                          shock%  st/ep  meanL  medL  depth  P(end<=1,2,4,8,12 w | in shock)
+  grid_tw                         2.0%   0.42    4.9   4.0   0.29    21%   37%   62%   84%   93%
+  grid_kr                         2.5%   0.48    5.0   3.0   0.30    20%   35%   56%   78%   91%
+  grid_jp                         2.0%   0.45    4.3   3.0   0.32    23%   41%   66%   88%   95%
+  grid_cn                         0.6%   0.12    4.4   2.5   0.29    21%   39%   57%   72%   79%
+  grid_us                         1.9%   0.45    4.0   3.0   0.29    24%   43%   66%   86%   93%
+  grid_eu                         2.0%   0.46    4.5   3.0   0.31    23%   41%   64%   79%   84%
+  grid_sea                        0.7%   0.14    3.7   2.0   0.31    24%   43%   64%   88%   94%
+  grid_in                         1.7%   0.37    4.1   3.0   0.29    23%   41%   64%   82%   89%
+
+edges carrying energy (from a source or terminal): u < 0.9 x median (only edges with shocks > 1% of weeks)
+  item                          shock%  st/ep  meanL  medL  depth  P(end<=1,2,4,8,12 w | in shock)
+  src_qa_lng->chk_hormuz          1.0%   0.18    5.5   3.0   0.50    18%   34%   54%   74%   81%
+  src_gulf_crude->chk_hormuz      1.0%   0.18    5.5   3.0   0.50    18%   34%   54%   74%   81%
+  src_gulf_crude->chk_malacca    18.8%   0.05   38.7  32.0   0.78     0%    1%    1%    2%    4%
+  src_us_lng->chk_panama          9.1%   0.20    5.9   3.0   0.68     3%    5%    8%   12%   14%
+  src_us_lng->term_eu            38.1%   0.32    6.8   3.0   0.77     1%    2%    3%    4%    6%
+  src_us_crude->chk_panama        8.7%   0.19    6.0   3.0   0.68     2%    5%    8%   11%   13%
+  src_us_crude->term_eu          37.5%   0.31    7.1   3.0   0.77     1%    2%    3%    4%    6%
+  src_au_lng->term_kr             4.0%   0.37    4.2   3.0   0.54    10%   19%   28%   35%   38%
+  src_au_lng->term_jp             3.8%   0.43    4.5   3.0   0.44    12%   23%   35%   47%   52%
+  src_au_lng->term_cn             3.5%   0.38    5.1   3.0   0.40    12%   23%   34%   43%   48%
+  src_au_lng->term_sea            3.2%   0.43    3.9   3.0   0.56    14%   26%   39%   48%   52%
+  src_ru_gas->term_jp            20.0%   0.46    5.5   3.0   0.71     2%    5%    8%   10%   12%
+  src_ru_gas->term_cn            29.0%   0.38    6.4   3.0   0.76     1%    3%    5%    7%    8%
+  src_ru_gas->grid_cn            27.9%   0.11   38.0  38.0   0.77     0%    1%    2%    3%    4%
+  src_ru_gas->grid_eu            17.6%   0.05   37.0  37.5   0.75     0%    0%    1%    2%    3%
+  src_ru_crude->chk_turkish       3.9%   0.25    6.8   3.0   0.40     7%   13%   20%   28%   34%
+  src_ru_crude->term_cn          41.9%   0.37    6.1   3.0   0.78     1%    2%    3%    4%    5%
+  src_kz_uranium->grid_kr         3.1%   0.03    nan   nan   0.41     0%    1%    2%    4%    6%
+  src_kz_uranium->grid_jp         4.4%   0.03   41.5  41.5   0.51     1%    1%    3%    5%    7%
+  src_kz_uranium->grid_cn         2.9%   0.03   84.0  84.0   0.51     1%    1%    2%    4%    6%
+  src_kz_uranium->grid_us         3.1%   0.03    nan   nan   0.61     0%    0%    1%    2%    2%
+  src_kz_uranium->grid_eu         3.1%   0.03    nan   nan   0.51     1%    1%    2%    5%    7%
+  src_kz_uranium->grid_in         3.2%   0.03    nan   nan   0.59     1%    1%    2%    5%    7%
+  src_ru_enrichment->grid_kr      2.3%   0.04   49.2  52.5   0.45     1%    2%    3%    6%   10%
+  src_ru_enrichment->grid_jp     18.2%   0.06   12.0   6.0   0.74     0%    1%    2%    3%    5%
+  src_ru_enrichment->grid_cn     45.0%   0.11   27.6  23.0   0.77     0%    0%    1%    2%    3%
+  src_ru_enrichment->grid_us      3.0%   0.03   29.0  29.0   0.59     0%    1%    2%    4%    6%
+  src_ru_enrichment->grid_eu      2.6%   0.03   52.5  52.5   0.55     0%    1%    1%    2%    3%
+  src_ru_enrichment->grid_in      2.4%   0.04   46.8  52.5   0.38     1%    2%    4%    9%   13%
+  chk_hormuz->chk_malacca        18.8%   0.05   38.7  32.0   0.78     0%    1%    1%    2%    4%
+  chk_hormuz->chk_suez            1.3%   0.01   38.0  38.0   0.38     2%    5%    9%   19%   28%
+  chk_hormuz->chk_cape            1.3%   0.01   38.0  38.0   0.38     2%    5%    9%   19%   28%
+  chk_hormuz->chk_taiwan         21.9%   0.06   29.4  25.5   0.76     0%    1%    2%    4%    5%
+  chk_hormuz->term_tw            22.7%   0.24    7.7   3.0   0.75     1%    2%    4%    6%    8%
+  chk_hormuz->term_in             1.6%   0.22    5.3   3.0   0.48    15%   28%   43%   60%   70%
+  chk_malacca->chk_taiwan        22.5%   0.13   12.9   9.5   0.81     1%    1%    3%    5%    7%
+  chk_malacca->term_tw           23.0%   0.24    7.4   3.0   0.80     1%    2%    4%    6%    9%
+  chk_malacca->term_kr           34.9%   0.22   10.2   3.0   0.82     1%    1%    3%    4%    6%
+  chk_malacca->term_jp           46.9%   0.24    7.6   4.0   0.80     1%    1%    2%    3%    4%
+  chk_malacca->term_cn           28.9%   0.22   10.4   4.0   0.77     1%    2%    3%    5%    6%
+  chk_suez->term_eu              21.2%   0.28    7.4   3.0   0.78     1%    2%    4%    6%    8%
+  chk_suez->term_eu              21.2%   0.28    7.4   3.0   0.78     1%    2%    4%    6%    8%
+  chk_suez->term_in               3.9%   0.22    5.9   3.0   0.52     7%   12%   20%   29%   35%
+  chk_suez->term_in               3.9%   0.22    5.9   3.0   0.52     7%   12%   20%   29%   35%
+  chk_cape->term_eu              21.2%   0.28    7.4   3.0   0.78     1%    2%    4%    6%    8%
+  chk_cape->term_in               3.9%   0.22    5.9   3.0   0.52     7%   12%   20%   29%   35%
+  chk_taiwan->term_kr            38.7%   0.22    8.2   4.0   0.78     1%    1%    2%    3%    4%
+  chk_taiwan->term_jp            18.6%   0.23    6.6   3.0   0.79     1%    2%    4%    6%    8%
+  chk_taiwan->term_cn            37.0%   0.21   15.0   3.0   0.82     1%    1%    2%    4%    5%
+  chk_panama->term_tw            11.6%   0.25    5.9   2.5   0.68     2%    5%    7%   10%   13%
+  chk_panama->term_jp             9.0%   0.25    6.3   3.5   0.66     3%    6%   10%   15%   18%
+  chk_panama->term_sea           36.7%   0.28   10.9   4.0   0.87     1%    1%    2%    4%    5%
+  chk_turkish->term_eu           21.2%   0.28    7.4   3.0   0.78     1%    2%    4%    6%    8%
+
+events acting in the episode (incl. carried-in), per episode, and mean duration (weeks)
+  tariff               acting/ep  14.37  start inside/ep  7.67  duration mean   86.5 median   51.7
+  sanction             acting/ep  33.24  start inside/ep  8.51  duration mean  284.9 median  120.4
+  material_outage      acting/ep   3.24  start inside/ep  0.84  duration mean  259.2 median  109.8
+  militarised_closure  acting/ep   1.66  start inside/ep  0.89  duration mean   97.0 median   36.5
+  regional_conflict    acting/ep   0.95  start inside/ep  0.52  duration mean   74.2 median   37.5
+  piracy               acting/ep   0.66  start inside/ep  0.56  duration mean   19.2 median   11.9
+  energy_shock         acting/ep   4.69  start inside/ep  4.49  duration mean    3.3 median    2.0
+  weather_closure      acting/ep   2.95  start inside/ep  2.91  duration mean    1.2 median    0.9
+  port_strike          acting/ep   2.82  start inside/ep  2.72  duration mean    4.2 median    2.2

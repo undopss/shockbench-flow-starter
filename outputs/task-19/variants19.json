@@ -1,0 +1,4 @@
+{"bufplan_pp20": {"agent": "agents/mpc_bufplan", "params": {"pulse_plan": true, "pp_value": 20}},
+ "sell_end": {"agent": "agents/mpc_sell", "params": {"sell_end": true}},
+ "sell_buffer": {"agent": "agents/mpc_sell", "params": {"sell_buffer": true}},
+ "sell_both": {"agent": "agents/mpc_sell", "params": {"sell_buffer": true, "sell_end": true}}}

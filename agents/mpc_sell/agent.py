@@ -46,6 +46,9 @@ PARAMS = {
     "fab_cap_mode": "observed",  # "energy": plan power-starved fabs (grid shed last week) at their recent starts
     "wafer_buffer": 3.0,  # weeks of nameplate fab starts kept on hand as wafers (soft; 0 = off)
     "buffer_cost": 1000.0,  # USD per wafer and week below that buffer
+    "sell_buffer": False,  # task 19: keep the wafer buffer only at fabs whose chips the chip LP can sell
+    "sell_end": False,  # task 19: no wafer buffer for lots that can't reach a sink before the episode ends
+    "sell_frac": 0.9,  # a fab planned under this share of its LP capacity counts as sales-limited
     "chip_H": 24,  # chip planning horizon in weeks (wafer -> fab -> OSAT -> sink takes up to ~20)
     "chip_time_limit": 2.0,  # CPU seconds used this week after which the chip LP is skipped (Small 2 s, Full 4 s)
     "pulse_plan": True,  # planned pulses (pplan.py, from mpc_pplan): per fab grid, choose the terminal -> grid releases
@@ -58,6 +61,8 @@ PARAMS = {
     "pp_enum_H": 6,
     "pp_deadline": 1.5,  # CPU seconds used this week after which no more grids are planned
 }
+STATS = {"chip_ok": 0, "chip_skip": 0, "chip_fail": 0}  # weeks the chip LP was used / skipped for time / failed
+
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
 
@@ -86,7 +91,9 @@ class Agent:
         self.chips = None
         try:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"],
-                                            wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"])
+                                            wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
+                                            sell_buffer=PARAMS["sell_buffer"], sell_end=PARAMS["sell_end"],
+                                            sell_frac=PARAMS["sell_frac"])
         except Exception:
             pass
 
@@ -200,8 +207,13 @@ class Agent:
                 if plan is not None and all(np.isfinite(q) for q in plan.values()):
                     for s, q in plan.items():
                         flows[s] = q
+                    STATS["chip_ok"] += 1
+                else:
+                    STATS["chip_fail"] += 1
             except Exception:
-                pass
+                STATS["chip_fail"] += 1
+        else:
+            STATS["chip_skip"] += 1
         if PARAMS["pulse_weeks"] > 0 and self.ok:
             try:
                 G_bar = observation["graph_now.grid.G_bar"]

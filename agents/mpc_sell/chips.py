@@ -28,11 +28,16 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
-                 buffer_cost=1000.0):
+                 buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9):
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
         self.wafer_buffer, self.buffer_cost = float(wafer_buffer), float(buffer_cost)
+        # task 19 (both off by default): sell_buffer solves once without the buffer and, at a fab whose planned starts
+        # stay under sell_frac of its LP capacity (its chips can't be sold, not power-limited), shrinks the buffer to
+        # wafer_buffer weeks of those planned starts; sell_end drops the buffer in weeks whose lots can't reach a sink
+        # before the episode ends (fab tau + OSAT tau + two shipping weeks)
+        self.sell_buffer, self.sell_end, self.sell_frac = bool(sell_buffer), bool(sell_end), float(sell_frac)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -122,6 +127,8 @@ class ChipPlanner:
                 self.lane_rest[(li, e)] = list(route[j + 1:])
         self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])}
         self.lot_keys = layout.get("lot_keys")
+        # weeks from an OSAT receiving raw chips to a sink receiving the package: OSAT tau + one shipping week each way
+        self.tail_lead = 2 + max((o["tau"] for o in self.osats), default=2)
 
     def _recent_starts(self, obs, f, week):
         """Mean lots started per week over the last ``recent_weeks`` weeks, read from the fab's work in process."""
@@ -367,6 +374,7 @@ class ChipPlanner:
                 b.append(max(thr, 0.0))
                 r += 1
         # wafer buffer: I[in_f, t] + short[f, t] >= wafer_buffer * nameplate (limited by storage)
+        buf_rows = []  # (row, fab index, t)
         for fi in range(nB):
             f = self.fabs[fi]
             c0 = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
@@ -374,14 +382,35 @@ class ChipPlanner:
             if want <= 0:
                 continue
             for t in range(H):
+                if self.sell_end and week + t + f["tau"] + self.tail_lead > self.T:
+                    continue
                 rows += [r, r]; cols += [off_I + f["in"] * H + t, off_b + fi * H + t]; vals += [-1.0, -1.0]
                 b.append(-want)
+                buf_rows.append((r, fi, t))
                 cost[off_b + fi * H + t] = self.buffer_cost
                 r += 1
         A_ub = coo_matrix((vals, (rows, cols)), shape=(r, n)).tocsr()
+        b = np.array(b, dtype=float)
+        bounds = np.column_stack([np.zeros(n), hi])
 
-        res = linprog(cost, A_ub=A_ub, b_ub=np.array(b), A_eq=A_eq, b_eq=rhs,
-                      bounds=np.column_stack([np.zeros(n), hi]), method="highs")
+        if self.sell_buffer and buf_rows:
+            # pass 1 without the buffer: how many wafers would each fab start if only selling chips counted?
+            c1 = cost.copy()
+            c1[off_b:off_b + nB * H] = 0.0
+            res1 = linprog(c1, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs")
+            if res1.status == 0:
+                x1 = res1.x
+                for fi in range(nB):
+                    st = x1[off_f + fi * H: off_f + fi * H + H]
+                    caps = hi[off_f + fi * H: off_f + fi * H + H]
+                    if np.max(caps) <= 0 or np.max(st) >= self.sell_frac * np.max(caps):
+                        continue
+                    want = self.wafer_buffer * float(np.max(st))
+                    for (rr, ff, _t) in buf_rows:
+                        if ff == fi:
+                            b[rr] = max(b[rr], -want)
+
+        res = linprog(cost, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs")
         if res.status != 0:
             return None
         x = res.x

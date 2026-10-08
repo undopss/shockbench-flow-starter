@@ -25,8 +25,11 @@ def episode(n, spec, agent_root):
     t0 = time.perf_counter()
     inst, omega, marks, fallback = _world(task, entropy, n, reps, cache)
     pseed = _policy_seed(entropy, n, NO_ZIP_SHA256)
-    shim = _metered_shim(load_agent_class(agent_root, f"submission_{Path(agent_root).stem}"), None)
+    cls = load_agent_class(agent_root, f"submission_{Path(agent_root).stem}")
+    mod = sys.modules.get(cls.__module__)
+    shim = _metered_shim(cls, None)
     traj = rollout(inst, shim, omega, regime, pseed, marks=marks, fallback=fallback)
+    stats = dict(getattr(mod, "STATS", {}) or {})
     unload_agent()
     cpu = list(getattr(shim, "cpu_weeks", []))
     R = traj.records
@@ -43,19 +46,37 @@ def episode(n, spec, agent_root):
                 ed = inst.edges[e]
                 key = f"{N[ed.tail].id}|{N[ed.head].id}|{K[k].id}"
                 ship[key] = ship.get(key, 0.0) + float(q)
+    # weekly executed vs requested chip shipments per action slot
+    from shockbench_flow.dynamics.state import StepRecord  # noqa: F401
+    ships_w = {}
+    for t, r in enumerate(R):
+        for (e, k, lane), q in r.x.items():
+            if "chip" in K[k].id:
+                ed = inst.edges[e]
+                key = f"{N[ed.tail].id}|{N[ed.head].id}|{K[k].id}"
+                ships_w.setdefault(key, [0.0] * len(R))[t] += float(q)
+    req = {}
+    for r in R:
+        for sl, q in r.requested.items():
+            req[sl] = req.get(sl, 0.0) + float(q)
+    exe = {}
+    for r in R:
+        for sl, q in r.executed.items():
+            exe[sl] = exe.get(sl, 0.0) + float(q)
     pk = {}
     for r in R:
         for key, v in r.packaged.items():
             pk[str(key)] = pk.get(str(key), 0.0) + float(v)
     dem = [{"node": N[d.node].id, "k": K[d.k].id, "pi": float(d.pi)} for d in inst.demands]
     return {
-        "episode": n, "J_agent_cents": traj.J_cents, "fallback_weeks": sum(took_fallback(r) for r in R),
+        "episode": n, "J_agent_cents": traj.J_cents, "fallback_weeks": sum(took_fallback(r) for r in R), "stats": stats,
         "cpu_max": max(cpu, default=None), "cpu_median": float(np.median(cpu)) if cpu else None,
         "slots": slots, "disp_w": disp_w.tolist(), "stock_w": stock_w.tolist(),
         "fabs": [N[f].id for f in inst.fabs], "lots_w": np.array([r.lots_started for r in R]).tolist(),
         "energy_w": np.array([r.energy for r in R]).tolist(),
         "lost_w": np.array([r.lost for r in R]).tolist(), "served_w": np.array([r.served for r in R]).tolist(),
-        "demands": dem, "ship": ship, "packaged": pk,
+        "demands": dem, "ship": ship, "ships_w": ships_w, "req": {str(k): v for k, v in req.items()},
+        "exe": {str(k): v for k, v in exe.items()}, "packaged": pk,
         "cost": {c: float(sum(getattr(r.costs, c) for r in R)) for c in ("shortage", "disposal", "shed", "holding")},
         "seconds": round(time.perf_counter() - t0, 1),
     }
@@ -79,8 +100,9 @@ def main(task, entropy, neps, agent, n_jobs, tag=None):
     out.write_text(json.dumps(rows))
     print(f"played in {time.time() - t:.0f} s, written {out}")
     print("RSS:", es.rss([r["J_agent_cents"] for r in rows]))
-    print("fallback weeks", sum(r["fallback_weeks"] for r in rows), "cpu max", max(r["cpu_max"] for r in rows),
-          "median", np.median([r["cpu_median"] for r in rows]))
+    print("chip LP stats", [r["stats"] for r in rows])
+    print("fallback weeks", sum(r["fallback_weeks"] for r in rows), "cpu max", [r["cpu_max"] for r in rows],
+          "median", [r["cpu_median"] for r in rows])
 
 
 if __name__ == "__main__":

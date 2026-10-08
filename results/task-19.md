@@ -1,4 +1,6 @@
-Status: building the naive F_Q cache for this machine (Python 3.13.16; the home cache is keyed on 3.13.5, so every Full world rebuilt it single-threaded, ~30 min)
+Status: running the funnel (small random 20, then full devpick:2,2,1,1)
 
-Plan: measure where mpc_bufplan(pp20) makes chips it cannot sell (disposal, end stock, late lots), then build
-agents/mpc_sell (copy of mpc_bufplan with pp20 on by default; new options off by default) and funnel vs the baseline.
+Measured so far (Full devpick:2,2,1,1, baseline mpc_bufplan pp20 = agents/mpc_sell defaults): chips disposed 13M/episode
+(transport-limited: OSAT->sink edges run at their episode-reduced capacity). Ceiling, clairvoyant LP with fab starts
+capped at the agent's: 0.104 T USD/episode (routing + start-capping); with each grid's fab power movable between its
+fabs: 0.140 T. Both under the 0.17 T bar. Testing two cheap off-by-default options anyway (sell_buffer, sell_end).

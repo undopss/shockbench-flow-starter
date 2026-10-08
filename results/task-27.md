@@ -1,4 +1,4 @@
-Status: built agents/mpc_clim, waiting for reference cache, then Small 20 + Full 6
+Status: running Full 6 (devpick:2,2,1,1)
 
 Plan: measure disruption statistics on 300 own-root episodes (Full and Small), build agents/mpc_clim (climate options off by default) and run the funnel vs mpc_fab3sell.
 

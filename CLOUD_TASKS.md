@@ -332,3 +332,53 @@ gas is cut 20-25% by sanctions in some episodes. Task 21: the power side is ≈ 
 2. If a lever ≥ 0.1 T exists (e.g. other fuels/lanes the energy LP under-uses, stocking up before known cuts, nucfuel
    with its long lead, routing around Malacca), build it in `agents/mpc_jpow/` (from `agents/mpc_fab3sell`, off by
    default) and run the same funnel as task 23. Don't change pplan's valuation (that's task 23); the two should combine.
+
+**Tasks 23 and 24 above are PARKED (not launched); don't do them unless your task number says so.**
+
+## Round 7 (2026-10-08 evening): broader ideas, information we never used
+Baseline for every task below: `agents/mpc_fab3sell` (Codabench Small 0.7668; Full dev 20 0.810, Small dev 20 0.782).
+Read results/task-20.md (the map), task-21.md (chip LP is accurate; the remaining gap is the power side + foresight),
+task-22.md (our three planners beat the package's joint LP by far). Other teams are at 0.85-0.88 on Small, so much
+more is reachable without foresight than our ceilings suggested. We have until Oct 10 evening: build properly, but
+keep each new piece an option that is **off by default** in a new agent folder, and keep the CPU budget with margin.
+Funnel for anything you build (vs `agents/mpc_fab3sell`, same episodes): `small random 20` + `full 0 devpick:2,2,1,1`
+→ if either is better, `full 0 dev` and `small 0 dev` → a fresh Full seed 12 as the overfitting guard.
+
+### 25. BUILD: closed loop — let the agent learn from what actually happened (feedback)
+Every week the agent sees what its last action did, and ignores it: `last_week.sinks.demand/served/lost`,
+`last_week.clip.requested/executed` (did the simulator execute what we asked?), `last_week.cost_components`,
+`last_week.shed.qty` (used only by the pulse), plus the realized stock/pipeline vs what our LPs predicted.
+1. Measure first (Full devpick + Small dev, a few episodes): week by week, where do our planners' **predictions miss
+   reality** systematically? E.g. fuel LP's expected grid output vs real G_av / shed per grid; chip LP's expected
+   served vs real served per sink; requested vs executed per slot type (clipping we don't know about); pulse
+   planner's predicted fab energy vs real. Which misses are biased (always the same sign) and big in USD?
+2. Build `agents/mpc_fb/`: online corrections from those signals (e.g. per-grid / per-fab / per-lane learned
+   correction factors or bias terms with a simple running estimate, shrunk toward 1 early in the episode).
+3. Funnel above. Report which correction gave what.
+
+### 26. MEASURE + BUILD: learn from the perfect plan what doesn't need foresight (imitation)
+The oracle's decisions are part foresight, part structure (task 15: ~85% of the gap is calm-time planning). Find the
+structural part and copy it.
+1. On ≥ 40 training episodes of your own root (Full; and Small), solve the oracle (`shockbench_flow.oracle.lp`) and
+   record, per week: grid stocks per fuel vs psi·I-bar, terminal stocks, fab energy / lots per fab, wafer stocks per fab,
+   chip stocks per OSAT, which lanes/sources it uses. Do the same for `agents/mpc_fab3sell`.
+2. Find patterns that depend only on what an agent can observe (week, stock, graph_now, forecast...): e.g. "the oracle
+   keeps grid X's crude at ~k weeks of burn", "it powers fab Y in alternate weeks", "it front-loads wafers before week
+   N", "it never uses lane Z". Fit simple rules/targets (per grid/fab, maybe a function of observed state); check on
+   held-out episodes that they predict the oracle (and say how well).
+3. Build `agents/mpc_imit/` that feeds those targets into our planners (e.g. as target stocks / soft constraints /
+   values) and run the funnel.
+
+### 27. MEASURE + BUILD: know the climate (disruption statistics) + use `closure_end`
+Our planners assume the present persists. Instead, learn the **statistics** of disruptions offline and hedge, without
+predicting a specific event. Also read `closure_end.chokepoint` / `closure_end.end_week` (announced reopening of a
+closed strait), which no agent of ours has ever used.
+1. From ≥ 200 training episodes (gym `ShockBench/Full-v0` / `Small-v0`, own root; ground truth from omega as
+   `outputs/task-15/signals.py` does): per grid / chokepoint / source / edge, the rate and duration of energy shocks,
+   closures, outages, sanctions, capacity cuts; how often `closure_end` is announced and how accurate it is.
+2. Value: (a) `closure_end`: when a strait's reopening is known, don't route the long way / don't over-stock (or plan
+   the flow for the reopening week); (b) risk-based safety stocks: per grid/fuel, a safety level from the shock
+   statistics (expected shortfall during a typical shock × its probability) instead of the flat `safety_weeks`, and
+   expected-capacity derating of risky lanes in the LPs.
+3. Build `agents/mpc_clim/` (precomputed statistics stored as a small data file next to agent.py; nothing per-episode
+   leaks from the hidden set) and run the funnel. Report (a) and (b) separately.

@@ -1,0 +1,3 @@
+{"mpc_fab3sell": {"agent": "agents/mpc_fab3sell", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true}},
+ "imit_room": {"agent": "agents/mpc_imit", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room"}},
+ "imit_target": {"agent": "agents/mpc_imit", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "target"}}}

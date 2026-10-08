@@ -1,0 +1,19 @@
+small: train 20 test 20 episodes
+Rule G/C: weeks with enough fuel in the pool (>= thr + 1 week of burn): grid end stock (I - thr)/burn
+  pool              m(train)  test: |err|<0.1wk  <0.25wk  enough-fuel share | agent same stat: within 0.25 of m
+  grid_tw/lng         0.36       3.7%     9.3%      31.0%        |   6.1%
+  grid_tw/crude       0.00      56.0%    56.4%      54.4%        |  67.5%
+  grid_kr/lng         0.17       5.7%    33.5%      15.2%        |  39.1%
+  grid_kr/crude       0.00      73.2%    73.7%      90.0%        |  30.5%
+  grid_jp/lng         0.00      74.3%    75.1%      23.2%        |  23.0%
+  grid_jp/crude       0.00      68.1%    69.0%      22.0%        |  19.2%
+  grid_eu/lng        -0.01      79.7%    81.0%      29.4%        |   7.2%
+  grid_eu/crude       0.00      96.1%    98.1%      41.4%        |  16.2%
+
+Rule F: fab utilisation runs (weeks); oracle vs agent on test episodes: mean run length >=90% / <=10%, share of weeks >= 90%
+  fab_tw_leading_1   oracle: hi-run   8.4 lo-run  10.3 hi  7.3% | mpc_fab3sell: hi-run   2.1 lo-run   5.1 hi 13.8% |
+  fab_tw_mature_1    oracle: hi-run   1.0 lo-run  13.2 hi  0.3% | mpc_fab3sell: hi-run   3.3 lo-run  11.5 hi  9.8% |
+  fab_kr_memory_1    oracle: hi-run   5.8 lo-run  12.1 hi  4.4% | mpc_fab3sell: hi-run   2.1 lo-run   3.3 hi 19.6% |
+  fab_jp_memory_1    oracle: hi-run  23.7 lo-run  16.2 hi 16.0% | mpc_fab3sell: hi-run   1.4 lo-run  18.2 hi  7.2% |
+  fab_eu_leading_1   oracle: hi-run   6.2 lo-run  17.6 hi 10.1% | mpc_fab3sell: hi-run   2.5 lo-run  21.7 hi  9.3% |
+  fab_eu_mature_1    oracle: hi-run   4.0 lo-run  19.6 hi  1.2% | mpc_fab3sell: hi-run   2.2 lo-run  19.3 hi  7.3% |

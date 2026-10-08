@@ -32,12 +32,19 @@ def episode(n, spec, agent_root):
     from shockbench_flow.dynamics.env import rollout, took_fallback
     from shockbench_flow.marks import osat_throughput
     from shockbench_flow_agent.local_eval import NO_ZIP_SHA256
-    from shockbench_flow_agent.scoring import _metered_shim, _policy_seed, _world
+    from shockbench_flow_agent.scoring import _label, _metered_shim, _policy_seed
+    from shockbench_flow.disruption.sampler import sample_omega
+    from shockbench_flow.hosting.tasks import task_generator
+    from shockbench_flow.marks import compute_marks
     from shockbench_flow_agent.shim import load_agent_class, unload_agent
 
     task, entropy, regime, reps, cache = spec
     t0 = time.perf_counter()
-    inst, omega, marks, fallback = _world(task, entropy, n, reps, cache)
+    # the scorer's world without the naive fallback (its F_Q takes ~1 h to build here); a failed week would play the
+    # empty action instead of naive, so check fallback_weeks == 0 (mpc_fab3sell has none on Full dev)
+    inst, gparams = task_generator(task)
+    omega = sample_omega(inst, gparams, entropy, n, _label(entropy))
+    marks, fallback = compute_marks(inst, omega), None
     pseed = _policy_seed(entropy, n, NO_ZIP_SHA256)
     shim = _metered_shim(load_agent_class(agent_root, f"submission_{Path(agent_root).stem}"), None)
     traj = rollout(inst, shim, omega, regime, pseed, marks=marks, fallback=fallback)
@@ -132,6 +139,43 @@ def episode(n, spec, agent_root):
             above += max(0.0, float(r.lots_started[fi]) - base)
     out["alpha_headroom_lots"] = head
     out["alpha_lots_above_Rcap"] = above
+
+    # ---- power steering inside a grid (sim.py:349-354, production.py:200): leftover power is split pro rata to
+    # e p-hat / R, so the wafers on hand decide who gets it. Bound: each grid-week, re-split the fab energy the grid
+    # actually gave its fabs, greedily by chip value per GWh (pi / e), each fab up to alpha-bar R cap0 lots (as if the
+    # agent had steered wafers perfectly), vs what the agent's split made. Gross: every extra lot valued at its pi.
+    steer, fab_val = 0.0, 0.0
+    steer_g = defaultdict(float)
+    steer_wk = defaultdict(float)  # grid-weeks where the agent's split left value on the table
+    for ti, r in enumerate(R):
+        for gi, g in enumerate(inst.grids):
+            members = inst.grid_fabs[gi]
+            if len(members) < 2:
+                continue
+            Etot = float(sum(r.energy[fi] for fi in members))
+            if Etot <= 1e-9:
+                continue
+            have = sum(float(r.lots_started[fi]) * val[fi] for fi in members)
+            opts = []
+            for fi in members:
+                fab = N[inst.fabs[fi]].fab
+                if fab.e <= 0:
+                    continue
+                cap = float(marks.alpha_bar[ti][fi]) * float(marks.R[ti][fi]) * fab.cap0
+                opts.append((val[fi] / fab.e, fab.e, cap, fi))
+            best, left = 0.0, Etot
+            for vpe, e, cap, fi in sorted(opts, reverse=True):
+                use = min(left, e * cap)
+                best += use * vpe
+                left -= use
+            steer += max(0.0, best - have)
+            steer_g[N[g].id] += max(0.0, best - have) / 1e12
+            steer_wk[N[g].id] += best - have > 1e-3 * max(best, 1.0)
+            fab_val += have
+    out["steer_gain_T"] = steer / 1e12
+    out["fab_lot_value_T"] = fab_val / 1e12
+    out["steer_gain_by_grid_T"] = dict(steer_g)
+    out["steer_weeks_by_grid"] = dict(steer_wk)
 
     # ---- supply lift
     lostsup = defaultdict(float)

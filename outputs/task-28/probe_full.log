@@ -1,0 +1,6 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   6 | elapsed:   26.2s remaining:   26.2s
+[Parallel(n_jobs=3)]: Done   6 out of   6 | elapsed:   49.0s finished
+written outputs/task-28/probe_full_0_devpick-2-2-1-1_mpc_fab3sell.json
+RSS check: {'rss': 0.8499698487392189, 'pooled': True, 'rss_all': 0.8508555931794923, 'rss_by_stratum': {1: 0.8426984935073485, 2: 0.869398381239416, 3: 0.8381111717132965, 4: 0.8447466649346469}}

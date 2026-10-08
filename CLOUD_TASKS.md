@@ -382,3 +382,10 @@ closed strait), which no agent of ours has ever used.
    expected-capacity derating of risky lanes in the LPs.
 3. Build `agents/mpc_clim/` (precomputed statistics stored as a small data file next to agent.py; nothing per-episode
    leaks from the hidden set) and run the funnel. Report (a) and (b) separately.
+
+## !!! Runner bug fixed (2026-10-08 ~18:30 Kyiv), read this
+Until commit after dd67ac4, `outputs/variants.py` **dropped the agent folder's own `params.json`** when a variant had
+no "params". So `{"agent": "agents/mpc_fab3sell"}` played mpc_fab3sell's PARAMS defaults = **mpc_bufplan pp20**
+(Full dev 20 0.7820, not 0.8099), and every round-7 "diff vs mpc_fab3sell" is really vs pp20. Variants that pass
+the full params (e.g. task 25's sfcap) are fine in absolute RSS. Now fixed: with no "params" the folder's own
+params.json is kept. **Compare against the absolute mpc_fab3sell numbers, or rerun the baseline with the fixed runner.**

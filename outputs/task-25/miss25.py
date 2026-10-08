@@ -92,7 +92,7 @@ def analyse(inst, ag, recs, logs):
     P = len(ag.pools)
     feeds = {}
     for (node, k), p_i in ag.feeds.items():
-        idx = ag.stock_index.get((node, k))
+        idx = inst.slot_index.get((node, k))  # the record's stock is in the simulator's slot order
         if idx is not None:
             feeds.setdefault(p_i, []).append(idx)
     stock_miss = np.zeros((P, T)) * np.nan
@@ -194,7 +194,7 @@ def analyse(inst, ag, recs, logs):
                 continue
             for i, p in enumerate(ch.pos):
                 dp += lg["chip"]["d"][i]
-                dr += float(recs[w - 1].disposal[ch.stock_index[(p["node"], p["k"])]])
+                dr += float(recs[w - 1].disposal[inst.slot_index[(p["node"], p["k"])]])
         res["chip_disp"] = [dp, dr]
     res["cpu"] = [lg["cpu"] for lg in logs.values()]
     res["shed_usd"] = float(sum(float(np.dot(r.shed, [ag._voll[i] for i in range(len(r.shed))])) for r in recs))

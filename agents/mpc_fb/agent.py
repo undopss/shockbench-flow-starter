@@ -62,6 +62,8 @@ PARAMS = {
     "kappa_lp": False,  # task 18: queued tanker cargo drains at the chokepoint's kappa_tb, and the LP's lanes share it
     "pp_split": False,  # task 18: a planner mode that recharges the rationed fuel and holds the others (crude)
     "pp_direct": [],  # grid ids whose direct source -> grid pipelines the planner also times (task 18; empty = off)
+    # task 25 (closed loop; all off by default = mpc_fab3sell exactly)
+    "fb_sf_cap": False,  # the fuel LP's shortfall is at most the week's burn (else it books phantom fuel to meet its floors)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -413,6 +415,8 @@ class Agent:
                 lo[off_b + p_i * H + t] = burn[p_i]  # the simulator burns it whenever the stock allows
                 hi[off_b + p_i * H + t] = burn[p_i]
                 cost[off_sf + p_i * H + t] = voll[p_i]
+                if PARAMS["fb_sf_cap"]:
+                    hi[off_sf + p_i * H + t] = burn[p_i]
                 hi[off_I + p_i * H + t] = cap[p_i]
                 cost[off_I + p_i * H + t] = 1.0  # a little holding, to not overstock
                 # a unit below the rationing floor cuts output ~ burn/floor units, each at VOLL

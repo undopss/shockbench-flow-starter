@@ -231,3 +231,20 @@ physically reachable first (`outputs/reachable_bound.py`, task 17's `fabs17.py`)
    no-harm check (JP is on Small).
 3. Report fab lots at CN/JP/SEA (agent vs oracle) and shed by grid, before vs after.
 4. `sbf check` Small and Full for the best variant (CPU max/median per week).
+
+### 19. BUILD: stop making chips nobody can sell (runs in parallel with task 18)
+Task 17 (results/task-17.md, point 2): mpc_buffer disposes of **10.3M chips per episode** on Full (oracle ~0.3M) and
+ends with 4.0M in stock. Mostly chip_mat_raw at fab_us_mature_1 (3.6M) and fab_eu_mature_1 (1.4M), chip_le_raw 1.4M at
+US fabs, packaged chip_le/chip_mat 1.5M each at the kr/tw/my OSATs. The agent also over-starts US fabs (17.4M lots vs
+the oracle's 9.8M) and TW (17.1M vs 14.8M): more output than their OSAT routes can take (e.g. sanctioned fab→OSAT
+edges), plus 2.1M chip_le + 3.5M chip_mat lots started in the last 10 weeks that can't reach a sink in time.
+Ceiling ≤ 0.2 T USD/episode (value of those chips), realistic part unknown: measure it first.
+Ideas, your call: cap lots at fabs whose raw-chip outflow is blocked or full; send the wafers/power to fabs whose chips
+can reach a sink instead (that's where the value is, not the disposal cost of 0.011 T); stop starting lots that can't
+reach a sink before the episode ends; route raw chips before they overflow.
+1. Build in a copy (`agents/mpc_sell/`, from `agents/mpc_bufplan`, with pp20 on; new options off by default).
+   Don't touch CN/JP/SEA fuel/pulse logic (that's task 18; the two should combine later).
+2. Funnel vs baseline `{"agent": "agents/mpc_bufplan", "params": {"pulse_plan": true, "pp_value": 20}}`:
+   `small random 20` → `full 0 devpick:2,2,1,1` → `full 0 dev` if better.
+3. Report chips disposed / ending stock / lots per fab (agent vs oracle), before vs after.
+4. `sbf check` Small and Full for the best variant (CPU max/median per week).

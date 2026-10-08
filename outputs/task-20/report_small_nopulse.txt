@@ -1,0 +1,149 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+episodes 20; mean gap agent-oracle 0.282 T USD; naive-oracle 0.930 T; RSS (mean of per-ep ratio, unweighted) 0.6859
+
+ALL: 20 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.4439e+09   2.7611e+09   1.1423e+09     1.6188e+09         0.6%
+war_risk          6.6046e+07   8.0489e+07   5.9977e+07     2.0512e+07         0.0%
+tariff            7.7037e+09   1.0941e+10   7.7391e+09     3.2018e+09         1.1%
+holding           7.8261e+09   7.6495e+09   6.4211e+09     1.2284e+09         0.4%
+queue_holding     3.0061e+09   6.8995e+08   2.8373e+08     4.0622e+08         0.1%
+shortage          1.1774e+12   1.0331e+12   8.2654e+11     2.0659e+11        73.3%
+disposal          5.2577e+09   3.6501e+09   4.2292e+08     3.2272e+09         1.1%
+shed              2.2840e+12   1.7807e+12   1.7136e+12     6.7135e+10        23.8%
+salvage_credit   -2.4191e+09  -2.4303e+09  -7.5414e+08    -1.6762e+09        -0.6%
+TOTAL             3.4853e+12   2.8372e+12   2.5554e+12     2.8175e+11       100.0%
+
+harm level 1: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.3240e+09   2.7444e+09   1.3077e+09     1.4367e+09         0.6%
+war_risk          1.0564e+08   1.0563e+08   5.8543e+07     4.7084e+07         0.0%
+tariff            5.6856e+09   7.0230e+09   4.1020e+09     2.9210e+09         1.3%
+holding           7.3094e+09   7.1330e+09   5.8374e+09     1.2956e+09         0.6%
+queue_holding     3.6938e+09   5.1738e+08   1.4497e+08     3.7242e+08         0.2%
+shortage          1.0681e+12   8.2646e+11   6.4034e+11     1.8612e+11        82.8%
+disposal          3.7473e+09   1.3461e+09   1.7716e+08     1.1690e+09         0.5%
+shed              1.8767e+12   1.5277e+12   1.4949e+12     3.2817e+10        14.6%
+salvage_credit   -2.1311e+09  -2.2444e+09  -7.6823e+08    -1.4761e+09        -0.7%
+TOTAL             2.9656e+12   2.3708e+12   2.1461e+12     2.2470e+11       100.0%
+  level 1: gap 0.225 T/ep
+
+harm level 2: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.8743e+09   3.2077e+09   1.1788e+09     2.0288e+09         0.7%
+war_risk          7.7204e+07   1.0601e+08   9.3641e+07     1.2370e+07         0.0%
+tariff            8.4409e+09   1.5434e+10   9.4579e+09     5.9756e+09         2.0%
+holding           8.4903e+09   8.3636e+09   6.7985e+09     1.5651e+09         0.5%
+queue_holding     2.5179e+09   7.9722e+08   3.2621e+08     4.7102e+08         0.2%
+shortage          1.1877e+12   1.0256e+12   8.1408e+11     2.1156e+11        70.6%
+disposal          6.9593e+09   5.9041e+09   4.6104e+08     5.4431e+09         1.8%
+shed              2.5277e+12   1.9670e+12   1.8921e+12     7.4866e+10        25.0%
+salvage_credit   -2.8912e+09  -2.9041e+09  -7.9875e+08    -2.1054e+09        -0.7%
+TOTAL             3.7419e+12   3.0235e+12   2.7237e+12     2.9982e+11       100.0%
+  level 2: gap 0.300 T/ep
+
+harm level 3: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.3463e+09   2.7064e+09   1.1873e+09     1.5191e+09         0.4%
+war_risk          1.9880e+07   2.9579e+07   3.3098e+07    -3.5188e+06        -0.0%
+tariff            6.7220e+09   6.5049e+09   5.7688e+09     7.3602e+08         0.2%
+holding           7.5251e+09   7.2611e+09   6.1347e+09     1.1264e+09         0.3%
+queue_holding     1.3729e+09   4.0233e+08   1.7787e+08     2.2446e+08         0.1%
+shortage          1.1832e+12   1.1074e+12   8.2304e+11     2.8432e+11        80.3%
+disposal          3.8510e+09   2.3554e+09   5.9459e+08     1.7608e+09         0.5%
+shed              2.2170e+12   1.5244e+12   1.4586e+12     6.5805e+10        18.6%
+salvage_credit   -2.3315e+09  -2.3408e+09  -7.4642e+08    -1.5944e+09        -0.5%
+TOTAL             3.4197e+12   2.6487e+12   2.2948e+12     3.5389e+11       100.0%
+  level 3: gap 0.354 T/ep
+
+harm level 4: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.2308e+09   2.3860e+09   8.9520e+08     1.4908e+09         0.6%
+war_risk          6.1461e+07   8.0741e+07   5.4628e+07     2.6113e+07         0.0%
+tariff            9.9662e+09   1.4802e+10   1.1628e+10     3.1746e+09         1.3%
+holding           7.9797e+09   7.8402e+09   6.9138e+09     9.2642e+08         0.4%
+queue_holding     4.4401e+09   1.0429e+09   4.8586e+08     5.5699e+08         0.2%
+shortage          1.2707e+12   1.1731e+12   1.0287e+12     1.4434e+11        58.1%
+disposal          6.4734e+09   4.9948e+09   4.5887e+08     4.5359e+09         1.8%
+shed              2.5144e+12   2.1037e+12   2.0087e+12     9.5053e+10        38.2%
+salvage_credit   -2.3224e+09  -2.2319e+09  -7.0315e+08    -1.5287e+09        -0.6%
+TOTAL             3.8139e+12   3.3057e+12   3.0571e+12     2.4858e+11       100.0%
+  level 4: gap 0.249 T/ep
+
+## Lost sales by product (USD/episode, mean): agent vs oracle vs naive
+product                  demand $ naive lost agent lost oracle lost agent-oracle
+chip_le                     1.446      1.070      0.938       0.749        0.189
+chip_mat                    0.145      0.107      0.095       0.077        0.018
+(T USD per episode)
+
+## Lost sales by sink x product, top 25 by agent-oracle (T USD/episode)
+sink                         product                demand    agent   oracle      a-o agent fill oracle fill
+sink_us                      chip_le                 0.877    0.531    0.381    0.149      39.5%       56.5%
+sink_eu                      chip_le                 0.321    0.215    0.194    0.021      33.0%       39.5%
+sink_jp                      chip_le                 0.248    0.193    0.174    0.019      22.2%       29.8%
+sink_cn                      chip_mat                0.061    0.050    0.042    0.008      17.2%       30.5%
+sink_us                      chip_mat                0.051    0.020    0.016    0.005      60.8%       69.7%
+sink_jp                      chip_mat                0.014    0.013    0.010    0.003      12.7%       31.1%
+sink_eu                      chip_mat                0.018    0.012    0.009    0.002      36.6%       49.5%
+sink_cn                      chip_le                 0.000    0.000    0.000    0.000     100.0%      100.0%
+
+by sink region: US 0.154, EU 0.023, JP 0.021, CN 0.008
+
+## Fab lots started per episode (mean): agent vs oracle
+fab                        cls      grid       product              cap*T     agent    oracle    a/o  a %cap  o %cap  E agent E oracle
+fab_kr_memory_1            memory   grid_kr    chip_le_raw       15859740   2863235   3785808   0.76   18.1%   23.9%   3607.7   4770.1
+fab_tw_leading_1           leading  grid_tw    chip_le_raw        7189572    676064   1355973   0.50    9.4%   18.9%   1352.1   2711.9
+fab_jp_memory_1            memory   grid_jp    chip_le_raw        7482488    457180   1113840   0.41    6.1%   14.9%    576.0   1403.4
+fab_tw_mature_1            mature   grid_tw    chip_mat_raw       6122870    727081    909159   0.80   11.9%   14.8%    654.4    818.2
+fab_eu_leading_1           leading  grid_eu    chip_le_raw        1278524    274840    353143   0.78   21.5%   27.6%    549.7    706.3
+fab_eu_mature_1            mature   grid_eu    chip_mat_raw       9369828   2000795   1859108   1.08   21.4%   19.8%   1800.7   1673.2
+lots by grid (agent / oracle): grid_tw 1403145/2265132, grid_kr 2863235/3785808, grid_jp 457180/1113840, grid_eu 2275635/2212251
+lots by class (agent / oracle): leading 950904/1709116, mature 2727876/2768267, memory 3320415/4899648
+
+## Shed by grid (USD/episode, mean)
+grid         priority        naive     agent    oracle       a-o  (T USD)
+grid_eu      base_first     1.0336    0.9045    0.8786    0.0258
+grid_jp      base_first     0.6772    0.6006    0.5783    0.0223
+grid_kr      base_first     0.3286    0.1552    0.1449    0.0103
+grid_tw      base_first     0.2445    0.1205    0.1117    0.0088
+
+## Per episode: gap and NEW disruption events (onset in week 0..T; events running since before the episode are left out)
+  ep lvl   gap T naive-o T    RSS chipgap T shedgap T  energy_sho material_o militarise     piracy port_strik regional_c   sanction     tariff weather_cl
+   0   3   0.275     0.783  0.649     0.283    -0.009           1          0          0          0          0          0          5          5          1
+   1   2   0.188     1.408  0.867     0.088     0.085           0          0          0          0          1          0          2          1          3
+   2   2   0.300     1.153  0.740     0.165     0.110           2          0          0          1          1          0          1          0          2
+   3   2   0.263     0.695  0.622     0.197     0.056           1          0          4          1          1          0          1          1          0
+   4   2   0.117     0.740  0.842     0.061     0.038           0          1          1          0          1          0          7          5          1
+   5   2   0.632     1.096  0.423     0.547     0.085           1          0          1          0          0          2          1          1          2
+   6   1   0.218     0.468  0.535     0.204     0.009           1          1          0          0          1          0          2          4          2
+   7   1   0.114     0.537  0.788     0.091     0.017           1          0          0          0          0          0          1          4          0
+  11   1   0.190     1.277  0.851     0.184     0.001           0          1          0          0          2          0          1          4          0
+  12   1   0.335     0.955  0.649     0.289     0.045           0          0          0          0          0          0          7          4          2
+  13   1   0.266     0.859  0.690     0.163     0.093           0          0          0          0          0          0          2          1          1
+  26   3   0.278     1.069  0.740     0.294    -0.021           1          0          1          0          1          0          6          3          0
+  27   3   0.624     1.257  0.504     0.486     0.136           0          0          2          0          3          0          4          2          3
+  30   3   0.108     0.970  0.889     0.051     0.054           1          2          0          0          1          2         10          8          0
+  41   4   0.276     0.549  0.498     0.183     0.083           8          0          5          2          1          1          7          4          1
+  46   3   0.485     1.546  0.687     0.308     0.169           3          0          2          0          1          0          7         10          0
+  76   4   0.447     1.438  0.689     0.268     0.167           1          0          0          0          0          0          0          0          1
+  80   4   0.097     0.307  0.683     0.022     0.068           1          0          7          2          1          0          8          9          1
+ 102   4   0.258     1.059  0.756     0.145     0.103           0          0          2          3          2          0         26         17          1
+ 106   4   0.165     0.431  0.616     0.104     0.053           0          0          1          1          0          0          2          3          0
+
+Gap with vs without each event type (mean T USD/episode; corr = Pearson of count vs gap):
+  energy_shock           episodes 12/20: with 0.291, without 0.268, corr +0.09
+  material_outage        episodes  4/20: with 0.158, without 0.313, corr -0.41
+  militarised_closure    episodes 10/20: with 0.320, without 0.244, corr -0.05
+  piracy                 episodes  6/20: with 0.226, without 0.305, corr -0.22
+  port_strike            episodes 13/20: with 0.262, without 0.319, corr +0.13
+  regional_conflict      episodes  3/20: with 0.339, without 0.272, corr +0.18
+  sanction               episodes 19/20: with 0.273, without 0.447, corr -0.14
+  tariff                 episodes 18/20: with 0.272, without 0.373, corr -0.23
+  weather_closure        episodes 13/20: with 0.310, without 0.229, corr +0.41
+
+Event targets of the biggest-gap episodes:
+  ep 5 (lvl 2, gap 0.632 T): energy_shock@grid_krx1; militarised_closure@chk_malaccax1; regional_conflict@USx2; sanction@pipe.tb.src_kz_uranium.grid_jpx1; tariff@USx1; weather_closure@chk_malaccax1; weather_closure@chk_turkishx1
+  ep 27 (lvl 3, gap 0.624 T): militarised_closure@chk_malaccax2; port_strike@KRx1; port_strike@RUx1; port_strike@USx1; sanction@air.ct.mat_ua_neon.fab_eu_leading_1x1; sanction@bypass.tb.src_gulf_crude.chk_malaccax1; sanction@sea.tb.src_us_lng.chk_panamax2; tariff@SEAx1; tariff@USx1; weather_closure@chk_suezx1; weather_closure@chk_taiwanx2
+  ep 46 (lvl 3, gap 0.485 T): energy_shock@grid_eux1; energy_shock@grid_jpx1; energy_shock@grid_krx1; militarised_closure@chk_malaccax2; port_strike@GULFx1; sanction@air.ct.fab_eu_mature_1.osat_myx1; sanction@air.ct.fab_kr_memory_1.osat_myx1; sanction@air.ct.osat_my.sink_eux1; sanction@cape.ct.fab_eu_mature_1.chk_capex1; sanction@sea.ct.osat_my.chk_taiwanx1; sanction@sea.tb.src_us_lng.term_eux2; tariff@EUx7; tariff@SEAx3
+  ep 76 (lvl 4, gap 0.447 T): energy_shock@grid_eux1; weather_closure@chk_panamax1
+  ep 12 (lvl 1, gap 0.335 T): sanction@air.ct.mat_ua_neon.fab_tw_leading_1x1; sanction@air.ct.osat_tw.sink_eux1; sanction@bypass.tb.src_gulf_crude.chk_malaccax2; sanction@sea.ct.fab_tw_leading_1.osat_myx2; sanction@sea.tb.src_us_crude.chk_panamax1; tariff@KRx1; tariff@SEAx1; tariff@TWx1; tariff@USx1; weather_closure@chk_capex1; weather_closure@chk_malaccax1

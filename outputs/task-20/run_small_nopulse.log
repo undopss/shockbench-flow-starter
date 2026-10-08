@@ -1,0 +1,74 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:   12.5s
+[Parallel(n_jobs=4)]: Done  10 tasks      | elapsed:   18.8s
+[Parallel(n_jobs=4)]: Done  16 out of  20 | elapsed:   24.7s remaining:    6.2s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:   30.2s finished
+played in 30 s, written outputs/task-17/gap17v2_small_0_dev_fab3sell_nopulse.json
+references reproduced exactly on 20/20 episodes; fallback weeks 0
+RSS check: {'rss': 0.7094694293026169, 'pooled': True, 'rss_all': 0.696994412519664, 'rss_by_stratum': {1: 0.7258178883250185, 2: 0.70552934088006, 3: 0.6854123556293346, 4: 0.6715133706181002}}
+
+ALL: 20 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.4439e+09   2.7611e+09   1.1423e+09     1.6188e+09         0.6%
+war_risk          6.6046e+07   8.0489e+07   5.9977e+07     2.0512e+07         0.0%
+tariff            7.7037e+09   1.0941e+10   7.7391e+09     3.2018e+09         1.1%
+holding           7.8261e+09   7.6495e+09   6.4211e+09     1.2284e+09         0.4%
+queue_holding     3.0061e+09   6.8995e+08   2.8373e+08     4.0622e+08         0.1%
+shortage          1.1774e+12   1.0331e+12   8.2654e+11     2.0659e+11        73.3%
+disposal          5.2577e+09   3.6501e+09   4.2292e+08     3.2272e+09         1.1%
+shed              2.2840e+12   1.7807e+12   1.7136e+12     6.7135e+10        23.8%
+salvage_credit   -2.4191e+09  -2.4303e+09  -7.5414e+08    -1.6762e+09        -0.6%
+TOTAL             3.4853e+12   2.8372e+12   2.5554e+12     2.8175e+11       100.0%
+
+harm level 1: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.3240e+09   2.7444e+09   1.3077e+09     1.4367e+09         0.6%
+war_risk          1.0564e+08   1.0563e+08   5.8543e+07     4.7084e+07         0.0%
+tariff            5.6856e+09   7.0230e+09   4.1020e+09     2.9210e+09         1.3%
+holding           7.3094e+09   7.1330e+09   5.8374e+09     1.2956e+09         0.6%
+queue_holding     3.6938e+09   5.1738e+08   1.4497e+08     3.7242e+08         0.2%
+shortage          1.0681e+12   8.2646e+11   6.4034e+11     1.8612e+11        82.8%
+disposal          3.7473e+09   1.3461e+09   1.7716e+08     1.1690e+09         0.5%
+shed              1.8767e+12   1.5277e+12   1.4949e+12     3.2817e+10        14.6%
+salvage_credit   -2.1311e+09  -2.2444e+09  -7.6823e+08    -1.4761e+09        -0.7%
+TOTAL             2.9656e+12   2.3708e+12   2.1461e+12     2.2470e+11       100.0%
+
+harm level 2: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.8743e+09   3.2077e+09   1.1788e+09     2.0288e+09         0.7%
+war_risk          7.7204e+07   1.0601e+08   9.3641e+07     1.2370e+07         0.0%
+tariff            8.4409e+09   1.5434e+10   9.4579e+09     5.9756e+09         2.0%
+holding           8.4903e+09   8.3636e+09   6.7985e+09     1.5651e+09         0.5%
+queue_holding     2.5179e+09   7.9722e+08   3.2621e+08     4.7102e+08         0.2%
+shortage          1.1877e+12   1.0256e+12   8.1408e+11     2.1156e+11        70.6%
+disposal          6.9593e+09   5.9041e+09   4.6104e+08     5.4431e+09         1.8%
+shed              2.5277e+12   1.9670e+12   1.8921e+12     7.4866e+10        25.0%
+salvage_credit   -2.8912e+09  -2.9041e+09  -7.9875e+08    -2.1054e+09        -0.7%
+TOTAL             3.7419e+12   3.0235e+12   2.7237e+12     2.9982e+11       100.0%
+
+harm level 3: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.3463e+09   2.7064e+09   1.1873e+09     1.5191e+09         0.4%
+war_risk          1.9880e+07   2.9579e+07   3.3098e+07    -3.5188e+06        -0.0%
+tariff            6.7220e+09   6.5049e+09   5.7688e+09     7.3602e+08         0.2%
+holding           7.5251e+09   7.2611e+09   6.1347e+09     1.1264e+09         0.3%
+queue_holding     1.3729e+09   4.0233e+08   1.7787e+08     2.2446e+08         0.1%
+shortage          1.1832e+12   1.1074e+12   8.2304e+11     2.8432e+11        80.3%
+disposal          3.8510e+09   2.3554e+09   5.9459e+08     1.7608e+09         0.5%
+shed              2.2170e+12   1.5244e+12   1.4586e+12     6.5805e+10        18.6%
+salvage_credit   -2.3315e+09  -2.3408e+09  -7.4642e+08    -1.5944e+09        -0.5%
+TOTAL             3.4197e+12   2.6487e+12   2.2948e+12     3.5389e+11       100.0%
+
+harm level 4: 5 episodes (USD per episode, mean)
+component              naive        agent      perfect  agent-perfect share of gap
+freight           2.2308e+09   2.3860e+09   8.9520e+08     1.4908e+09         0.6%
+war_risk          6.1461e+07   8.0741e+07   5.4628e+07     2.6113e+07         0.0%
+tariff            9.9662e+09   1.4802e+10   1.1628e+10     3.1746e+09         1.3%
+holding           7.9797e+09   7.8402e+09   6.9138e+09     9.2642e+08         0.4%
+queue_holding     4.4401e+09   1.0429e+09   4.8586e+08     5.5699e+08         0.2%
+shortage          1.2707e+12   1.1731e+12   1.0287e+12     1.4434e+11        58.1%
+disposal          6.4734e+09   4.9948e+09   4.5887e+08     4.5359e+09         1.8%
+shed              2.5144e+12   2.1037e+12   2.0087e+12     9.5053e+10        38.2%
+salvage_credit   -2.3224e+09  -2.2319e+09  -7.0315e+08    -1.5287e+09        -0.6%
+TOTAL             3.8139e+12   3.3057e+12   3.0571e+12     2.4858e+11       100.0%

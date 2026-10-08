@@ -1,0 +1,36 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+20 episodes, T=52: gap agent-oracle 0.223 T/ep, naive-oracle 0.930 T/ep -> 0.01 RSS ~ 0.0093 T/ep
+pi per product: {'chip_mat': 10340, 'chip_le': 50430}
+
+## Oracle's extra lots per fab (M lots/episode) by the agent's state in that week; agent's surplus lots
+fab                    grid        agent  oracle       cap     wafer  homes<1% homes>=1%     power     other  surplus deficit $T
+fab_tw_leading_1       tw           1.63    1.36      0.00      0.18      0.00      0.46      0.02      0.00     0.93      0.033
+fab_tw_mature_1        tw           0.96    0.91      0.00      0.18      0.00      0.19      0.02      0.00     0.44      0.004
+fab_kr_memory_1        kr           4.00    3.79      0.00      0.35      0.02      1.07      0.20      0.00     1.85      0.083
+fab_jp_memory_1        jp           0.61    1.11      0.00      0.00      0.01      0.88      0.00      0.00     0.38      0.045
+fab_eu_leading_1       eu           0.35    0.35      0.00      0.02      0.01      0.11      0.00      0.00     0.14      0.007
+fab_eu_mature_1        eu           2.57    1.86      0.00      0.02      0.03      1.18      0.00      0.00     1.95      0.013
+TOTAL M lots                                  0.00      0.76      0.07      3.89      0.24      0.00     5.69
+TOTAL T USD (lots x pi)                      0.000     0.030     0.002     0.141     0.011     0.000    0.191
+
+## Gap by time (agent - oracle, T USD/episode): chip lost sales and shed, quarters and the last 8 weeks
+                wk 1-13     wk 14-26     wk 27-39     wk 40-52     wk 45-52
+chip_le          -0.003        0.004        0.039        0.056        0.037
+chip_mat         -0.001        0.003        0.006        0.008        0.005
+shed              0.040        0.011        0.022        0.029        0.020
+
+## Shed gap by grid and quarter (agent - oracle, T USD/episode)
+grid_tw       0.013    0.000    0.002    0.007
+grid_kr       0.010    0.001    0.004    0.008
+grid_jp       0.009    0.003    0.006    0.010
+grid_eu       0.009    0.007    0.010    0.004
+
+## Late lots (started in the last 8 weeks; tau 6-8 weeks, so they rarely reach a sink): agent vs oracle, M
+  chip_le_raw    agent   0.06  oracle   0.01
+  chip_mat_raw   agent   0.02  oracle   0.00
+
+## Chips: end stock and disposal (M units/episode), agent vs oracle
+  chip_le        end stock   0.56  disposed agent   1.25  oracle   0.00
+  chip_le_raw    end stock   0.06  disposed agent   0.37  oracle   0.19
+  chip_mat       end stock   0.33  disposed agent   0.65  oracle   0.00
+  chip_mat_raw   end stock   0.19  disposed agent   0.89  oracle   0.10

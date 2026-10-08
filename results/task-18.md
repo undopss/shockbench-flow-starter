@@ -1,4 +1,4 @@
-Status: building more planner modes; best so far kce_split +0.023 on Full dev 20
+Status: running fresh-seed Full check (full random 12); funnel done, best = kce_split +0.023 on Full dev 20
 
 Found so far (Full devpick, outputs/task-18/diag18.py, lng18.py, crude18.py):
 - SEA: crude (3% of SEA load) can only reach grid_sea via chk_panama -> term_sea, capacity ~13/week vs 750 needed: SEA's home shortfall is physical, its fabs can't be powered without the oracle's homes-first relaxation.
@@ -35,3 +35,16 @@ kappa_cn_eu               0.7924  0.779  0.846  0.771  0.706  +0.0104  [+0.0028,
 kce_split                 0.8050  0.795  0.850  0.784  0.734  +0.0230  [+0.0090, +0.0411]   100.0%      0  <-- better
 kce_split_H7              0.8038  0.793  0.848  0.785  0.734  +0.0218  [+0.0079, +0.0397]   100.0%      0  <-- better
 ```
+
+Small random 20 (no-harm check, entropy 289346776):
+```
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+bufplan_pp20              0.7319  0.690  0.785  0.752  0.754  +0.0000  [+0.0000, +0.0000]     nan%      0
+kappa_cn_eu               0.7323  0.695  0.784  0.741  0.754  +0.0004  [-0.0045, +0.0058]    56.0%      0
+kce_split                 0.7476  0.706  0.801  0.762  0.780  +0.0157  [+0.0084, +0.0230]   100.0%      0  <-- better
+```
+A 6th planner mode (gas exact-full + crude held, pp_split 2) gave only +0.002 in the diag18 replay: not pursued.
+
+sbf check of outputs/task-18/best_agent (= agents/mpc_fab3 + params.json {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true}), this cloud machine:
+- Small (budget 2 s): week 1 0.119 s, median 0.099 s, max 0.160 s. All checks passed.
+- Full (budget 4 s): week 1 0.341 s, median 0.246 s, max 0.369 s. All checks passed.

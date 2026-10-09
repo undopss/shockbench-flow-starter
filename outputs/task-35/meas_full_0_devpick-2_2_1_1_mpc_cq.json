@@ -1,0 +1,316 @@
+[
+ {
+  "episode": 2,
+  "J": 476787324292725,
+  "cause": {
+   "edgefull": 5270275.083185154,
+   "closed": 489944.59362374904
+  },
+  "by_chk": {
+   "chk_malacca": 3781075.67585684,
+   "chk_taiwan": 1112687.3605255755,
+   "chk_suez": 760818.3085514823,
+   "chk_turkish": 49892.360000000095,
+   "chk_cape": 55745.971874999996
+  },
+  "by_edge": {
+   "sea.ct.chk_malacca.fab_tw_leading_1": 478984.3677835827,
+   "sea.ct.chk_malacca.chk_taiwan": 101767.27500000011,
+   "sea.ct.chk_taiwan.chk_malacca": 120166.53444388855,
+   "sea.ct.chk_malacca.chk_suez": 2478437.7870486067,
+   "sea.ct.chk_taiwan.fab_sea_mature_1": 248021.24612418844,
+   "sea.ct.chk_suez.chk_malacca": 98797.7250000001,
+   "sea.ct.chk_malacca.fab_tw_mature_2": 287687.6242759009,
+   "sea.ct.chk_turkish.fab_us_mature_2": 49892.360000000095,
+   "sea.ct.chk_taiwan.osat_my": 344699.93597387866,
+   "sea.ct.chk_taiwan.osat_vn": 30975.01713358185,
+   "sea.ct.chk_taiwan.osat_ph": 59771.2943986108,
+   "sea.ct.chk_suez.sink_eu": 662020.5835514822,
+   "sea.ct.chk_taiwan.sink_cn": 190446.16817943047,
+   "sea.ct.chk_taiwan.sink_sea": 118607.16427199697
+  },
+  "by_k": {
+   "wafer": 1255081.547847877,
+   "chip_le_raw": 407640.9357164189,
+   "chip_mat_raw": 238227.10889802058,
+   "chip_mat": 3859270.084346579
+  },
+  "dispatched_ct": 306468701.8232767,
+  "costs": {
+   "freight": 21073345015.97945,
+   "war_risk": 0.0,
+   "tariff": 11523233940.726158,
+   "holding": 42693372006.1061,
+   "queue_holding": 179742977.8282989,
+   "shortage": 2305833597607.1167,
+   "disposal": 44452010317.69896,
+   "shed": 2350732712681.686
+  },
+  "lost_units": {
+   "chip_le": 35517803.00881465,
+   "chip_mat": 49606892.1562132
+  },
+  "lost_val": 2305833597607.1206
+ },
+ {
+  "episode": 5,
+  "J": 420538865241951,
+  "cause": {
+   "closed": 5422626.933015785,
+   "edgefull": 2072195.1939640346
+  },
+  "by_chk": {
+   "chk_malacca": 5368778.614223929,
+   "chk_taiwan": 871610.038858136,
+   "chk_turkish": 7127.480000000014,
+   "chk_suez": 1247305.9938977545
+  },
+  "by_edge": {
+   "sea.ct.chk_taiwan.fab_sea_mature_1": 102837.80000000002,
+   "sea.ct.chk_turkish.fab_us_mature_2": 7127.480000000014,
+   "sea.ct.chk_taiwan.osat_my": 235495.80791239053,
+   "sea.ct.chk_taiwan.osat_vn": 30975.01713358185,
+   "sea.ct.chk_taiwan.osat_ph": 59771.2943986108,
+   "sea.ct.chk_suez.sink_eu": 1177506.6862619915,
+   "sea.ct.chk_taiwan.sink_cn": 307588.4948102345,
+   "sea.ct.chk_taiwan.sink_jp": 71770.64878905477,
+   "sea.ct.chk_suez.sink_row": 67934.00176336899,
+   "sea.ct.chk_taiwan.sink_kr": 9322.657022408355,
+   "sea.ct.chk_suez.fab_row_leading_1": 1865.3058723942188
+  },
+  "by_k": {
+   "wafer": 1517983.8446667152,
+   "chip_le_raw": 652083.3356273548,
+   "chip_mat_raw": 1719017.9786878603,
+   "chip_mat": 3605736.9679978914
+  },
+  "dispatched_ct": 313353422.5650268,
+  "costs": {
+   "freight": 20408059624.726036,
+   "war_risk": 422385518.19435304,
+   "tariff": 16570999826.00249,
+   "holding": 37858140100.39794,
+   "queue_holding": 1303884008.7284455,
+   "shortage": 1775060626777.759,
+   "disposal": 8809890732.583326,
+   "shed": 2352744181645.01
+  },
+  "lost_units": {
+   "chip_le": 26302784.96915157,
+   "chip_mat": 43338172.423422515
+  },
+  "lost_val": 1775060626777.7593
+ },
+ {
+  "episode": 0,
+  "J": 480575628663256,
+  "cause": {
+   "edgefull": 11321385.507062944,
+   "closed": 2594078.3741983315
+  },
+  "by_chk": {
+   "chk_hormuz": 716469.6439981257,
+   "chk_taiwan": 2594078.3741983315,
+   "chk_malacca": 9985197.737752123,
+   "chk_suez": 619718.1253126983
+  },
+  "by_edge": {
+   "sea.ct.chk_hormuz.chk_malacca": 716469.6439981257,
+   "sea.ct.chk_malacca.chk_suez": 9740162.950557597,
+   "sea.ct.chk_suez.chk_malacca": 98797.7250000001,
+   "sea.ct.chk_suez.sink_eu": 520920.40031269833,
+   "sea.ct.chk_malacca.sink_in": 245034.78719451014
+  },
+  "by_k": {
+   "wafer": 1361667.1993016333,
+   "chip_le_raw": 748284.0390112326,
+   "chip_mat_raw": 183986.2829775966,
+   "chip_mat": 11621526.359970821
+  },
+  "dispatched_ct": 270373318.2921,
+  "costs": {
+   "freight": 17415667515.555065,
+   "war_risk": 358996371.228607,
+   "tariff": 21548618601.267715,
+   "holding": 33106793450.27147,
+   "queue_holding": 3940306491.2479186,
+   "shortage": 2276772822199.116,
+   "disposal": 14782138604.756935,
+   "shed": 2442735634343.325
+  },
+  "lost_units": {
+   "chip_le": 32683824.200965177,
+   "chip_mat": 60599942.62883638
+  },
+  "lost_val": 2276772822199.116
+ },
+ {
+  "episode": 1,
+  "J": 722203881536982,
+  "cause": {
+   "edgefull": 8697802.799900552,
+   "closed": 293016.1141502967,
+   "kappa": 30310.804611891886
+  },
+  "by_chk": {
+   "chk_hormuz": 625565.5782695347,
+   "chk_malacca": 3387137.84760435,
+   "chk_taiwan": 4658238.544637722,
+   "chk_suez": 260137.32405766466,
+   "chk_cape": 66837.59093689136,
+   "chk_turkish": 23212.83315658322
+  },
+  "by_edge": {
+   "sea.ct.chk_hormuz.chk_malacca": 597607.6304494364,
+   "sea.ct.chk_malacca.fab_tw_leading_1": 44158.44672802523,
+   "sea.ct.chk_taiwan.chk_malacca": 120166.53444388855,
+   "sea.ct.chk_malacca.chk_suez": 3274822.7356429556,
+   "sea.ct.chk_taiwan.fab_sea_mature_1": 73654.1,
+   "sea.ct.chk_suez.chk_malacca": 130872.94946450641,
+   "sea.ct.chk_malacca.fab_tw_mature_2": 68156.6652333683,
+   "sea.ct.chk_taiwan.osat_vn": 30975.01713358185,
+   "sea.ct.chk_taiwan.osat_ph": 99618.82399768467,
+   "sea.ct.chk_taiwan.sink_cn": 4049956.7951907064,
+   "sea.ct.chk_taiwan.sink_jp": 68507.71883121185,
+   "sea.ct.chk_taiwan.sink_sea": 82444.00016541683,
+   "lombok.ct.chk_suez.osat_sg": 1119.7066901522865,
+   "lombok.ct.chk_hormuz.chk_taiwan": 10958.657018823542,
+   "sea.ct.chk_turkish.fab_eu_leading_1": 7753.838112314001,
+   "sea.ct.chk_turkish.fab_eu_mature_1": 15458.99504426922,
+   "sea.ct.chk_suez.fab_eu_leading_1": 2109.3979718709115,
+   "lombok.ct.chk_suez.osat_my": 1657.8793796952014,
+   "cape.ct.chk_cape.chk_malacca": 17569.438769925022,
+   "lombok.ct.chk_suez.osat_vn": 233.46963271990717
+  },
+  "by_k": {
+   "wafer": 982262.4709717957,
+   "chip_le_raw": 178449.476626888,
+   "chip_mat_raw": 221579.7222619931,
+   "chip_mat": 7638838.048802059
+  },
+  "dispatched_ct": 326369257.7122065,
+  "costs": {
+   "freight": 18411675514.799316,
+   "war_risk": 0.0,
+   "tariff": 11326031906.738836,
+   "holding": 34070126035.33537,
+   "queue_holding": 259570418.46991664,
+   "shortage": 1378423968878.1038,
+   "disposal": 6152461270.153427,
+   "shed": 5779422586179.289
+  },
+  "lost_units": {
+   "chip_le": 17087604.52293746,
+   "chip_mat": 49939413.26930811
+  },
+  "lost_val": 1378423968878.1016
+ },
+ {
+  "episode": 53,
+  "J": 597185219722784,
+  "cause": {
+   "edgefull": 35214639.072574556,
+   "closed": 245845.55558259357
+  },
+  "by_chk": {
+   "chk_malacca": 3490349.2559498646,
+   "chk_taiwan": 4895686.1438799715,
+   "chk_turkish": 117212.38188138443,
+   "chk_suez": 26957236.84644594
+  },
+  "by_edge": {
+   "sea.ct.chk_malacca.fab_tw_leading_1": 945705.2400000012,
+   "sea.ct.chk_malacca.chk_taiwan": 101767.27500000011,
+   "sea.ct.chk_taiwan.fab_kr_memory_1": 1256985.450000001,
+   "sea.ct.chk_turkish.fab_eu_leading_1": 14504.651881384396,
+   "sea.ct.chk_suez.fab_eu_leading_1": 11064.15,
+   "sea.ct.chk_turkish.fab_eu_mature_1": 102707.73000000001,
+   "sea.ct.chk_taiwan.fab_sea_mature_1": 382167.5000000001,
+   "sea.ct.chk_malacca.fab_tw_mature_2": 646433.7750000006,
+   "sea.ct.chk_taiwan.osat_my": 1763749.4154574017,
+   "sea.ct.chk_taiwan.osat_vn": 174369.8412339161,
+   "sea.ct.chk_taiwan.osat_ph": 383532.4723910861,
+   "sea.ct.chk_suez.sink_eu": 26667740.471476637,
+   "sea.ct.chk_taiwan.sink_cn": 237736.07311989472,
+   "sea.ct.chk_taiwan.sink_kr": 697145.391677654,
+   "sea.ct.chk_malacca.chk_suez": 1695053.1356904053,
+   "cape.ct.chk_malacca.chk_cape": 24482.445000000007,
+   "sea.ct.chk_suez.fab_row_leading_1": 32586.669386713955,
+   "east.ct.chk_malacca.fab_kr_leading_1": 1115.6276724891607,
+   "east.ct.chk_malacca.fab_kr_memory_1": 75791.75758696752
+  },
+  "by_k": {
+   "wafer": 3625358.0595016917,
+   "chip_le_raw": 1965464.107585127,
+   "chip_mat_raw": 356187.6214972774,
+   "chip_mat": 29513474.839573078
+  },
+  "dispatched_ct": 287176791.2837478,
+  "costs": {
+   "freight": 18698714203.45768,
+   "war_risk": 0.0,
+   "tariff": 15707610917.267773,
+   "holding": 32948971911.221554,
+   "queue_holding": 426746709.75141376,
+   "shortage": 1950219829989.6492,
+   "disposal": 9829163889.374256,
+   "shed": 3950202723562.7876
+  },
+  "lost_units": {
+   "chip_le": 28884715.697813798,
+   "chip_mat": 47799662.17209117
+  },
+  "lost_val": 1950219829989.6475
+ },
+ {
+  "episode": 26,
+  "J": 1055638271521896,
+  "cause": {
+   "edgefull": 29855844.621668827,
+   "closed": 3007898.6962145036
+  },
+  "by_chk": {
+   "chk_malacca": 28933313.072269157,
+   "chk_taiwan": 2832811.976214503,
+   "chk_turkish": 232589.0700000001,
+   "chk_suez": 865029.1993996652
+  },
+  "by_edge": {
+   "sea.ct.chk_malacca.fab_tw_leading_1": 903584.5407075259,
+   "sea.ct.chk_malacca.chk_taiwan": 103713.17734093238,
+   "sea.ct.chk_suez.fab_eu_leading_1": 17333.834999999995,
+   "sea.ct.chk_malacca.chk_suez": 26937057.114545073,
+   "sea.ct.chk_malacca.fab_tw_mature_2": 821391.3750771709,
+   "sea.ct.chk_suez.sink_eu": 496346.0931445435,
+   "sea.ct.chk_turkish.fab_eu_leading_1": 8851.320000000002,
+   "sea.ct.chk_turkish.fab_eu_mature_1": 48651.03000000002,
+   "sea.ct.chk_malacca.sink_in": 77835.66292526174,
+   "lombok.ct.chk_suez.osat_sg": 717.5726281715099,
+   "east.ct.chk_malacca.fab_kr_leading_1": 901.9101469601412,
+   "east.ct.chk_malacca.fab_kr_memory_1": 88829.2915262199,
+   "lombok.ct.chk_suez.osat_my": 350631.69862695015
+  },
+  "by_k": {
+   "wafer": 3631942.736758353,
+   "chip_le_raw": 831196.7395014,
+   "chip_mat_raw": 566867.4296810405,
+   "chip_mat": 27833736.41194251
+  },
+  "dispatched_ct": 205566430.17367104,
+  "costs": {
+   "freight": 11040357559.402853,
+   "war_risk": 46529838.383255444,
+   "tariff": 16553874293.903193,
+   "holding": 24568360996.279198,
+   "queue_holding": 1099596797.253424,
+   "shortage": 2435933543279.744,
+   "disposal": 8366590639.920492,
+   "shed": 8060702799729.962
+  },
+  "lost_units": {
+   "chip_le": 34289367.22977521,
+   "chip_mat": 68222283.14222337
+  },
+  "lost_val": 2435933543279.747
+ }
+]

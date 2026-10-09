@@ -1,0 +1,43 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+static: 29 (commodity, later edge) groups shared by chip routes with >= 2 different first edges; 26 later edges shared across any container commodity
+  wafer        sea.ct.chk_malacca.chk_suez              u0=215273.44000000003 firsts=2
+  wafer        sea.ct.chk_malacca.chk_taiwan            u0=154963.91999999998 firsts=2
+  wafer        sea.ct.chk_malacca.fab_tw_leading_1      u0=82956.59999999999 firsts=2
+  wafer        east.ct.chk_malacca.fab_kr_memory_1      u0=120778.02 firsts=2
+  wafer        sea.ct.chk_malacca.fab_sea_mature_1      u0=111176.0 firsts=3
+  wafer        sea.ct.chk_malacca.fab_tw_mature_2       u0=47098.99999999999 firsts=2
+  wafer        sea.ct.chk_suez.chk_malacca              u0=481252.49999999994 firsts=2
+  wafer        sea.ct.chk_suez.fab_eu_leading_1         u0=14752.199999999999 firsts=3
+  wafer        sea.ct.chk_suez.fab_row_leading_1        u0=9078.6 firsts=2
+  wafer        cape.ct.chk_cape.chk_malacca             u0=397033.3125 firsts=2
+  wafer        cape.ct.chk_cape.fab_eu_leading_1        u0=12170.564999999999 firsts=2
+  wafer        sea.ct.chk_taiwan.fab_kr_memory_1        u0=146397.6 firsts=2
+  chip_le_raw  sea.ct.chk_malacca.osat_my               u0=209880.55286312022 firsts=4
+  chip_le_raw  sea.ct.chk_malacca.osat_vn               u0=5957.757772756804 firsts=4
+  chip_le_raw  sea.ct.chk_suez.chk_malacca              u0=481252.49999999994 firsts=2
+  chip_le_raw  lombok.ct.chk_suez.osat_my               u0=173151.45611207417 firsts=2
+  chip_le_raw  lombok.ct.chk_suez.osat_vn               u0=4915.150162524364 firsts=2
+  chip_le_raw  cape.ct.chk_cape.chk_malacca             u0=397033.3125 firsts=2
+  chip_le_raw  sea.ct.chk_taiwan.osat_my                u0=342819.63542022987 firsts=2
+  chip_le_raw  sea.ct.chk_taiwan.osat_vn                u0=25812.51427798487 firsts=2
+  chip_mat_raw sea.ct.chk_malacca.osat_my               u0=209880.55286312022 firsts=2
+  chip_mat_raw sea.ct.chk_malacca.osat_sg               u0=48050.08936412299 firsts=2
+  chip_mat     sea.ct.chk_malacca.chk_suez              u0=215273.44000000003 firsts=5
+  chip_mat     sea.ct.chk_malacca.sink_in               u0=46780.88 firsts=5
+  chip_mat     sea.ct.chk_suez.sink_eu                  u0=105256.98 firsts=5
+  chip_mat     sea.ct.chk_suez.sink_row                 u0=93561.76 firsts=5
+  chip_mat     sea.ct.chk_taiwan.sink_cn                u0=158705.14014952534 firsts=3
+  chip_mat     sea.ct.chk_taiwan.sink_jp                u0=37031.19936822259 firsts=3
+  chip_mat     sea.ct.chk_taiwan.sink_kr                u0=26450.85669158756 firsts=3
+container cargo queued at chokepoints at end of week, unit-weeks per episode (mean over 6):
+  closed 3,843,676  edgefull 273,186,547  kappa 301,308
+  dispatched container units per episode: 288,700,114
+  by_chk: chk_malacca 183,253,992, chk_taiwan 55,080,683, chk_cape 16,838,576, chk_hormuz 11,407,330, chk_suez 10,632,516, chk_turkish 118,433
+  by_edge: sea.ct.chk_malacca.chk_suez 151,663,826, sea.ct.chk_taiwan.sink_cn 28,292,958, sea.ct.chk_malacca.sink_in 20,181,930, cape.ct.chk_cape.chk_malacca 16,362,478, sea.ct.chk_hormuz.chk_malacca 11,317,686, sea.ct.chk_taiwan.sink_jp 10,342,580, sea.ct.chk_suez.sink_eu 9,757,386, sea.ct.chk_taiwan.fab_kr_memory_1 7,519,696, sea.ct.chk_malacca.fab_tw_leading_1 4,733,827, east.ct.chk_malacca.fab_kr_memory_1 3,265,118
+  by_k: chip_mat 225,614,932, wafer 30,496,979, chip_mat_raw 14,921,683, chip_le_raw 6,297,937
+  ep   2 J 4.7802 T  queue 434,660,175 edgefull 430,630,238  qhold 0.0016 T  lost sales 2.322 T  chip_le 35,514,858, chip_mat 51,160,393
+  ep   5 J 4.2888 T  queue 222,505,038 edgefull 211,496,894  qhold 0.0021 T  lost sales 1.853 T  chip_le 26,279,811, chip_mat 51,059,812
+  ep   0 J 4.8429 T  queue 397,445,922 edgefull 394,825,441  qhold 0.0052 T  lost sales 2.305 T  chip_le 33,225,712, chip_mat 60,676,287
+  ep   1 J 7.2528 T  queue 361,362,835 edgefull 357,795,675  qhold 0.0015 T  lost sales 1.402 T  chip_le 17,138,049, chip_mat 51,960,461
+  ep  53 J 5.9832 T  queue 183,569,948 edgefull 182,943,529  qhold 0.0010 T  lost sales 1.981 T  chip_le 29,345,890, chip_mat 48,474,072
+  ep  26 J 10.5440 T  queue 64,445,266 edgefull 61,427,505  qhold 0.0012 T  lost sales 2.429 T  chip_le 34,258,149, chip_mat 67,682,121

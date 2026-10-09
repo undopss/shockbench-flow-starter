@@ -1,4 +1,27 @@
-Status: fresh seed done; mpc_final = stack3; running Small dev no-harm check, then sbf check
+Status: done — `agents/mpc_final` (= mpc_imit_room + fb_kappa_ct + safety_weeks 4 + pp_end 0.7 + warn_gain 0.5): Full dev 20 0.8270 (+0.0043 [+0.0003, +0.0082]), fresh Full seed 12 +0.0029 [-0.0019, +0.0081], Small dev +0.0050 [-0.0019, +0.0118]. Real but small; far below the +0.05 bar. sbf check Small + Full pass.
+
+## Verdict
+- Stacking the small wins gives about **+0.003 to +0.004 RSS on Full**, not +0.03-0.05. The 6-episode devpick sweep
+  overstated everything with safety_weeks (devpick +0.014..+0.019 → dev 20 +0.001..+0.006): devpick is too small to tune on.
+- Kept: (b) `fb_kappa_ct` (the only change with an interval above 0 on both devpick and dev 20; fresh +0.0022, 85%), plus
+  safety_weeks 4 / pp_end 0.7 / warn_gain 0.5 (stack3: dev 20 interval above 0, fresh +0.0029, 84%).
+- Dropped: (a) pulse_grids TW+KR+JP+SEA (-0.0022 on devpick), (c) imit_target (-0.0030), wafer_buffer 2 / 2.5,
+  pp_end 1.1, safety_weeks 2. No effect: pulse_weeks, pp_direct + JP/SEA, buffer_cost.
+- Choices I made without anyone to ask: "positive on both" read as a positive point estimate on dev 20 AND fresh 12
+  (no fresh interval is above 0 with 12 episodes); among those, stack3 has the best point estimate on both. If the team
+  wants only interval-above-0 evidence, `{"fb_kappa_ct": true}` alone on top of mpc_imit_room's params is the safer pick
+  (dev 20 +0.0023 [+0.0011, +0.0036]).
+- `sbf check` (this cloud machine, 1 dev episode): Small max 0.117 s / median 0.083 s per week (budget 2 s);
+  Full max 0.309 s / median 0.238 s (budget 4 s). 0 fallback weeks in every run.
+
+## Small dev 20 (no-harm), round v33_small_small_0_1009-1009
+```
+small, entropy 0, 20 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.7823  0.811  0.751  0.795  0.670  +0.0000  [+0.0000, +0.0000]     nan%      0
+mpc_final                 0.7873  0.817  0.755  0.802  0.668  +0.0050  [-0.0019, +0.0118]    86.0%      0
+
+```
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,

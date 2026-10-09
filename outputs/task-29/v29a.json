@@ -1,0 +1,6 @@
+{"imit_room": {"agent": "agents/mpc_imit_room"},
+ "pv1": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pv_dual": true, "pv_scale": 1.0}},
+ "pv3": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pv_dual": true, "pv_scale": 3.0}},
+ "pv1_rel": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pv_dual": true, "pv_scale": 1.0, "pv_release": true}},
+ "pp5": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pp_value": 5.0}},
+ "pp1": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pp_value": 1.0}}}

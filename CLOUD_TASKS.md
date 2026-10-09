@@ -526,3 +526,29 @@ off by default. Baseline: `{"agent": "agents/mpc_jpow"}`.
    building `agents/mpc_combo` (= mpc_jpow + mpc_final) in parallel; keep your change easy to copy into it (one option
    in chips.py + PARAMS).
 4. `results/task-35.md`: the measurement, the tables, the verdict, and a one-line diff summary for porting to mpc_combo.
+
+### 37. MEASURE + BUILD: chips made and thrown away (`agents/mpc_nodisp`)
+Read `results/task-34.md` (new map) and `results/task-35.md`. On mpc_combo (Full dev 20) chips disposed are worth
+≈ 0.27 T/ep at pi (chip_le 0.177 + chip_mat 0.089; ≈ 8 RSS points as a ceiling): 8.57 M units/ep disposed in weeks
+the slot's out-edges were ≥ 95% full, 3.82 M with spare out-capacity (mostly chip_mat at fab_eu_mature_1, osat_tw,
+osat_cn). Top: osat_kr chip_le 0.94 M, fab_us_mature_1 raw chip_mat 3.41 M (it makes 3.6 M more than the oracle),
+fab_us_leading_3 raw chip_le 0.61 M, osat_tw chip_le 0.56 M, osat_my chip_le 0.49 M. Task 21 put better chip routing
+with foresight at ≤ 0.094 T, so expect +0.01 to +0.03 at best; the bar here is a gain whose interval is above 0 on
+Full dev 20 **and** a fresh Full seed. Reminder: the simulator starts every wafer a fab holds (up to cap and power) and
+packages every raw chip an OSAT holds, so the only levers are **what we ship where** (wafers, raw chips, chips).
+Start from **`agents/mpc_cq`** → `agents/mpc_nodisp`, new options off by default; baseline `{"agent": "agents/mpc_cq"}`.
+1. Measure first on mpc_cq (Full devpick:2,2,1,1 with `outputs/task-20/disp20.py` / `outputs/task-34/map34.py`): how
+   much disposal is left after task 35's fix, where, which commodity, and for each big case **why**: (i) out-edges
+   full (then the chips should not have been made/sent there), (ii) spare out-capacity but no sink wanted them (then
+   they should not have been made: wafers shipped to a fab whose output can't sell), (iii) spare capacity and demand
+   but the LP did not ship (horizon end, LP model mismatch: e.g. disposal happens at end of week after serving,
+   storage caps, lead times). Compare the chip LP's planned stock at each node with the real one.
+2. Build the fixes the measurement points to. Candidates: a wafer buffer only where the fab's output is sellable
+   (task 19's `sell_buffer` exists in chips.py, off; or size the buffer by the fab's sellable output, not nameplate);
+   plan raw-chip shipments to OSATs with their out-edges' remaining capacity (cq_edges may already cover it); fix any
+   LP-vs-simulator mismatch found in (iii).
+3. Funnel vs mpc_cq: `full 0 devpick:2,2,1,1` → `full 0 dev` → fresh Full seed 20 (new root, write it down) →
+   `small 0 dev` (no harm only). `sbf check` Small + Full for the best variant. Report disposal and lost sales
+   before/after, by node.
+4. `results/task-37.md`: measurement, tables, verdict, and a short port note (which files/options) so the change can
+   be copied into the final agent (mpc_combo + cq).

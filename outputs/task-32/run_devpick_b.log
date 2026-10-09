@@ -1,0 +1,20 @@
+round variants32b_full_0_1009-0842: task full, entropy 0, episodes devpick:2,2,1,1, baseline base
+references ready in 1 s (6 episodes)
+  baseline base: reused full_0_devpick-2-2-1-1_f8d60554249f41c6.json
+  played base in 0 s: RSS 0.8535
+  played steer_max_twkr in 64 s: RSS 0.8480
+  played steer_max_kr in 62 s: RSS 0.8474
+  played steer_max_tw in 64 s: RSS 0.8497
+  played steer_mean_twkr in 55 s: RSS 0.8405
+  played steer_max_us in 60 s: RSS 0.8512
+
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+steer_max_twkr            0.8480  0.844  0.872  0.824  0.832  -0.0055  [-0.0062, -0.0048]     0.0%      0  <-- worse
+steer_max_kr              0.8474  0.843  0.870  0.825  0.834  -0.0061  [-0.0080, -0.0044]     0.0%      0  <-- worse
+steer_max_tw              0.8497  0.839  0.875  0.839  0.843  -0.0038  [-0.0053, -0.0021]     0.0%      0  <-- worse
+steer_mean_twkr           0.8405  0.837  0.867  0.814  0.820  -0.0130  [-0.0183, -0.0083]     0.0%      0  <-- worse
+steer_max_us              0.8512  0.844  0.871  0.838  0.842  -0.0023  [-0.0042, -0.0001]     0.0%      0  <-- worse
+
+results: outputs/variants/variants32b_full_0_1009-0842/results.json

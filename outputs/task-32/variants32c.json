@@ -1,0 +1,96 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "tw_mean": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw"
+   ],
+   "steer_stat": "mean"
+  }
+ },
+ "tw_mean_m15": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw"
+   ],
+   "steer_stat": "mean",
+   "steer_margin": 1.5
+  }
+ },
+ "tw_max8": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw"
+   ],
+   "steer_weeks": 8
+  }
+ },
+ "tw_max_b2": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw"
+   ],
+   "steer_buf": 2.0
+  }
+ },
+ "kr_max8": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_kr"
+   ],
+   "steer_weeks": 8
+  }
+ }
+}

@@ -1,4 +1,4 @@
-Status: running fresh Full seed 20
+Status: sbf check + guard test on mpc_combo
 
 agents/mpc_combo = mpc_jpow (agent.py, pplan.py) + mpc_final (chips.py, fb_kappa_ct option). Changes are disjoint (jpow: energy LP / pulse planner; final: chip LP + params), so the merge is mechanical. Running the reproduction check on Full dev (devpick:1,0,0,0).
 
@@ -25,3 +25,17 @@ final                     0.8270  0.826  0.861  0.797  0.757  +0.0043  [+0.0003,
 ```
 combo = jpow + final params (union); combo_safe = jpow params + fb_kappa_ct only. Wins don't add: combo +0.0094 ≈ jpow
 +0.0091; final's safety_weeks/pp_end/warn_gain add nothing on top of jpow. Fresh seed root: 540469033.
+
+## 3. Fresh Full seed, root 540469033, 20 episodes (no harm-level-4 episode drawn)
+```
+full, entropy 540469033, 20 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8345  0.832  0.818  0.889      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+combo                     0.8482  0.853  0.823  0.875      -  +0.0137  [+0.0041, +0.0247]    99.0%      0  <-- better
+combo_safe                0.8458  0.851  0.819  0.875      -  +0.0113  [+0.0027, +0.0217]    98.6%      0  <-- better
+jpow                      0.8387  0.842  0.816  0.874      -  +0.0043  [-0.0022, +0.0109]    86.5%      0
+final                     0.8494  0.851  0.827  0.894      -  +0.0150  [+0.0088, +0.0222]   100.0%      0  <-- better
+```
+Mean of the two sets (40 episodes): combo +0.0116, combo_safe +0.0108, final +0.0097, jpow +0.0067. jpow and final
+each win one set; combo is above 0 on both and the best on average -> **recommended: agents/mpc_combo with its
+params.json (the full union)**.

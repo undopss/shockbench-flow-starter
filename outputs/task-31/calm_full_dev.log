@@ -1,0 +1,17 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round calm31_full_0_1009-0910: task full, entropy 0, episodes dev, baseline imit_room
+references ready in 1 s (20 episodes)
+  baseline imit_room: reused full_0_dev_f8d60554249f41c6.json
+  played imit_room in 0 s: RSS 0.8228
+  played calm_off in 181 s: RSS 0.8228
+  played calm_small in 178 s: RSS 0.8211
+  played calm_big in 174 s: RSS 0.8215
+
+full, entropy 0, 20 episodes; diff = variant - imit_room, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+imit_room                 0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     nan%      0
+calm_off                  0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     0.0%      0
+calm_small                0.8211  0.822  0.856  0.780  0.756  -0.0016  [-0.0044, +0.0011]    17.1%      0
+calm_big                  0.8215  0.819  0.856  0.794  0.755  -0.0013  [-0.0029, -0.0000]     4.9%      0  <-- worse
+
+results: outputs/variants/calm31_full_0_1009-0910/results.json

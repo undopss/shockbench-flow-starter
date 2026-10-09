@@ -1,4 +1,4 @@
-Status: building agents/mpc_calm (switch test); sensitivity done: no calm/storm crossover
+Status: done — dead end. Level 1 is not calm on Full, no parameter is tuned for storms, and an online calm-week switch scores −0.001 (Full dev 20). Even a switch that knows the harm level is worth only +0.002.
 
 # Task 31: the calm episodes (harm level 1)
 
@@ -71,3 +71,51 @@ selects on noise). Both far below +0.05.
 
 Observable "calm weeks" (no closure, energy shock or piracy active in the last 4 weeks, from the episode's events)
 don't follow the harm level either: L1 148 of 520 weeks, L2 78, L3 126, L4 17; two of five L1 episodes have none.
+
+## Step 2b: the switch (`agents/mpc_calm`, option `calm_switch`, off by default)
+
+Signal (only what the agent sees): a week is **calm** when, for the last `calm_memory` = 4 weeks, every chokepoint was
+fully open (`graph_now.open` ≥ 0.999) and no grid's `G_bar` was below 98% of its running maximum. In calm weeks
+`calm_switch`'s overrides of `wafer_buffer` / `pp_value` / `safety_weeks` apply. It fires: Full ep 2 has 70 calm weeks of
+104 (`outputs/task-31/calmcount31.py`). Two variants: **calm_small** = the task's hypothesis (smaller buffer and
+pulses in calm weeks: wafer_buffer 2, pp_value 10); **calm_big** = the per-level sensitivity's best level-1 settings
+(wafer_buffer 4, pp_value 10). `calm_off` = mpc_calm with the switch off, to check it changes nothing.
+
+Full dev 20, entropy 0 (`outputs/task-31/calm31.json`, round `calm31_full_0_1009-0910`):
+```
+full, entropy 0, 20 episodes; diff = variant - imit_room, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+imit_room                 0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     nan%      0
+calm_off                  0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     0.0%      0
+calm_small                0.8211  0.822  0.856  0.780  0.756  -0.0016  [-0.0044, +0.0011]    17.1%      0
+calm_big                  0.8215  0.819  0.856  0.794  0.755  -0.0013  [-0.0029, -0.0000]     4.9%      0  <-- worse
+```
+Not promising, so the funnel stops here (no fresh seed, no Small run, no sbf check on Full: this is not final code).
+`sbf check agents/mpc_calm --task=tiny` passes.
+
+## Verdict
+
+**Dead end for +0.05.** On Full the "calm" level is calm only for the naive plan: its episodes have as many energy
+shocks and closures as the others. The agent is not over-cautious there (less buffer, less fuel safety and smaller
+pulses all hurt level 1 too), and a calm/stormy switch over the existing knobs is capped at +0.002 even with the true
+harm level. Level 1's gap (0.581 T/ep) is the same two levers as everywhere, concentrated in two episodes:
+1. **Fab power at CN/JP/KR when chips are short** (ep 7: 0.86 T of chips, CN mature 22.6M lots behind; ep 5: JP memory
+   11M lots behind) → task 30's lever.
+2. **Pulses that buy chips nobody can sell** (ep 2: more lots than the oracle at every fab, the same sales, 0.32 T of
+   extra shed, 44 B USD of disposal) → task 29's lever (value fab energy by what its chips can still sell, e.g. the
+   chip LP's duals; `pplan` today values it at the sinks' pi as if every chip sells, `fab_plan` is never passed).
+   Ep 2 alone is 0.064 T/ep at level 1 ≈ 2 L1 points ≈ 1 pooled point.
+
+## Surprising
+- imit_room's gain at level 1 (+0.021, task 26) is entirely one episode: ep 7's grid_in shed (0.32 T, a grid with no
+  fabs shedding ~1000 GWh every week for months) is gone with it.
+- Calm weeks by the event list: L1 148 of 520, L3 126, L4 17. The harm level says little about how many quiet weeks
+  an episode has.
+
+## Choices made without asking
+- Went straight to Full dev 20 (3 min per variant here) instead of devpick 6 first: more episodes per level for a
+  per-level question.
+- The split's "pulse shed price" reuses task 20's pulses-off run of mpc_fab3sell (same pulses as imit_room; the grid_in
+  entry differs because of imit_room, said in the table).
+- Files: `outputs/task-31/levels31.py` (split by level), `in31.py` (per-week fuel at one grid), `switch_bound31.py`
+  (switch ceiling), `calmcount31.py`, `sens31.json`, `calm31.json`, the gap JSON and both runners' `results.json`.

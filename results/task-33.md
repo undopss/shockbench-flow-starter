@@ -1,4 +1,4 @@
-Status: stage 2 done; running stage 3 (stacks) on Full devpick 6
+Status: stage 3 done (safety_weeks is the big lever: stack3 +0.014 on devpick); running stage 4 (safety_weeks range) on Full devpick 6
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,
@@ -62,3 +62,24 @@ k_warn0.5                 0.8569  0.844  0.875  0.861  0.849  +0.0034  [+0.0017,
 ```
 Over kct (+0.0020) the gains are all small: warn_gain 0.5 +0.0014, pp_end 0.7 +0.0011, wafer_buffer 2.5 +0.0011
 (but L3/L4 down), safety_weeks 4 +0.0021 (wide interval). pp_end 1.1 is very bad (-0.0276), safety_weeks 2 bad.
+
+## Stage 3: stacks, Full devpick 6, `outputs/task-33/v33_s3.json`, round v33_s3_full_0_1009-0909
+stack3 = kct + safety_weeks 4 + pp_end 0.7 + warn_gain 0.5.
+```
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+kct                       0.8555  0.846  0.882  0.839  0.846  +0.0020  [+0.0011, +0.0030]   100.0%      0  <-- better
+k_ppend0.5                0.8584  0.856  0.877  0.839  0.842  +0.0049  [+0.0030, +0.0070]   100.0%      0  <-- better
+k_warn1.0                 0.8569  0.846  0.875  0.860  0.836  +0.0034  [-0.0002, +0.0066]    94.0%      0
+k_sw5                     0.8649  0.857  0.875  0.873  0.841  +0.0114  [+0.0092, +0.0137]   100.0%      0  <-- better
+stack3                    0.8677  0.857  0.882  0.876  0.847  +0.0142  [+0.0124, +0.0161]   100.0%      0  <-- better
+stack3_wb2.5              0.8609  0.854  0.873  0.866  0.826  +0.0074  [+0.0053, +0.0097]   100.0%      0  <-- better
+stack3_cf0.6              0.8683  0.859  0.881  0.877  0.839  +0.0148  [+0.0125, +0.0173]   100.0%      0  <-- better
+stack3_ib1.0              0.8674  0.856  0.882  0.876  0.847  +0.0139  [+0.0117, +0.0163]   100.0%      0  <-- better
+stack_all                 0.8618  0.857  0.872  0.869  0.818  +0.0083  [+0.0057, +0.0112]   100.0%      0  <-- better
+s2_pe_wg                  0.8600  0.848  0.879  0.863  0.840  +0.0065  [+0.0037, +0.0095]   100.0%      0  <-- better
+
+```
+safety_weeks keeps paying as it grows (2: -0.0055, 4: +0.0041, 5: +0.0114 vs base); pp_end 0.5 > 0.7. wafer_buffer
+2.5 and the all-in stack hurt L4.

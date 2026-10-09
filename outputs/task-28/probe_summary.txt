@@ -1,0 +1,69 @@
+episodes [2, 5, 0, 1, 53, 26]
+scrap: units 0  T at pi 0.0000   hits/ep 0.5
+    2 []
+    5 []
+    0 []
+    1 [('fab_row_leading_1', 101.7, 0.6), ('fab_row_leading_1', 101.9, 0.6)]
+    53 []
+    26 [('fab_sea_mature_1', 31.3, 0.6)]
+osat: bind weeks 1.3  le displaced 2630  le raw disposed in bind weeks 0
+alpha: headroom lots 41270  lots above R cap0 0
+salvage 0.00592 T, max-at-cap 0.01772 T
+supply_lost_at_cap {'lng': 1808974, 'crude': 356750, 'nucfuel': 2099569, 'wafer': 95437143}
+end_stock {'lng': 516772, 'crude': 42961, 'nucfuel': 1385603, 'wafer': 8957631, 'chip_le_raw': 169602, 'chip_mat_raw': 790797, 'chip_mat': 4826344, 'chip_le': 703484}
+disposal_units {'lng': 421482, 'crude': 4085, 'nucfuel': 0, 'wafer': 1683316, 'chip_le_raw': 1503484, 'chip_mat_raw': 4962260, 'chip_mat': 3522407, 'chip_le': 3218996}
+lost_units {'chip_le': 30187081, 'chip_mat': 54706860}
+sink_idle_vs_lost_units {'chip_le': 2922450, 'chip_mat': 3552678}
+queue unit-weeks (fuel GWh-wk / chips units-wk):
+   chk_malacca/chip_mat                   169590269
+   chk_taiwan/chip_mat                     33444082
+   chk_hormuz/wafer                        12609767
+   chk_cape/chip_mat_raw                   11367195
+   chk_malacca/wafer                       10130055
+   chk_suez/chip_mat                        9789890
+   chk_taiwan/wafer                         7943798
+   chk_cape/chip_le_raw                     2372767
+   chk_taiwan/chip_le_raw                   2153486
+   chk_malacca/chip_mat/closed              1963249
+   chk_suez/chip_mat_raw                    1431857
+   chk_taiwan/chip_mat_raw                  1288265
+   chk_taiwan/chip_mat/closed               1259978
+   chk_cape/wafer                            740508
+   chk_malacca/chip_mat_raw/closed           334383
+   chk_taiwan/chip_le_raw/closed             325734
+   chk_cape/chip_mat_raw/closed              310565
+   chk_malacca/wafer/closed                  298993
+   chk_malacca/lng                           242871
+   chk_taiwan/wafer/closed                   239135
+   chk_taiwan/crude                          191317
+   chk_hormuz/wafer/closed                   179033
+   chk_malacca/crude                         167919
+   chk_suez/chip_le_raw                      143939
+   chk_suez/wafer                            137750
+   chk_suez/chip_mat/closed                  104532
+   chk_taiwan/crude/closed                    94387
+   chk_turkish/wafer                          94320
+   chk_taiwan/lng/closed                      85241
+   chk_malacca/chip_le_raw/closed             84053
+   chk_malacca/chip_le_raw                    71147
+   chk_cape/chip_le_raw/closed                66598
+   chk_taiwan/chip_mat_raw/closed             56327
+   chk_panama/crude                           53539
+   chk_turkish/wafer/closed                   36733
+   chk_malacca/crude/closed                   35147
+   chk_taiwan/lng                             34782
+   chk_malacca/lng/closed                     29135
+   chk_malacca/chip_mat_raw                   15499
+   chk_suez/lng                               10056
+   chk_hormuz/lng                              9240
+   chk_cape/lng                                2316
+   chk_suez/wafer/closed                       2151
+ENERGY per grid (mean per episode)
+  grid_tw {'lng_ration_GWh': 58266, 'lng_ration_GWh_when_shed': 55448, 'lng_stockout_GWh': 116, 'lng_stockout_weeks': 3, 'lng_stockout_GWh_when_shed': 33, 'crude_stockout_GWh': 4072, 'crude_stockout_weeks': 43, 'crude_stockout_GWh_when_shed': 1755, 'shed_GWh': 45412, 'shed_weeks': 34, 'fab_energy_short_GWh': 27128, 'shed_T': 0.187}
+  grid_kr {'lng_ration_GWh': 66029, 'lng_ration_GWh_when_shed': 65284, 'lng_stockout_GWh': 240, 'lng_stockout_weeks': 3, 'lng_stockout_GWh_when_shed': 206, 'crude_stockout_GWh': 5487, 'crude_stockout_weeks': 44, 'crude_stockout_GWh_when_shed': 2242, 'nucfuel_stockout_GWh': 0, 'nucfuel_stockout_weeks': 0, 'nucfuel_stockout_GWh_when_shed': 0, 'shed_GWh': 60548, 'shed_weeks': 31, 'fab_energy_short_GWh': 21281, 'shed_T': 0.25}
+  grid_jp {'lng_ration_GWh': 121497, 'lng_ration_GWh_when_shed': 121463, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 39697, 'crude_stockout_weeks': 66, 'crude_stockout_GWh_when_shed': 39503, 'nucfuel_stockout_GWh': 0, 'nucfuel_stockout_weeks': 0, 'nucfuel_stockout_GWh_when_shed': 0, 'shed_GWh': 156535, 'shed_weeks': 79, 'fab_energy_short_GWh': 14591, 'shed_T': 0.646}
+  grid_cn {'lng_ration_GWh': 70631, 'lng_ration_GWh_when_shed': 70445, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 54845, 'crude_stockout_weeks': 45, 'crude_stockout_GWh_when_shed': 54488, 'nucfuel_stockout_GWh': 0, 'nucfuel_stockout_weeks': 0, 'nucfuel_stockout_GWh_when_shed': 0, 'shed_GWh': 107050, 'shed_weeks': 46, 'fab_energy_short_GWh': 18843, 'shed_T': 0.442}
+  grid_us {'lng_ration_GWh': 0, 'lng_ration_GWh_when_shed': 0, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 2, 'crude_stockout_weeks': 0, 'crude_stockout_GWh_when_shed': 0, 'nucfuel_stockout_GWh': 105478, 'nucfuel_stockout_weeks': 7, 'nucfuel_stockout_GWh_when_shed': 105478, 'shed_GWh': 166553, 'shed_weeks': 12, 'fab_energy_short_GWh': 9392, 'shed_T': 0.687}
+  grid_eu {'lng_ration_GWh': 45249, 'lng_ration_GWh_when_shed': 45249, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 53073, 'crude_stockout_weeks': 58, 'crude_stockout_GWh_when_shed': 52853, 'nucfuel_stockout_GWh': 0, 'nucfuel_stockout_weeks': 0, 'nucfuel_stockout_GWh_when_shed': 0, 'shed_GWh': 111667, 'shed_weeks': 56, 'fab_energy_short_GWh': 14921, 'shed_T': 0.461}
+  grid_sea {'lng_ration_GWh': 302994, 'lng_ration_GWh_when_shed': 302983, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 61366, 'crude_stockout_weeks': 83, 'crude_stockout_GWh_when_shed': 61366, 'shed_GWh': 352842, 'shed_weeks': 92, 'fab_energy_short_GWh': 11854, 'shed_T': 1.456}
+  grid_in {'lng_ration_GWh': 55, 'lng_ration_GWh_when_shed': 55, 'lng_stockout_GWh': 0, 'lng_stockout_weeks': 0, 'lng_stockout_GWh_when_shed': 0, 'crude_stockout_GWh': 0, 'crude_stockout_weeks': 0, 'crude_stockout_GWh_when_shed': 0, 'nucfuel_stockout_GWh': 7920, 'nucfuel_stockout_weeks': 7, 'nucfuel_stockout_GWh_when_shed': 7920, 'shed_GWh': 8640, 'shed_weeks': 8, 'fab_energy_short_GWh': 0, 'shed_T': 0.036}

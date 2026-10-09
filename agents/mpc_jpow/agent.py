@@ -74,6 +74,9 @@ PARAMS = {
     "jp_grids": [],  # grid ids the options below apply to (empty = every grid with fabs)
     "jp_safety": {},  # fuel id -> safety weeks of burn in the energy LP's floor at those grids (stock up ahead)
     "jp_fill": [],  # fuel ids whose terminal -> grid release is at least what fills this week's segment (no holding)
+    # tanker queues drain onto each next edge at most at its capacity (the simulator's eta_u), in the energy LP and the
+    # pulse planner (needs kappa_lp). Without it a queue behind a cut edge was forecast to arrive at once
+    "jp_qedge": False,
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -95,7 +98,7 @@ class Agent:
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
-                                                 split=PARAMS["pp_split"])
+                                                 split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -379,7 +382,7 @@ class Agent:
         queue_tb = {}  # chokepoint position -> tanker cargo queued there (kappa_lp)
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
-            drain = _pplan.queue_release(obs, self.lot_keys, self.chk_node_pos, self.tb_k, H) if PARAMS["kappa_lp"] else {}
+            drain = _pplan.queue_release(obs, self.lot_keys, self.chk_node_pos, self.tb_k, H, PARAMS["jp_qedge"]) if PARAMS["kappa_lp"] else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue

@@ -23,12 +23,15 @@ from scipy.optimize import Bounds, LinearConstraint, milp
 from scipy.sparse import coo_matrix
 
 
-def queue_release(obs, lot_keys, chk_pos, tb_k, H):
+def queue_release(obs, lot_keys, chk_pos, tb_k, H, edge_cap=False):
     """{lot row: array H} of the quantity each queued tanker lot row releases in week + o (task 18, ``kappa_lp``).
 
     The simulator's default release (chokepoint.py, (10)) drains a chokepoint's queue FIFO by cohort (the week the lots
     reached it), pro rata inside a cohort, at most kappa_tb a week for the tanker pool. A closed chokepoint (open < 0.5)
     releases nothing. Rows of other pools are left out (the caller keeps its old rule for them).
+    ``edge_cap`` (task 30): also as the simulator does, a cohort releases onto each next edge at most that edge's
+    capacity left this week (eta_u in chokepoint.py), and only then shares kappa (eta_k). Without it a queue behind a
+    cut edge (e.g. Taiwan -> term_jp at 270 / week) was forecast to drain at kappa_tb in one week, and never did.
     """
     q = obs["queue_lots.qty"]
     kap = obs["graph_now.kappa.tb"]
@@ -47,6 +50,32 @@ def queue_release(obs, lot_keys, chk_pos, tb_k, H):
         cols = [c for c in range(sub.shape[1]) if sub[:, c].sum() > 0]
         rem = {c: float(sub[:, c].sum()) for c in cols}
         sched = np.zeros((len(rows), H))
+        if edge_cap:
+            u = obs["graph_now.u"]
+            nxt = [int(lot_keys[r_][3]) for r_ in rows]
+            left = sub.astype(float).copy()
+            for w in range(H):
+                budget = kc
+                ures = {e: float(u[e]) for e in set(nxt)}
+                for c in cols:
+                    y = left[:, c]
+                    if budget <= 0 or y.sum() <= 0:
+                        continue
+                    tot = {}
+                    for i, e in enumerate(nxt):
+                        tot[e] = tot.get(e, 0.0) + y[i]
+                    eta_u = np.array([min(1.0, max(ures[e], 0.0) / tot[e]) if tot[e] > 0 else 0.0 for e in nxt])
+                    tot2 = float((eta_u * y).sum())
+                    eta_k = min(1.0, budget / tot2) if tot2 > 0 else 0.0
+                    q_ = eta_k * eta_u * y
+                    for i, e in enumerate(nxt):
+                        ures[e] -= q_[i]
+                    left[:, c] -= q_
+                    sched[:, w] += q_
+                    budget -= float(q_.sum())
+            for i, row in enumerate(rows):
+                out[row] = sched[i]
+            continue
         for w in range(H):
             budget = kc
             for c in cols:
@@ -65,7 +94,7 @@ def queue_release(obs, lot_keys, chk_pos, tb_k, H):
 
 class PulsePlanner:
     def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
-                 direct_grids=(), kappa=False, split=False):
+                 direct_grids=(), kappa=False, split=False, qedge=False):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -88,6 +117,7 @@ class PulsePlanner:
         self.chk_pos = {node: i for i, node in enumerate(layout["chokepoints"])}
         self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
         self.kappa = bool(kappa)
+        self.qedge = bool(qedge)
         self.split = int(split)
         pools = static["commodities"].get("pool") or []
         self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
@@ -193,7 +223,7 @@ class PulsePlanner:
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             open_now = np.where(obs["graph_now.open.observed"] == 1, obs["graph_now.open"], 1.0)
             queued = obs["queue_lots.qty"].sum(axis=1)
-            drain = queue_release(obs, self.lot_keys, self.chk_pos, self.tb_k, H) if self.kappa else {}
+            drain = queue_release(obs, self.lot_keys, self.chk_pos, self.tb_k, H, self.qedge) if self.kappa else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue

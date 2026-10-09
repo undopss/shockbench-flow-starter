@@ -1,4 +1,4 @@
-Status: running Small dev 20 (no-harm check)
+Status: sbf check + queue re-measure on cq_abk
 
 Plan: agents/mpc_cq = mpc_jpow + three chip-LP options in chips.py (off by default): cq_edges (shared capacity rows on every later edge of chip routes, net of cargo already bound for it), cq_drain (queued chip cargo drains FIFO at min(next-edge, kappa_ct) shares, like jp_qedge), cq_kappa (routes share kappa_ct at each chokepoint). Static count: 29 (commodity, later edge) groups shared by chip routes with different first edges (matches Andrii). Smoke test on Full dev ep 3: options on solve every week, chip LP CPU 0.15 s mean / 0.23 max (same as off).
 
@@ -48,4 +48,12 @@ jpow                      0.8364  0.829  0.844  0.845      -  +0.0000  [+0.0000,
 cq_a                      0.8516  0.848  0.857  0.855      -  +0.0152  [+0.0081, +0.0248]   100.0%      0  <-- better
 cq_ab                     0.8524  0.847  0.860  0.855      -  +0.0161  [+0.0083, +0.0261]   100.0%      0  <-- better
 cq_abk                    0.8540  0.848  0.865  0.854      -  +0.0176  [+0.0094, +0.0279]   100.0%      0  <-- better
+```
+
+Small dev 20, root 0 (`v35c`, no-harm check only):
+```
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+jpow                      0.7994  0.840  0.756  0.806  0.676  +0.0000  [+0.0000, +0.0000]     nan%      0
+cq_a                      0.7976  0.837  0.756  0.804  0.672  -0.0018  [-0.0043, +0.0004]     8.5%      0
+cq_abk                    0.7969  0.839  0.754  0.800  0.670  -0.0025  [-0.0057, +0.0005]     8.8%      0
 ```

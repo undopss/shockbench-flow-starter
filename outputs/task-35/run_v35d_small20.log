@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v35c_small_0_1009-2127: task small, entropy 0, episodes dev, baseline jpow
+references ready in 778 s (20 episodes)
+  played jpow in 27 s: RSS 0.7994
+  played cq_a in 27 s: RSS 0.7976
+  played cq_abk in 24 s: RSS 0.7969
+
+small, entropy 0, 20 episodes; diff = variant - jpow, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+jpow                      0.7994  0.840  0.756  0.806  0.676  +0.0000  [+0.0000, +0.0000]     nan%      0
+cq_a                      0.7976  0.837  0.756  0.804  0.672  -0.0018  [-0.0043, +0.0004]     8.5%      0
+cq_abk                    0.7969  0.839  0.754  0.800  0.670  -0.0025  [-0.0057, +0.0005]     8.8%      0
+
+results: outputs/variants/v35c_small_0_1009-2127/results.json

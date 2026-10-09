@@ -501,3 +501,28 @@ test passed). Both are copies of `agents/mpc_imit_room` with different code chan
    episodes** and for each one line on what dominates its gap.
 5. `results/task-34.md`: the tables exactly as printed, the recommended final candidate (with its params.json), the
    new map, and the 3 biggest remaining leaks with a rough T/ep each. Full is what counts.
+
+### 35. BUILD: "jpow for chips" — shared downstream edges and strait queues in the chip LP (`agents/mpc_cq`)
+Found by Andrii's audit (`ideas/PULSE_V2_DETAILED_AUDIT.md` on branch `task-26-imit`, "P1 — Chip route LP can overbook
+shared downstream edges"; read it) and checked in our code: `chips.py` (~line 355) shares edge capacity **only per
+route's first edge** (`by_edge[ls["first"]]`); each slot alone is capped by the min capacity along its route. The
+simulator clips a dispatch only on its first edge (`dynamics/clip.py`); later legs are capped when cargo is released
+from a chokepoint queue onto the next edge (`chokepoint.py`: eta = min(1, u_e / cargo queued onto e), plus kappa_ct
+for containers). So two chip routes with different first edges can each plan the full capacity of a shared later
+edge; the excess waits in the strait queue and arrives late, while the LP plans with on-time arrivals. Andrii counts 29
+such (commodity, shared edge) groups on Full. Task 30 fixed the same mechanism for tanker fuel (`jp_qedge` in
+`agents/mpc_jpow`), never for chips.
+Start from **`agents/mpc_jpow`** (it has the tanker version of the fix to learn from) → `agents/mpc_cq`, new options
+off by default. Baseline: `{"agent": "agents/mpc_jpow"}`.
+1. Measure first (Full devpick:2,2,1,1): per chip lane and week, planned vs executed arrivals; how much chip cargo
+   waits in strait queues because a later edge is full, and what it costs (late / lost sales at pi). Count the shared
+   later-edge groups yourself.
+2. Build: (a) a shared capacity row for **every** edge of every chip route, at the week the cargo reaches that edge
+   (dispatch week + travel time of the earlier legs), over all slots and commodities that use it; (b) in the fixed
+   arrivals, chip cargo already queued at a strait drains at min(kappa_ct share, next-edge capacity share), like
+   `jp_qedge`; (c) both. Check the agent still reproduces mpc_jpow exactly with the options off.
+3. Funnel vs mpc_jpow: `full 0 devpick:2,2,1,1` → `full 0 dev` → fresh Full seed 20 (new root, write it down) →
+   `small 0 dev` (no harm only). `sbf check` Small + Full for the best variant (CPU max / median). Note: task 34 is
+   building `agents/mpc_combo` (= mpc_jpow + mpc_final) in parallel; keep your change easy to copy into it (one option
+   in chips.py + PARAMS).
+4. `results/task-35.md`: the measurement, the tables, the verdict, and a one-line diff summary for porting to mpc_combo.

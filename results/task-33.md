@@ -1,4 +1,4 @@
-Status: stage 3 done (safety_weeks is the big lever: stack3 +0.014 on devpick); running stage 4 (safety_weeks range) on Full devpick 6
+Status: stage 4 done; running Full dev 20 on 6 candidates
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,
@@ -83,3 +83,22 @@ s2_pe_wg                  0.8600  0.848  0.879  0.863  0.840  +0.0065  [+0.0037,
 ```
 safety_weeks keeps paying as it grows (2: -0.0055, 4: +0.0041, 5: +0.0114 vs base); pp_end 0.5 > 0.7. wafer_buffer
 2.5 and the all-in stack hurt L4.
+
+## Stage 4: safety_weeks range, Full devpick 6, `outputs/task-33/v33_s4.json`, round v33_s4_full_0_1009-0919
+```
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+k_sw6                     0.8622  0.856  0.873  0.868  0.834  +0.0087  [+0.0064, +0.0114]   100.0%      0  <-- better
+k_sw8                     0.8729  0.871  0.879  0.879  0.827  +0.0194  [+0.0133, +0.0262]   100.0%      0  <-- better
+k_sw10                    0.8594  0.858  0.862  0.869  0.823  +0.0059  [+0.0021, +0.0093]   100.0%      0  <-- better
+k_sw6_pe0.5               0.8651  0.857  0.876  0.873  0.840  +0.0116  [+0.0087, +0.0148]   100.0%      0  <-- better
+k_sw6_pe0.5_wg0.5         0.8649  0.854  0.875  0.880  0.841  +0.0114  [+0.0101, +0.0129]   100.0%      0  <-- better
+k_sw8_pe0.5_wg0.5         0.8703  0.865  0.876  0.882  0.837  +0.0168  [+0.0112, +0.0231]   100.0%      0  <-- better
+k_sw5_pe0.5_wg0.5         0.8646  0.855  0.875  0.877  0.843  +0.0111  [+0.0080, +0.0145]   100.0%      0  <-- better
+k_sw6_pe0.3_wg0.5         0.8645  0.854  0.878  0.876  0.839  +0.0110  [+0.0083, +0.0142]   100.0%      0  <-- better
+k_sw6_pe0.5_wg0.5_cf0.6   0.8656  0.857  0.874  0.881  0.833  +0.0121  [+0.0102, +0.0141]   100.0%      0  <-- better
+k_sw6_pe0.5_wg0.5_sc0.5   0.8659  0.856  0.877  0.878  0.843  +0.0124  [+0.0104, +0.0146]   100.0%      0  <-- better
+
+```
+safety_weeks is not monotone on 6 episodes (5: +0.011, 6: +0.009, 8: +0.019, 10: +0.006); L4 drops as it grows.

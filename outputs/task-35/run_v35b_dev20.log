@@ -1,0 +1,16 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v35b_full_0_1009-2057: task full, entropy 0, episodes dev, baseline jpow
+references ready in 1 s (20 episodes)
+  played jpow in 128 s: RSS 0.8319
+  played cq_a in 136 s: RSS 0.8397
+  played cq_ab in 130 s: RSS 0.8399
+  played cq_abk in 131 s: RSS 0.8398
+
+full, entropy 0, 20 episodes; diff = variant - jpow, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+jpow                      0.8319  0.840  0.853  0.797  0.759  +0.0000  [+0.0000, +0.0000]     nan%      0
+cq_a                      0.8397  0.851  0.859  0.802  0.757  +0.0078  [+0.0033, +0.0125]    99.8%      0  <-- better
+cq_ab                     0.8399  0.850  0.861  0.801  0.759  +0.0081  [+0.0031, +0.0133]    99.8%      0  <-- better
+cq_abk                    0.8398  0.852  0.859  0.799  0.760  +0.0079  [+0.0031, +0.0128]    99.8%      0  <-- better
+
+results: outputs/variants/v35b_full_0_1009-2057/results.json

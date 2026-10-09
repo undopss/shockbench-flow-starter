@@ -1,4 +1,4 @@
-Status: Full devpick done: every honest-value variant is worse; checking pp_value up + shed/lots
+Status: done — negative. The chip LP's marginal value makes the pulse planner worse on Full devpick (pv1 -0.010 [-0.016, -0.004]); pp_value 20 sits on a flat optimum (5..80 within 0.0015). Not a final candidate.
 
 Plan: measure pplan's fab-energy value V (pp_value x estimate) vs the chip LP's marginal value per grid/week on Full,
 then feed the planner that value (`agents/mpc_pval`, options `pv_dual`, `pv_scale`, `pv_release`, off by default) and run the funnel.
@@ -69,3 +69,94 @@ pp1                       0.8475  0.842  0.875  0.820  0.839  -0.0060  [-0.0079,
 
 results: outputs/variants/v29a_full_0_1009-0833/results.json
 ```
+
+## 3. The other direction and the dual's shape (`outputs/task-29/v29b.json`, same 6 episodes, same baseline numbers)
+
+pp40/pp80: the old valuation with a higher `pp_value`. pv20: the dual x 20 (same level as the old V, the dual's
+grid/week pattern): this separates "the level is wrong" from "the dual's pattern is wrong".
+
+```
+round v29b_full_0_1009-0858: task full, entropy 0, episodes devpick:2,2,1,1, baseline imit_room
+references ready in 2 s (6 episodes)
+  baseline imit_room: reused full_0_devpick-2-2-1-1_f8d60554249f41c6.json
+  played imit_room in 0 s: RSS 0.8535
+  played pp40 in 62 s: RSS 0.8520
+  played pp80 in 60 s: RSS 0.8523
+  played pv20 in 47 s: RSS 0.8462
+
+full, entropy 0, 6 episodes; diff = variant - imit_room, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+imit_room                 0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp40                      0.8520  0.842  0.875  0.842  0.846  -0.0015  [-0.0032, +0.0001]    18.9%      0
+pp80                      0.8523  0.842  0.877  0.842  0.842  -0.0012  [-0.0030, +0.0008]    19.1%      0
+pv20                      0.8462  0.836  0.877  0.831  0.814  -0.0073  [-0.0134, -0.0006]     0.0%      0  <-- worse
+
+results: outputs/variants/v29b_full_0_1009-0858/results.json
+```
+
+## 4. Shed by grid and fab lots, before/after (Full dev episodes 0, 2, 5, 7; `outputs/task-29/shedlots.py`)
+
+Shed in T USD (qty x VOLL) and wafer starts in M lots per episode; base = mpc_pval with defaults (= mpc_imit_room),
+pv1 = `pv_dual` true. (These are not the devpick episodes: the runner does not store its episode ids.)
+
+```
+Full dev episodes 0, 2, 5, 7 (per-episode means). base = mpc_imit_room params, pv1 = + pv_dual true
+J (reward sum, env scale) base ['4.837e+12', '4.778e+12', '4.428e+12', '4.002e+12']  pv1 ['4.815e+12', '4.777e+12', '4.468e+12', '4.192e+12']
+
+grid          shed base T  shed pv1 T   diff T
+grid_tw            0.2810      0.2854  +0.0044
+grid_kr            0.2919      0.2997  +0.0077
+grid_jp            0.4780      0.4688  -0.0092
+grid_cn            0.2212      0.1818  -0.0394
+grid_us            0.3301      0.3301  +0.0000
+grid_eu            0.5059      0.4976  -0.0082
+grid_sea           0.2198      0.2182  -0.0017
+grid_in            0.0219      0.0222  +0.0002
+total              2.3499      2.3037  -0.0462
+
+fab                    lots base M lots pv1 M   diff M
+fab_tw_leading_1             6.497      6.569   +0.072
+fab_tw_mature_1              4.598      4.461   -0.138
+fab_us_leading_1             1.457      1.456   -0.001
+fab_kr_leading_1             2.199      2.001   -0.198
+fab_kr_memory_1             17.831     16.916   -0.915
+fab_us_leading_2             1.015      1.015   -0.000
+fab_jp_memory_1              4.312      2.521   -1.791
+fab_us_leading_3             1.454      1.453   -0.001
+fab_eu_leading_1             1.103      0.911   -0.192
+fab_row_leading_1            0.654      0.575   -0.080
+fab_cn_mature_1             23.038     15.090   -7.949
+fab_us_mature_1              7.128      7.121   -0.007
+fab_eu_mature_1              8.596      7.212   -1.383
+fab_sea_mature_1             2.028      1.616   -0.412
+fab_tw_mature_2              4.932      5.087   +0.155
+fab_us_mature_2              7.389      7.381   -0.008
+total                       94.232     81.384  -12.848
+```
+
+## Verdict
+
+**Negative: the honest value as the chip LP measures it is worse than pp_value x pi. Don't use it.** Not run on
+`full 0 dev` / a fresh seed / Small (decision, written down): no variant cleared the first Full stage (every interval
+<= 0), and pp_value 5..80 is flat, so there is nothing to confirm.
+
+Why it fails (from the tables):
+- The dual is myopic. With `fab_cap_mode: observed` the chip LP caps a power-starved fab at ~1.25x its recent starts,
+  so it can only value the next few starts, and those can often wait (dual 0 in 32-57% of grid-weeks). A pulse
+  delivers a big block of energy that the LP never sees as feasible. So the LP undervalues it: pv1 saves 0.046 T/ep
+  of home shed (CN -0.039, JP -0.009, EU -0.008) but starts **12.8 M fewer lots** (CN mature -7.9 M, JP memory -1.8 M,
+  EU mature -1.4 M, KR memory -0.9 M), which costs more than the shed it saves.
+- Even at the old level (pv20), the dual's week-by-week pattern loses 0.007: pulsing only when the LP wants starts
+  this week is worse than pulsing whenever the fab has wafers.
+- "x20 is too high" isn't supported either: pp_value 5 -0.0012, 1 -0.0060, 40 -0.0015, 80 -0.0012. The planner's
+  decisions hardly change between 5 and 80 (fab energy beats homes by a wide margin at the chips' pi already:
+  median V/20 = 2.8-9.7 VOLL units). So the 0.19 T of pulse shed (task 20 item 2) is **not** a valuation problem:
+  at the true chip value (~pi) the pulses still pay. Reducing that shed needs better timing/foresight (when the grid
+  will be full anyway), not a different price.
+- Surprise: at episode start the chip LP plans **zero starts** for weeks 1-4 and gives every start a negative reduced
+  cost (-1k..-24k USD). That's the wafer-buffer penalty (starting a wafer drops the fab below its 3-week buffer).
+  The buffer's soft cost makes the LP's duals unusable as a value of energy. A buffer-free second solve for the duals
+  would fix that, but the pv20 result says the pattern, not just the level, is the problem, so I didn't build it (time box).
+
+Code: `agents/mpc_pval` (from `agents/mpc_imit_room`, same params.json). Options are off by default, and with the defaults it plays
+exactly like mpc_imit_room (`pv_dual` false: the duals are computed but not used). The dual extraction is inside try/except.

@@ -1,0 +1,17 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v29b_full_0_1009-0858: task full, entropy 0, episodes devpick:2,2,1,1, baseline imit_room
+references ready in 2 s (6 episodes)
+  baseline imit_room: reused full_0_devpick-2-2-1-1_f8d60554249f41c6.json
+  played imit_room in 0 s: RSS 0.8535
+  played pp40 in 62 s: RSS 0.8520
+  played pp80 in 60 s: RSS 0.8523
+  played pv20 in 47 s: RSS 0.8462
+
+full, entropy 0, 6 episodes; diff = variant - imit_room, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+imit_room                 0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+pp40                      0.8520  0.842  0.875  0.842  0.846  -0.0015  [-0.0032, +0.0001]    18.9%      0
+pp80                      0.8523  0.842  0.877  0.842  0.842  -0.0012  [-0.0030, +0.0008]    19.1%      0
+pv20                      0.8462  0.836  0.877  0.831  0.814  -0.0073  [-0.0134, -0.0006]     0.0%      0  <-- worse
+
+results: outputs/variants/v29b_full_0_1009-0858/results.json

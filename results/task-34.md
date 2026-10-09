@@ -1,4 +1,4 @@
-Status: sbf check + guard test on mpc_combo
+Status: gap map running
 
 agents/mpc_combo = mpc_jpow (agent.py, pplan.py) + mpc_final (chips.py, fb_kappa_ct option). Changes are disjoint (jpow: energy LP / pulse planner; final: chip LP + params), so the merge is mechanical. Running the reproduction check on Full dev (devpick:1,0,0,0).
 
@@ -39,3 +39,9 @@ final                     0.8494  0.851  0.827  0.894      -  +0.0150  [+0.0088,
 Mean of the two sets (40 episodes): combo +0.0116, combo_safe +0.0108, final +0.0097, jpow +0.0067. jpow and final
 each win one set; combo is above 0 on both and the best on average -> **recommended: agents/mpc_combo with its
 params.json (the full union)**.
+
+## 4. sbf check + guard (agents/mpc_combo, this cloud machine)
+- `sbf check mpc_combo --task=small`: all checks passed; week 1 0.119 s, median act 0.108 s, max 0.160 s (budget 2 s).
+- `sbf check mpc_combo --task=full`: all checks passed; week 1 0.329 s, median act 0.292 s, max 0.449 s (budget 4 s).
+- Guard (`outputs/task-34/guard_test.py 0 agents/mpc_combo`, = task 33's with the agent as argument), Full dev ep 0:
+  A 484595110784995 = B (bogus grid names) ; C (grid_cn renamed) 483247395594149 = D (pp_direct without grid_cn); 0 fallbacks. Passed.

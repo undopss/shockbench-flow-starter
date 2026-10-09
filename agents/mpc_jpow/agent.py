@@ -77,6 +77,7 @@ PARAMS = {
     # tanker queues drain onto each next edge at most at its capacity (the simulator's eta_u), in the energy LP and the
     # pulse planner (needs kappa_lp). Without it a queue behind a cut edge was forecast to arrive at once
     "jp_qedge": False,
+    "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -98,7 +99,8 @@ class Agent:
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
-                                                 split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"])
+                                                 split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"],
+                                                 arrfb=PARAMS["jp_arrfb"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]

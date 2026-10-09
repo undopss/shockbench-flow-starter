@@ -1,4 +1,4 @@
-Status: running fresh Full seed 12 (qedge: devpick +0.011, dev 20 +0.0051)
+Status: testing a second option (arrival feedback); qedge done on Full devpick, dev 20, fresh 12
 
 # Task 30: more power for the JP / SEA / CN fabs (`agents/mpc_jpow`)
 
@@ -9,3 +9,4 @@ Status: running fresh Full seed 12 (qedge: devpick +0.011, dev 20 +0.0051)
 - Fix `jp_qedge` (off by default): Full devpick **+0.0110 [+0.0038, +0.0190]** (0.8645 vs 0.8535).
 - Tried and rejected: `jp_fill` crude (never hold crude at the terminal): -0.039; crude safety stock 6 weeks: +0.001 (noise); LNG safety 5 weeks: -0.000.
 - Full dev 20 (root 0): base 0.8228, **qedge 0.8278, +0.0051 [+0.0007, +0.0096]**, 97.8% better; qedge + crude safety 6 weeks -0.0006 [-0.0142, +0.0107].
+- Fresh Full seed, **root 213168154** (random), 12 episodes: base 0.8401, **qedge 0.8429, +0.0028 [-0.0058, +0.0098]**, 71.9% better (L4 +0.026, L3 +0.010, L1/L2 0).

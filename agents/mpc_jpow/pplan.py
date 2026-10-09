@@ -94,7 +94,7 @@ def queue_release(obs, lot_keys, chk_pos, tb_k, H, edge_cap=False):
 
 class PulsePlanner:
     def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
-                 direct_grids=(), kappa=False, split=False, qedge=False):
+                 direct_grids=(), kappa=False, split=False, qedge=False, arrfb=0.0):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -118,6 +118,10 @@ class PulsePlanner:
         self.supply_index = {tuple(row): i for i, row in enumerate(layout["supply_slots"])}
         self.kappa = bool(kappa)
         self.qedge = bool(qedge)
+        # task 30 ``arrfb``: per destination, a running ratio of what arrived vs what was forecast a week earlier;
+        # future arrivals (week + 1 on) are scaled by it (shrunk to 1 early). 0 = off, else the EMA weight
+        self.arrfb = float(arrfb)
+        self.fb_prev, self.fb_num, self.fb_den = {}, {}, {}
         self.split = int(split)
         pools = static["commodities"].get("pool") or []
         self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
@@ -246,6 +250,19 @@ class PulsePlanner:
             for key, arr in planned.items():
                 for o in range(min(H, len(arr))):
                     add(key[0], key[1], o, float(arr[o]))
+        if self.arrfb > 0:
+            a = self.arrfb
+            for key in set(out) | set(self.fb_prev):
+                now = float(out[key][0]) if key in out else 0.0
+                if key in self.fb_prev:
+                    self.fb_num[key] = (1 - a) * self.fb_num.get(key, 0.0) + a * now
+                    self.fb_den[key] = (1 - a) * self.fb_den.get(key, 0.0) + a * self.fb_prev[key]
+            self.fb_prev = {key: float(v[1]) for key, v in out.items() if H > 1}
+            for key, v in out.items():
+                num, den = self.fb_num.get(key, 0.0), self.fb_den.get(key, 0.0)
+                if den > 1e-6:
+                    ratio = min(1.0, max(0.2, num / den))
+                    v[1:] *= ratio
         return out
 
     # -------------------------------------------------------------- plan

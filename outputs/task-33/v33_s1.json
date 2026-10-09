@@ -1,0 +1,178 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "a_pulse4": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "pulse_grids": [
+    "grid_tw",
+    "grid_kr",
+    "grid_jp",
+    "grid_sea"
+   ]
+  }
+ },
+ "b_kct": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true
+  }
+ },
+ "c_target": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "target"
+  }
+ },
+ "d_ppv10": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "pp_value": 10.0
+  }
+ },
+ "d_ppv40": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "pp_value": 40.0
+  }
+ },
+ "d_pw1.0": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "pulse_weeks": 1.0
+  }
+ },
+ "d_pw2.0": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "pulse_weeks": 2.0
+  }
+ },
+ "d_wb2": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "wafer_buffer": 2.0
+  }
+ },
+ "d_wb4": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "wafer_buffer": 4.0
+  }
+ },
+ "d_bc500": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "buffer_cost": 500.0
+  }
+ },
+ "d_bc2000": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "buffer_cost": 2000.0
+  }
+ },
+ "d_ppd_all": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu",
+    "grid_jp",
+    "grid_sea"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room"
+  }
+ }
+}

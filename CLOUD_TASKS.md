@@ -428,3 +428,67 @@ imit_target 0.8212** (intervals not recorded). Do, in order, pushing after each:
 ### 28 (rerun). Rule lawyer — finish it
 The first task-28 session hit the usage limit right after starting. Continue on `task-28-rulelawyer` if it has useful
 work (`git fetch origin task-28-rulelawyer`), otherwise start it from `cloud`. Same instructions as task 28 above.
+
+## Round 9: mentor follow-up — evaluation, calibration, and learned forecasts
+
+These tasks turn the mentor's notes into experiments. They improve the score only if they find a policy that generalizes;
+better test hygiene by itself does not raise RSS. Start from the strongest **verified Full** candidate available on the
+branch, and compare on identical episodes with the agent's `params.json` loaded. Do not treat the Small public score as
+the final objective.
+
+### 29. EVALUATE: make the experiment gate reproducible
+1. Add a short run manifest to every result: agent commit/hash, params, environment/package version, episode root,
+   episode IDs, harm-level counts, fallback count, and paired RSS interval. Verify the runner actually loads the
+   candidate's own `params.json` before starting a long run.
+2. Use one episode only as a crash/action/CPU smoke check. A low one-episode score is a diagnostic, not a reason to
+   discard or rerun the same experiment until it looks good. Never select a variant from a single episode.
+3. For score decisions, use paired episodes: cheap filter on `small random 20`, then `full 0 devpick:2,2,1,1`, then
+   `full 0 dev` and a fresh Full seed of at least 12 episodes for survivors. Include all four harm levels in Full
+   confirmation and report both aggregate RSS and per-level RSS.
+4. Keep the fresh seed untouched until the variant and parameters are fixed. If a result is inconclusive, collect a
+   predeclared larger paired sample; do not change the seed or hypothesis after seeing the result.
+Deliverable: a reusable manifest/checklist or runner update and one example result. No policy change is required.
+
+### 30. BUILD: measure and improve `imit_room`'s fuel-room estimate
+`agents/mpc_imit_room` improves Full RSS by +0.0128 on dev 20 and +0.0056 on a fresh Full seed. Its post-planner
+`_imit_clip` uses a fixed `imit_burn = 0.9` estimate. Find whether its remaining overflows and under-deliveries are
+caused by that estimate or by another part of the plan.
+1. Replay paired Full dev and fresh-seed episodes. Per grid/fuel/week, log predicted versus actual burn, current stock,
+   arrivals, end stock, disposal, clipped shipment, and whether the grid shed or fabs lacked power.
+2. Compare the fixed 0.9 estimate with a one-week estimate derived from the observable current grid state and the
+   simulator's rationing/energy-allocation rules. First validate the predicted end stock against simulator records;
+   do not rely on aggregate RSS alone.
+3. If the model is accurate and the ceiling is material, implement it as an optional parameter or option in a new
+   agent folder. Prefer adding the capacity constraint inside the energy LP so the later pulse plan and shipment plan
+   agree; preserve the existing post-plan clamp as a safety bound.
+4. Run the paired funnel from task 29. Keep the change only if Full dev and fresh Full both support it, it does not
+   harm a harm level materially, and `sbf check` passes Small and Full with CPU margin.
+
+### 31. TUNE: calibrate high-impact MPC parameters without fitting the dev set
+Use a fixed training root generated from the public simulator, then validate once on Full dev and once on an untouched
+fresh Full seed. Start from `mpc_fab3sell` and `mpc_imit_room`; ensure each variant inherits the same baseline options.
+Search a small, predeclared set of parameters that change meaningful decisions (for example `pp_value`, pulse timing,
+`safety_weeks`, and `imit_burn`), first one parameter family at a time, then test only the best supported combination.
+Use paired episode-level RSS and per-harm results; record every attempted variant, including failures. Avoid a large
+black-box search over many knobs: it will overfit the training episodes and obscure which behavior helped.
+Promote only a setting with a plausible path to +0.05 RSS on Full or a clearly useful combination with another proven
+change. Finalists must pass task 29's fresh-seed gate and both `sbf check` tasks.
+
+### 32. MEASURE FIRST: can a small time-series model add useful information to MPC?
+Treat “time-series MPC/model” as an offline-trained predictor that supplies a forecast or value correction to the
+existing planner, not as a replacement for the entire agent.
+1. Generate episodes from independent roots and save only information available to an acting agent: observations,
+   recent history, actions, realized next-week grid/fuel/chip outcomes, and—on a separate training pipeline—oracle
+   values/actions where available. Split by episode root, never by individual weeks from the same episode.
+2. Establish simple baselines first: current MPC forecast, persistence, and a small linear/MLP model. Measure held-out
+   prediction error in decision-relevant quantities (fuel burn, fab energy/utilization, shortages), then estimate with
+   counterfactual replay whether better predictions could change RSS enough to matter.
+3. Only if the held-out ceiling is promising, train a compact model and integrate it as a correction to MPC. Train
+   offline; bundle fixed weights. The submitted agent must run without network access, use only allowed runtime
+   dependencies, stay within CPU and package limits, and pass `sbf check` Small and Full.
+4. Compare against the same MPC with the model disabled, using task 29's paired Full gates. Do not spend time on a
+   large Hugging Face/zero-shot model or paid GPU until this small-model test shows useful held-out signal; GPU can
+   speed training, but the scorer runs CPU-only.
+
+**Priority:** tasks 29 and 30 first; task 31 only after the baseline and runner are verified; task 32 is exploratory and
+must stop at the held-out ceiling check if it cannot plausibly reach the Full improvement bar.

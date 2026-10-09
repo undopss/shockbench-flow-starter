@@ -160,3 +160,6 @@ Why it fails (from the tables):
 
 Code: `agents/mpc_pval` (from `agents/mpc_imit_room`, same params.json). Options are off by default, and with the defaults it plays
 exactly like mpc_imit_room (`pv_dual` false: the duals are computed but not used). The dual extraction is inside try/except.
+
+`sbf check` (defaults, i.e. as mpc_imit_room): Small passed (week 1 0.099 s, median act 0.080 s, max 0.119 s);
+Full passed (week 1 0.388 s, median act 0.209 s, max 0.388 s). This machine, check run only (not a full timing study).

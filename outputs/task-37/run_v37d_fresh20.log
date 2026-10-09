@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v37d_full_910653604_1009-2335: task full, entropy 910653604, episodes 20, baseline cq
+references ready in 411 s (20 episodes)
+  played cq in 142 s: RSS 0.8445
+  played open in 141 s: RSS 0.8470
+  played open_sellbuf in 216 s: RSS 0.8449
+
+full, entropy 910653604, 20 episodes; diff = variant - cq, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+cq                        0.8445  0.814  0.891  0.840  0.780  +0.0000  [+0.0000, +0.0000]     nan%      0
+open                      0.8470  0.815  0.893  0.844  0.787  +0.0025  [+0.0005, +0.0047]    98.2%      0  <-- better
+open_sellbuf              0.8449  0.816  0.892  0.839  0.771  +0.0005  [-0.0019, +0.0030]    61.7%      0
+
+results: outputs/variants/v37d_full_910653604_1009-2335/results.json

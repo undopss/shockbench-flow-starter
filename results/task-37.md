@@ -1,4 +1,4 @@
-Status: running fresh Full seed 20 (building references, ~25 min). Dev 20: nd_open +0.0057 [+0.0023, +0.0094]
+Status: running Small dev 20 (no-harm). Fresh Full root 910653604 x20: nd_open +0.0025 [+0.0005, +0.0047]; dev 20 +0.0057 [+0.0023, +0.0094]
 
 Found so far: ~85% of chip disposal on mpc_cq is transport-bound (every route out of the slot full); the chip LP itself
 plans almost all of it. One real LP-vs-simulator mismatch: the LP scales every lane's capacity by the chokepoint's open

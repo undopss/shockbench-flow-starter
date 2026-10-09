@@ -1,0 +1,2 @@
+{"imit_room": {"agent": "agents/mpc_imit_room"},
+ "pval_measure": {"agent": "agents/mpc_pval", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pv_dual": "measure"}}}

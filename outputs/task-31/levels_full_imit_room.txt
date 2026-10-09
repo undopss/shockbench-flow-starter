@@ -1,0 +1,57 @@
+outputs/task-31/gap17v2_full_0_dev_mpc_imit_room.json: 20 episodes, levels [1, 2, 3, 4]
+
+=== level 1: n=5  RSS 0.8214  gap 0.581 T/ep  naive gap 3.255
+  components (agent - oracle, T/ep): freight +0.0073  tariff +0.0161  holding +0.0196  queue_holding +0.0016  shortage +0.4245  disposal +0.0171  shed +0.1021  salvage_credit -0.0069
+  shortage by product: chip_le +0.3145  chip_mat +0.1100
+  shed by grid: grid_tw -0.0144  grid_kr +0.0732  grid_jp +0.0210  grid_cn +0.0069  grid_us -0.0008  grid_eu +0.0192  grid_sea -0.0021  grid_in -0.0009
+  pulse shed price (with - without pulses): grid_tw +0.0471  grid_kr +0.0709  grid_jp +0.0294  grid_cn +0.0402  grid_eu +0.0082  grid_sea -0.0008  grid_in -0.0651  total +0.1298
+  pulses-off chip shortage gap: +1.3456  RSS-off 0.5815
+  by quarter: Q1 shed +0.033 lost +0.015 | Q2 shed +0.023 lost +0.150 | Q3 shed +0.011 lost +0.131 | Q4 shed +0.035 lost +0.128
+  episodes: ep  gap  shed  short  | naive gap | events
+      7  0.794 -0.091  0.864 |  3.774 | energy_shock:12 material_outage:4 militarised_closure:1 port_strike:2 regional_conflict:1 sanction:22 tariff:13
+     10  0.593  0.150  0.403 |  2.528 | energy_shock:10 material_outage:3 militarised_closure:4 regional_conflict:2 sanction:35 tariff:20 weather_closure:3
+      5  0.577 -0.038  0.571 |  3.174 | energy_shock:7 material_outage:2 militarised_closure:1 piracy:1 port_strike:2 sanction:22 tariff:10 weather_closure:3
+     14  0.524  0.172  0.266 |  3.550 | energy_shock:4 material_outage:2 militarised_closure:2 port_strike:4 sanction:29 tariff:10 weather_closure:3
+      2  0.419  0.318  0.018 |  3.250 | energy_shock:10 material_outage:1 piracy:1 port_strike:3 regional_conflict:2 sanction:35 tariff:21 weather_closure:3
+
+=== level 2: n=5  RSS 0.8576  gap 0.437 T/ep  naive gap 3.068
+  components (agent - oracle, T/ep): freight +0.0054  tariff +0.0081  holding +0.0147  queue_holding +0.0017  shortage +0.2909  disposal +0.0091  shed +0.1121  salvage_credit -0.0052
+  shortage by product: chip_le +0.1781  chip_mat +0.1128
+  shed by grid: grid_tw +0.0118  grid_kr +0.0025  grid_jp +0.0450  grid_cn +0.0331  grid_us +0.0105  grid_eu +0.0200  grid_sea -0.0111
+  pulse shed price (with - without pulses): grid_tw +0.0109  grid_kr +0.0203  grid_jp +0.0061  grid_cn +0.0584  grid_eu +0.0183  grid_sea -0.0048  grid_in -0.0012  total +0.1080
+  pulses-off chip shortage gap: +0.5997  RSS-off 0.7942
+  by quarter: Q1 shed +0.021 lost +0.001 | Q2 shed +0.035 lost +0.043 | Q3 shed +0.017 lost +0.117 | Q4 shed +0.039 lost +0.130
+  episodes: ep  gap  shed  short  | naive gap | events
+      6  0.647  0.041  0.580 |  2.333 | energy_shock:1 material_outage:5 militarised_closure:1 piracy:1 port_strike:2 regional_conflict:1 sanction:25 tariff:12 weather_closure:1
+      0  0.598  0.178  0.375 |  2.895 | energy_shock:9 material_outage:3 militarised_closure:2 piracy:3 sanction:32 tariff:13 weather_closure:2
+      4  0.338  0.107  0.193 |  3.646 | energy_shock:4 material_outage:11 militarised_closure:1 piracy:1 port_strike:5 sanction:38 tariff:23 weather_closure:3
+      3  0.311  0.139  0.138 |  2.243 | energy_shock:5 material_outage:9 militarised_closure:4 port_strike:2 sanction:24 tariff:6 weather_closure:2
+      1  0.290  0.096  0.169 |  4.222 | energy_shock:3 material_outage:1 port_strike:3 regional_conflict:3 sanction:30 tariff:8 weather_closure:5
+
+=== level 3: n=5  RSS 0.7911  gap 0.773 T/ep  naive gap 3.701
+  components (agent - oracle, T/ep): freight +0.0053  tariff +0.0058  holding +0.0144  shortage +0.5275  disposal +0.0119  shed +0.2132  salvage_credit -0.0052
+  shortage by product: chip_le +0.4286  chip_mat +0.0989
+  shed by grid: grid_tw +0.0986  grid_kr +0.0287  grid_jp +0.0099  grid_cn +0.0530  grid_us -0.0007  grid_eu +0.0159  grid_sea +0.0077
+  pulse shed price (with - without pulses): grid_tw +0.1021  grid_kr +0.0575  grid_jp +0.0069  grid_cn +0.0734  grid_eu +0.0135  grid_sea +0.0005  grid_in -0.0015  total +0.2525
+  pulses-off chip shortage gap: +1.5641  RSS-off 0.5809
+  by quarter: Q1 shed +0.076 lost +0.013 | Q2 shed +0.002 lost +0.139 | Q3 shed +0.071 lost +0.162 | Q4 shed +0.065 lost +0.213
+  episodes: ep  gap  shed  short  | naive gap | events
+     57  0.855  0.216  0.603 |  3.153 | energy_shock:2 material_outage:6 militarised_closure:1 port_strike:2 sanction:34 tariff:9 weather_closure:2
+     76  0.834  0.088  0.714 |  4.327 | energy_shock:7 material_outage:5 militarised_closure:6 port_strike:2 sanction:42 tariff:13 weather_closure:2
+     61  0.752  0.283  0.431 |  3.145 | energy_shock:4 militarised_closure:3 sanction:44 tariff:17 weather_closure:2
+     53  0.727  0.228  0.466 |  4.588 | energy_shock:1 material_outage:5 port_strike:5 regional_conflict:2 sanction:38 tariff:19 weather_closure:4
+     69  0.699  0.250  0.425 |  3.290 | energy_shock:1 material_outage:3 militarised_closure:2 piracy:1 port_strike:1 regional_conflict:1 sanction:30 tariff:19 weather_closure:4
+
+=== level 4: n=5  RSS 0.7554  gap 0.892 T/ep  naive gap 3.649
+  components (agent - oracle, T/ep): freight +0.0048  tariff +0.0113  holding +0.0130  shortage +0.6382  disposal +0.0097  shed +0.2203  salvage_credit -0.0048
+  shortage by product: chip_le +0.5143  chip_mat +0.1239
+  shed by grid: grid_tw +0.1167  grid_jp +0.0319  grid_cn +0.0268  grid_us +0.0100  grid_eu +0.0312  grid_sea -0.0092  grid_in +0.0125
+  pulse shed price (with - without pulses): grid_tw +0.0789  grid_kr +0.0595  grid_jp +0.0072  grid_cn +0.0338  grid_eu +0.0170  grid_sea -0.0055  grid_in -0.0504  total +0.1406
+  pulses-off chip shortage gap: +1.5847  RSS-off 0.5374
+  by quarter: Q1 shed +0.038 lost +0.018 | Q2 shed +0.048 lost +0.142 | Q3 shed +0.057 lost +0.249 | Q4 shed +0.077 lost +0.229
+  episodes: ep  gap  shed  short  | naive gap | events
+     41  1.443  0.513  0.901 |  3.163 | energy_shock:16 material_outage:1 militarised_closure:6 piracy:2 port_strike:2 regional_conflict:1 sanction:61 tariff:18 weather_closure:1
+     80  1.114  0.042  1.053 |  4.364 | energy_shock:5 material_outage:4 militarised_closure:3 piracy:5 port_strike:1 sanction:61 tariff:16 weather_closure:3
+    102  0.883  0.339  0.473 |  3.305 | energy_shock:4 material_outage:4 militarised_closure:5 piracy:3 port_strike:6 sanction:72 tariff:43 weather_closure:3
+     26  0.531  0.121  0.393 |  3.453 | energy_shock:4 material_outage:3 militarised_closure:4 port_strike:1 regional_conflict:2 sanction:55 tariff:29 weather_closure:2
+     44  0.492  0.087  0.371 |  3.957 | energy_shock:9 material_outage:5 militarised_closure:2 port_strike:3 sanction:35 tariff:19 weather_closure:3

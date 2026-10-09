@@ -1,0 +1,7 @@
+{"imit_room": {"agent": "agents/mpc_imit_room"},
+ "wb2": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "wafer_buffer": 2.0}},
+ "wb4": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "wafer_buffer": 4.0}},
+ "sw1.5": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "safety_weeks": 1.5}},
+ "sw4.5": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "safety_weeks": 4.5}},
+ "ppv10": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pp_value": 10.0}},
+ "ppv40": {"agent": "agents/mpc_imit_room", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "pp_value": 40.0}}}

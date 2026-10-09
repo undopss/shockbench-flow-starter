@@ -1,0 +1,171 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "kct": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true
+  }
+ },
+ "k_ppend0.5": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "pp_end": 0.5
+  }
+ },
+ "k_warn1.0": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "warn_gain": 1.0
+  }
+ },
+ "k_sw5": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 5.0
+  }
+ },
+ "stack3": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5
+  }
+ },
+ "stack3_wb2.5": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "wafer_buffer": 2.5
+  }
+ },
+ "stack3_cf0.6": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cover_frac": 0.6
+  }
+ },
+ "stack3_ib1.0": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "imit_burn": 1.0
+  }
+ },
+ "stack_all": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "wafer_buffer": 2.5,
+   "cover_frac": 0.6,
+   "imit_burn": 1.0
+  }
+ },
+ "s2_pe_wg": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "pp_end": 0.7,
+   "warn_gain": 0.5
+  }
+ }
+}

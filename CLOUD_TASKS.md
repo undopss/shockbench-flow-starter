@@ -477,3 +477,27 @@ existing params on Full devpick (pp_value, pulse_weeks, wafer_buffer weeks/cost,
 written down. Keep only what is positive on Full dev 20 **and** the fresh Full seed 12. Then the guard: the agent must
 not crash or fall back if a grid name in params (pulse_grids, pp_direct) is missing from the map (skip it silently;
 test with a renamed grid). Deliver `agents/mpc_final` with its params.json, the tables, `sbf check` Small + Full.
+
+## Round 10 (2026-10-09 evening): team goal Full ≥ 0.85
+Round 9 results (all merged into `cloud`): 29, 31, 32 dead; **30 `agents/mpc_jpow`** (jp_qedge + jp_arrfb 0.2, a
+forecast bug fix: Full dev 20 +0.0091, fresh Full 12 +0.0061, all intervals > 0) and **33 `agents/mpc_final`**
+(fb_kappa_ct + safety_weeks 4 + pp_end 0.7 + warn_gain 0.5: Full dev 20 +0.0043, fresh +0.0029; the grid-name guard
+test passed). Both are copies of `agents/mpc_imit_room` with different code changes, never tested together.
+
+### 34. BUILD + MEASURE: the combined agent and a fresh gap map (`agents/mpc_combo`)
+1. Build `agents/mpc_combo` = `agents/mpc_imit_room` + the code changes of **both** `agents/mpc_jpow` and
+   `agents/mpc_final` (diff each against mpc_imit_room, merge by hand, new options off by default in PARAMS).
+   params.json = the union of both params.json files. Check: with only jpow's params it must reproduce mpc_jpow's play
+   exactly on one Full dev episode (same J), and the same for mpc_final; write the J values down.
+2. Variants vs baseline `{"agent": "agents/mpc_imit_room"}`: `combo` (full union), `combo_safe` (jpow params +
+   `fb_kappa_ct` only), `jpow` (agents/mpc_jpow), `final` (agents/mpc_final). Run `full 0 dev` (20) and a **fresh Full
+   seed, 20 episodes** (pick a new random root, write it down). Push after each run.
+3. `sbf check` Small + Full on the best variant (CPU max / median), and `outputs/task-33/guard_test.py` on it.
+4. **New gap map** of the best variant on Full dev 20 (the task-20 scripts: `outputs/task-17/gap17.py`,
+   `outputs/task-20/map20.py`, `disp20.py`, `flow20.py`). The cost to the clairvoyant split into: shed by grid; chip
+   lost sales split into **(a) not made** (fab had no power / no wafers / at capacity), **(b) made but disposed** (where,
+   why), **(c) made but late or at a cheaper sink**; holding / disposal / tariff / freight. Compare with task 20's
+   map (mpc_fab3sell) line by line: what did jpow change? Then the per-episode RSS list sorted, with the **5 worst
+   episodes** and for each one line on what dominates its gap.
+5. `results/task-34.md`: the tables exactly as printed, the recommended final candidate (with its params.json), the
+   new map, and the 3 biggest remaining leaks with a rough T/ep each. Full is what counts.

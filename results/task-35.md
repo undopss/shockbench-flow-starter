@@ -1,4 +1,4 @@
-Status: running fresh Full seed 20 (jpow, cq_a, cq_ab, cq_abk)
+Status: running Small dev 20 (no-harm check)
 
 Plan: agents/mpc_cq = mpc_jpow + three chip-LP options in chips.py (off by default): cq_edges (shared capacity rows on every later edge of chip routes, net of cargo already bound for it), cq_drain (queued chip cargo drains FIFO at min(next-edge, kappa_ct) shares, like jp_qedge), cq_kappa (routes share kappa_ct at each chokepoint). Static count: 29 (commodity, later edge) groups shared by chip routes with different first edges (matches Andrii). Smoke test on Full dev ep 3: options on solve every week, chip LP CPU 0.15 s mean / 0.23 max (same as off).
 
@@ -39,4 +39,13 @@ jpow                      0.8319  0.840  0.853  0.797  0.759  +0.0000  [+0.0000,
 cq_a                      0.8397  0.851  0.859  0.802  0.757  +0.0078  [+0.0033, +0.0125]    99.8%      0  <-- better
 cq_ab                     0.8399  0.850  0.861  0.801  0.759  +0.0081  [+0.0031, +0.0133]    99.8%      0  <-- better
 cq_abk                    0.8398  0.852  0.859  0.799  0.760  +0.0079  [+0.0031, +0.0128]    99.8%      0  <-- better
+```
+
+Fresh Full seed, root **1730880025** (picked by the runner's `random`), episodes 0..19 (`v35b`; no harm level 4 drawn):
+```
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+jpow                      0.8364  0.829  0.844  0.845      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+cq_a                      0.8516  0.848  0.857  0.855      -  +0.0152  [+0.0081, +0.0248]   100.0%      0  <-- better
+cq_ab                     0.8524  0.847  0.860  0.855      -  +0.0161  [+0.0083, +0.0261]   100.0%      0  <-- better
+cq_abk                    0.8540  0.848  0.865  0.854      -  +0.0176  [+0.0094, +0.0279]   100.0%      0  <-- better
 ```

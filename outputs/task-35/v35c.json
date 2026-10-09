@@ -1,0 +1,39 @@
+{
+ "jpow": {
+  "agent": "agents/mpc_jpow"
+ },
+ "cq_a": {
+  "agent": "agents/mpc_cq",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "cq_edges": true
+  }
+ },
+ "cq_abk": {
+  "agent": "agents/mpc_cq",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true
+  }
+ }
+}

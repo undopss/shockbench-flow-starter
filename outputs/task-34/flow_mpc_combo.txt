@@ -1,0 +1,42 @@
+## chip balance per episode (mean, million units)
+chip_le   agent   lots   30.18  of which in the last 10 weeks  0.13  served   34.14  lost   33.37
+chip_le   oracle  lots   31.58  of which in the last 10 weeks  0.00  served   40.91  lost   26.60
+   agent disposal of chip_le* (units/episode): osat_kr/chip_le 0.94M, fab_us_leading_3/chip_le_raw 0.61M, osat_tw/chip_le 0.56M, osat_my/chip_le 0.49M, fab_us_leading_1/chip_le_raw 0.28M, fab_us_leading_2/chip_le_raw 0.25M
+chip_mat  agent   lots   51.61  of which in the last 10 weeks  0.79  served   52.57  lost   57.49
+chip_mat  oracle  lots   48.15  of which in the last 10 weeks  0.01  served   62.64  lost   47.42
+   agent disposal of chip_mat* (units/episode): fab_us_mature_1/chip_mat_raw 3.43M, fab_eu_mature_1/chip_mat_raw 1.63M, osat_tw/chip_mat 1.38M, osat_cn/chip_mat 0.99M, fab_us_mature_2/chip_mat_raw 0.81M, osat_my/chip_mat 0.35M
+
+## lost-sales gap (agent - oracle, T USD/episode) by quarter of the episode
+chip_le   wk 1-26: 0.005 (agent 0.314, oracle 0.310) | wk 27-52: 0.088 (agent 0.440, oracle 0.352) | wk 53-78: 0.120 (agent 0.463, oracle 0.344) | wk 79-104: 0.129 (agent 0.467, oracle 0.337)
+chip_mat  wk 1-26: 0.009 (agent 0.120, oracle 0.111) | wk 27-52: 0.026 (agent 0.154, oracle 0.128) | wk 53-78: 0.034 (agent 0.158, oracle 0.124) | wk 79-104: 0.034 (agent 0.161, oracle 0.127)
+
+## fab lots gap (oracle - agent, M lots) per grid by quarter
+grid_cn    -0.20   2.05   1.60  -0.36
+grid_eu    -1.15  -0.33  -0.40  -0.83
+grid_jp     0.51   1.24   0.88   0.26
+grid_kr    -1.02   0.71   0.86  -0.31
+grid_sea   -0.05   1.31   1.18   0.52
+grid_tw    -1.74  -0.37  -0.02  -0.38
+grid_us    -1.95  -1.48  -1.38  -1.17
+
+## per episode: lots deficit (oracle - agent, M) per grid, and chip lost-sales gap T: grid_cn grid_jp grid_sea grid_kr grid_us grid_tw grid_eu
+ep   0 lvl 2  CN -15.19 JP   3.46 SEA   1.36 KR  -2.14 US  -6.76 TW   4.50 EU  -2.84  chip gap 0.390
+ep   1 lvl 2  CN   5.81 JP  -0.01 SEA   3.71 KR   1.44 US  -0.12 TW  -8.65 EU  -8.65  chip gap 0.163
+ep   2 lvl 1  CN  -1.23 JP  -6.36 SEA   3.53 KR  -8.79 US -10.77 TW -10.68 EU  -5.02  chip gap 0.016
+ep   3 lvl 2  CN  -0.52 JP   0.08 SEA   6.40 KR   0.16 US  -6.02 TW  -0.59 EU  -2.94  chip gap 0.137
+ep   4 lvl 2  CN   5.81 JP  -5.02 SEA   9.74 KR  -3.35 US  -3.56 TW  -0.05 EU  -1.41  chip gap 0.195
+ep   5 lvl 1  CN   1.79 JP   6.66 SEA   2.17 KR  -9.31 US  -1.27 TW   6.64 EU  -5.79  chip gap 0.364
+ep   6 lvl 2  CN   0.01 JP   6.29 SEA   1.03 KR   2.56 US  -1.21 TW   0.43 EU   2.33  chip gap 0.537
+ep   7 lvl 1  CN  20.04 JP   6.54 SEA  -0.81 KR   5.16 US  -0.33 TW   5.35 EU  -2.85  chip gap 0.869
+ep  10 lvl 1  CN  -6.12 JP   3.44 SEA   0.63 KR   1.21 US  -6.74 TW  -6.19 EU  -4.04  chip gap 0.359
+ep  14 lvl 1  CN  -5.13 JP   2.59 SEA  -1.13 KR  -0.08 US -15.85 TW  -8.69 EU  -4.44  chip gap 0.240
+ep  26 lvl 4  CN   1.78 JP   2.20 SEA   2.22 KR   1.99 US  -7.78 TW  -3.38 EU  -1.32  chip gap 0.379
+ep  41 lvl 4  CN  19.00 JP   3.96 SEA   5.91 KR   2.25 US  -6.33 TW   2.49 EU   0.05  chip gap 0.910
+ep  44 lvl 4  CN   1.66 JP   3.16 SEA  -0.29 KR  -0.64 US  -3.88 TW  -5.19 EU   0.69  chip gap 0.353
+ep  53 lvl 3  CN   5.79 JP   0.13 SEA   6.45 KR   0.11 US  -6.21 TW  -0.35 EU   0.18  chip gap 0.403
+ep  57 lvl 3  CN   4.42 JP   6.11 SEA   2.93 KR   1.64 US  -7.73 TW  -4.33 EU   0.61  chip gap 0.606
+ep  61 lvl 3  CN  -9.09 JP   3.35 SEA  -0.07 KR   2.39 US -10.71 TW  -9.65 EU  -8.18  chip gap 0.429
+ep  69 lvl 3  CN   3.92 JP   7.14 SEA   2.47 KR  -3.33 US  -7.91 TW   0.06 EU  -2.85  chip gap 0.446
+ep  76 lvl 3  CN   4.69 JP   3.12 SEA   6.75 KR   3.18 US  -2.93 TW  -3.54 EU  -1.38  chip gap 0.669
+ep  80 lvl 4  CN  20.14 JP   5.76 SEA   2.79 KR  10.17 US  -7.44 TW  -3.65 EU  -4.59  chip gap 1.023
+ep 102 lvl 4  CN   4.17 JP   4.87 SEA   3.33 KR   0.24 US  -6.24 TW  -5.01 EU  -1.69  chip gap 0.408

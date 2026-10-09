@@ -1,0 +1,10 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v_base_full_0_1009-0803: task full, entropy 0, episodes devpick:2,2,1,1, baseline base
+references ready in 1677 s (6 episodes)
+  played base in 48 s: RSS 0.8535
+
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+
+results: outputs/variants/v_base_full_0_1009-0803/results.json

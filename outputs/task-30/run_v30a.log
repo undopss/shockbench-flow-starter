@@ -1,0 +1,22 @@
+round v30a_full_0_1009-0837: task full, entropy 0, episodes devpick:2,2,1,1, baseline base
+references ready in 1 s (6 episodes)
+  baseline base: reused full_0_devpick-2-2-1-1_f8d60554249f41c6.json
+  played base in 0 s: RSS 0.8535
+  played jpow_off in 52 s: RSS 0.8535
+  played fill_crude in 48 s: RSS 0.8149
+  played safe6_crude in 46 s: RSS 0.8545
+  played fill_safe6 in 45 s: RSS 0.8221
+  played fill_safe6_lng5 in 45 s: RSS 0.8263
+  played safe_lng5 in 46 s: RSS 0.8534
+
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+jpow_off                  0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     0.0%      0
+fill_crude                0.8149  0.816  0.822  0.811  0.779  -0.0386  [-0.0412, -0.0358]     0.0%      0  <-- worse
+safe6_crude               0.8545  0.840  0.873  0.868  0.826  +0.0010  [-0.0012, +0.0030]    81.8%      0
+fill_safe6                0.8221  0.817  0.829  0.840  0.758  -0.0314  [-0.0394, -0.0226]     0.0%      0  <-- worse
+fill_safe6_lng5           0.8263  0.822  0.827  0.847  0.779  -0.0272  [-0.0355, -0.0179]     0.0%      0  <-- worse
+safe_lng5                 0.8534  0.844  0.877  0.842  0.842  -0.0001  [-0.0016, +0.0015]    23.4%      0
+
+results: outputs/variants/v30a_full_0_1009-0837/results.json

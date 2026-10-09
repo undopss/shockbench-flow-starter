@@ -1,4 +1,4 @@
-Status: running a per-level parameter sensitivity on Full dev 20 (baseline split done)
+Status: building agents/mpc_calm (switch test); sensitivity done: no calm/storm crossover
 
 # Task 31: the calm episodes (harm level 1)
 
@@ -45,3 +45,29 @@ imit_room already removed level 1's grid_in shed (0.064 → −0.001): L1 0.800 
 
 So level 1's deficit vs level 2 is not a calm-specific behaviour: it is the same two levers as everywhere (fab power
 where chips are short; pulses that buy unsellable chips), concentrated in eps 7 and 2.
+
+## Step 2a: is the agent tuned for storms? Per-level sensitivity (Full dev 20, entropy 0, `outputs/task-31/sens31.json`)
+
+`uv run python outputs/variants.py full 0 dev outputs/task-31/sens31.json 4` (round `sens31_full_0_1009-0846`):
+```
+full, entropy 0, 20 episodes; diff = variant - imit_room, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+imit_room                 0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     nan%      0
+wb2                       0.8108  0.813  0.847  0.766  0.746  -0.0120  [-0.0181, -0.0056]     0.1%      0  <-- worse
+wb4                       0.8233  0.824  0.855  0.793  0.752  +0.0005  [-0.0051, +0.0051]    57.1%      0
+sw1.5                     0.8113  0.814  0.840  0.775  0.748  -0.0115  [-0.0201, -0.0026]     2.1%      0  <-- worse
+sw4.5                     0.8204  0.817  0.855  0.795  0.755  -0.0024  [-0.0063, +0.0013]    15.5%      0
+ppv10                     0.8220  0.823  0.853  0.790  0.756  -0.0008  [-0.0029, +0.0009]    28.3%      0
+ppv40                     0.8198  0.820  0.850  0.791  0.756  -0.0029  [-0.0056, -0.0007]     0.3%      0  <-- worse
+```
+(wb = `wafer_buffer` weeks, default 3; sw = `safety_weeks`, default 3; ppv = `pp_value`, default 20.)
+**No knob is "built for storms":** less buffer or less fuel safety is worse at level 1 too (wb2 −0.008, sw1.5 −0.007
+at L1), and nothing moves level 1 by more than +0.003.
+
+Ceiling of a switch among these 7 settings (`outputs/task-31/switch_bound31.py`, my own pooled RSS, 0.8244 for the
+baseline vs the runner's 0.8228): a switch that **knows the harm level** and picks the best setting per level:
+**+0.0017**; one that picks the best setting **per episode in hindsight**: +0.010 (an optimistic bound: it also
+selects on noise). Both far below +0.05.
+
+Observable "calm weeks" (no closure, energy shock or piracy active in the last 4 weeks, from the episode's events)
+don't follow the harm level either: L1 148 of 520 weeks, L2 78, L3 126, L4 17; two of five L1 episodes have none.

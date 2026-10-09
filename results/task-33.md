@@ -1,4 +1,4 @@
-Status: Full dev 20 done; running fresh Full seed 12 (kct, stack3, sw8)
+Status: Full dev 20 done; running fresh Full seed 12 (entropy 1255168353; kct, stack3, sw8)
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,

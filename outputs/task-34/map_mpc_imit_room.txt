@@ -1,0 +1,49 @@
+20 episodes, T=104: gap agent-oracle 0.671 T/ep, naive-oracle 3.418 T/ep -> 0.01 RSS ~ 0.0342 T/ep
+pi per product: {'chip_mat': 10335, 'chip_le': 50460}
+
+## Oracle's extra lots per fab (M lots/episode) by the agent's state in that week; agent's surplus lots
+fab                    grid        agent  oracle       cap     wafer  homes<1% homes>=1%     power     other  surplus deficit $T
+fab_tw_leading_1       tw           6.86    6.40      0.01      0.20      0.01      1.55      0.12      0.00     2.35      0.095
+fab_tw_mature_1        tw           5.24    4.27      0.00      0.13      0.00      1.14      0.08      0.00     2.32      0.014
+fab_us_leading_1       us           1.22    0.93      0.00      0.11      0.00      0.02      0.00      0.00     0.42      0.006
+fab_kr_leading_1       kr           1.72    0.74      0.00      0.03      0.00      0.14      0.01      0.00     1.17      0.010
+fab_kr_memory_1        kr          12.97   14.11      0.05      0.35      0.06      4.93      0.24      0.00     4.48      0.284
+fab_us_leading_2       us           0.96    0.72      0.00      0.12      0.00      0.01      0.00      0.00     0.36      0.006
+fab_jp_memory_1        jp           3.28    6.77      0.00      0.02      0.05      4.69      0.04      0.00     1.32      0.242
+fab_us_leading_3       us           1.15    0.54      0.00      0.04      0.00      0.01      0.00      0.00     0.65      0.002
+fab_eu_leading_1       eu           0.95    0.76      0.00      0.06      0.00      0.18      0.00      0.00     0.44      0.013
+fab_row_leading_1      eu           0.54    0.61      0.00      0.12      0.00      0.15      0.00      0.00     0.20      0.014
+fab_cn_mature_1        cn          19.29   22.75      0.00      0.05      6.60      4.49      0.18      0.00     7.87      0.117
+fab_us_mature_1        us           6.19    2.62      0.00      0.10      0.00      0.06      0.00      0.00     3.72      0.002
+fab_eu_mature_1        eu           7.35    4.79      0.00      0.10      0.01      1.07      0.00      0.00     3.75      0.012
+fab_sea_mature_1       sea          1.69    4.58      0.00      0.25      0.00      3.76      0.01      0.00     1.13      0.042
+fab_tw_mature_2        tw           5.12    4.12      0.00      0.30      0.00      1.06      0.05      0.00     2.42      0.015
+fab_us_mature_2        us           6.32    5.03      0.00      0.15      0.00      0.04      0.00      0.00     1.47      0.002
+TOTAL M lots                                  0.07      2.11      6.75     23.30      0.74      0.00    34.10
+TOTAL T USD (lots x pi)                      0.003     0.064     0.075     0.709     0.024     0.000    0.810
+
+## Gap by time (agent - oracle, T USD/episode): chip lost sales and shed, quarters and the last 8 weeks
+                wk 1-26     wk 27-52     wk 53-78    wk 79-104    wk 97-104
+chip_le           0.003        0.090        0.126        0.139        0.043
+chip_mat          0.009        0.029        0.038        0.036        0.010
+shed              0.042        0.027        0.039        0.054        0.014
+
+## Shed gap by grid and quarter (agent - oracle, T USD/episode)
+grid_tw       0.016    0.014    0.014    0.010
+grid_kr       0.015    0.005   -0.001    0.007
+grid_jp       0.007    0.006    0.005    0.009
+grid_cn       0.011    0.004    0.004    0.010
+grid_us      -0.000   -0.000    0.005   -0.000
+grid_eu      -0.009    0.002    0.010    0.019
+grid_sea      0.002   -0.005    0.000   -0.002
+grid_in       0.000    0.000    0.002    0.001
+
+## Late lots (started in the last 8 weeks; tau 6-8 weeks, so they rarely reach a sink): agent vs oracle, M
+  chip_le_raw    agent   0.13  oracle   0.00
+  chip_mat_raw   agent   0.39  oracle   0.01
+
+## Chips: end stock and disposal (M units/episode), agent vs oracle
+  chip_le        end stock   0.63  disposed agent   2.13  oracle   0.00
+  chip_le_raw    end stock   0.14  disposed agent   1.37  oracle   0.12
+  chip_mat       end stock   3.20  disposed agent   2.63  oracle   0.00
+  chip_mat_raw   end stock   0.66  disposed agent   5.65  oracle   0.17

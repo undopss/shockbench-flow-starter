@@ -1,0 +1,53 @@
+episodes: 20 (root 0 dev); agents: fab3sell, imit_room, combo
+
+## 1. Gap to the clairvoyant plan, T USD/episode (agent - oracle)
+component               fab3sell     imit_room         combo     d imit_room         d combo
+freight                   0.0058        0.0057        0.0059         -0.0001          0.0001
+war_risk                  0.0000        0.0000        0.0000         -0.0000         -0.0000
+tariff                    0.0103        0.0103        0.0103         -0.0000         -0.0000
+holding                   0.0153        0.0154        0.0156          0.0001          0.0003
+queue_holding             0.0009        0.0009        0.0008         -0.0000         -0.0001
+shortage                  0.4714        0.4703        0.4449         -0.0011         -0.0265
+disposal                  0.0125        0.0119        0.0139         -0.0005          0.0015
+shed                      0.1971        0.1619        0.1596         -0.0352         -0.0376
+salvage_credit           -0.0055       -0.0055       -0.0055         -0.0000         -0.0000
+TOTAL                     0.7078        0.6710        0.6454         -0.0368         -0.0624
+
+shed by grid:
+  grid_tw                 0.0543        0.0532        0.0495         -0.0011         -0.0048
+  grid_kr                 0.0299        0.0262        0.0271         -0.0037         -0.0028
+  grid_jp                 0.0271        0.0270        0.0216         -0.0002         -0.0055
+  grid_cn                 0.0304        0.0300        0.0360         -0.0005          0.0056
+  grid_us                 0.0048        0.0048        0.0048          0.0000          0.0000
+  grid_eu                 0.0219        0.0216        0.0221         -0.0003          0.0002
+  grid_sea               -0.0037       -0.0037       -0.0051          0.0000         -0.0014
+  grid_in                 0.0325        0.0030        0.0036         -0.0295         -0.0289
+
+## 2. Chip lost sales split (T USD/episode; units M)
+fab3sell:
+  chip_le   gap  0.3610 = (a) not made  0.0993 [ +1.97 M lots] + (b) disposed  0.1710 [ +3.39 M] + (c) rest  0.0908   | end stock 0.0379, sink-mix part -0.0001
+  chip_mat  gap  0.1104 = (a) not made -0.0323 [ -3.13 M lots] + (b) disposed  0.0834 [ +8.07 M] + (c) rest  0.0593   | end stock 0.0391, sink-mix part -0.0006
+  by sink (lost-sales gap T): sea/le 0.147, cn/mat 0.070, us/le 0.069, eu/le 0.039, in/le 0.033, jp/le 0.033, sea/mat 0.031, row/le 0.020
+imit_room:
+  chip_le   gap  0.3589 = (a) not made  0.0971 [ +1.92 M lots] + (b) disposed  0.1704 [ +3.38 M] + (c) rest  0.0914   | end stock 0.0393, sink-mix part -0.0001
+  chip_mat  gap  0.1114 = (a) not made -0.0315 [ -3.05 M lots] + (b) disposed  0.0838 [ +8.11 M] + (c) rest  0.0591   | end stock 0.0399, sink-mix part -0.0006
+  by sink (lost-sales gap T): sea/le 0.146, cn/mat 0.070, us/le 0.069, eu/le 0.040, jp/le 0.033, in/le 0.033, sea/mat 0.031, kr/le 0.020
+combo:
+  chip_le   gap  0.3414 = (a) not made  0.0708 [ +1.40 M lots] + (b) disposed  0.1765 [ +3.50 M] + (c) rest  0.0942   | end stock 0.0415, sink-mix part -0.0001
+  chip_mat  gap  0.1034 = (a) not made -0.0358 [ -3.46 M lots] + (b) disposed  0.0891 [ +8.62 M] + (c) rest  0.0501   | end stock 0.0309, sink-mix part -0.0006
+  by sink (lost-sales gap T): sea/le 0.140, us/le 0.065, cn/mat 0.063, eu/le 0.036, in/le 0.031, jp/le 0.031, sea/mat 0.029, row/le 0.020
+
+## 3. Per-episode RSS of combo, sorted (RSS_e = (J_naive - J_agent) / (J_naive - J_oracle))
+  ep41(L4) 0.544  ep57(L3) 0.721  ep6(L2) 0.724  ep80(L4) 0.753  ep102(L4) 0.753  ep61(L3) 0.764  ep69(L3) 0.785  ep7(L1) 0.788  ep0(L2) 0.790  ep10(L1) 0.797  ep76(L3) 0.814  ep26(L4) 0.845  ep14(L1) 0.857  ep3(L2) 0.865  ep5(L1) 0.866  ep53(L3) 0.874  ep2(L1) 0.877  ep44(L4) 0.879  ep4(L2) 0.906  ep1(L2) 0.929
+
+5 worst:
+  ep  41 L4 RSS 0.544: gap 1.442 T = chip_le 0.636 (a 0.257 b 0.268 c 0.111) + chip_mat 0.275 + shed 0.502 (grid_tw 0.233, grid_cn 0.165) + other 0.030
+      fab lot deficits (M): fab_cn_mature_1 +19.00, fab_sea_mature_1 +5.91, fab_jp_memory_1 +3.96; 53 shocks start in the episode, biggest: sanction@air.ct.osat_my.sink_kr wk8+306 sev1.00, tariff@SEA wk10+102 sev1.00, sanction@sea.ct.mat_cn_gage.fab_us_mature_2 wk11+146 sev1.00, sanction@sea.tb.src_ru_gas.term_jp wk12+171 sev1.00
+  ep  57 L3 RSS 0.721: gap 0.881 T = chip_le 0.504 (a 0.292 b 0.134 c 0.078) + chip_mat 0.102 + shed 0.237 (grid_tw 0.085, grid_kr 0.056) + other 0.038
+      fab lot deficits (M): fab_jp_memory_1 +6.11, fab_cn_mature_1 +4.42, fab_sea_mature_1 +2.93; 13 shocks start in the episode, biggest: sanction@sea.ct.osat_tw.sink_cn wk23+169 sev1.00, material_outage@mat_kr_wafer wk32+961 sev1.00, tariff@ROW wk24+64 sev1.00, tariff@TW wk33+53 sev1.00
+  ep   6 L2 RSS 0.724: gap 0.644 T = chip_le 0.458 (a 0.404 b 0.001 c 0.052) + chip_mat 0.080 + shed 0.078 (grid_cn 0.044, grid_eu 0.035) + other 0.028
+      fab lot deficits (M): fab_jp_memory_1 +6.29, fab_eu_mature_1 +3.41, fab_kr_memory_1 +2.34; 16 shocks start in the episode, biggest: sanction@sea.ct.osat_tw.sink_jp wk14+180 sev1.00, material_outage@mat_ua_neon wk17+392 sev1.00, tariff@US wk20+105 sev1.00, material_outage@mat_kr_wafer wk39+62 sev1.00
+  ep  80 L4 RSS 0.753: gap 1.079 T = chip_le 0.846 (a 0.744 b 0.082 c 0.020) + chip_mat 0.177 + shed 0.036 (grid_tw 0.072, grid_eu 0.043) + other 0.020
+      fab lot deficits (M): fab_cn_mature_1 +20.14, fab_kr_memory_1 +10.81, fab_jp_memory_1 +5.76; 49 shocks start in the episode, biggest: tariff@JP wk6+311 sev1.00, tariff@ROW wk7+415 sev1.00, sanction@air.ct.osat_my.sink_jp wk7+832 sev1.00, sanction@air.ct.fab_row_leading_1.osat_vn wk8+227 sev1.00
+  ep 102 L4 RSS 0.753: gap 0.817 T = chip_le 0.320 (a 0.151 b 0.090 c 0.079) + chip_mat 0.088 + shed 0.336 (grid_tw 0.178, grid_jp 0.065) + other 0.073
+      fab lot deficits (M): fab_jp_memory_1 +4.87, fab_cn_mature_1 +4.17, fab_sea_mature_1 +3.33; 101 shocks start in the episode, biggest: sanction@air.ct.mat_cn_gage.fab_jp_memory_1 wk9+207 sev1.00, sanction@sea.ct.mat_jp_resist.fab_us_leading_2 wk9+94 sev1.00, sanction@air.ct.osat_tw.sink_kr wk10+140 sev1.00, sanction@pipe.tb.src_ru_enrichment.grid_in wk10+157 sev1.00

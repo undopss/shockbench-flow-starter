@@ -1,0 +1,30 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "combo": {
+  "agent": "agents/mpc_combo"
+ },
+ "combo_safe": {
+  "agent": "agents/mpc_combo",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true
+  }
+ },
+ "jpow": {
+  "agent": "agents/mpc_jpow"
+ },
+ "final": {
+  "agent": "agents/mpc_final"
+ }
+}

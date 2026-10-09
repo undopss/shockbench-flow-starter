@@ -1,0 +1,32 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+20 episodes, 179 s. Chip disposal per episode (M units) by outflow state that week; 'lost' = of which in weeks when a sink of that product lost sales
+slot                                   storage n_out  blocked  (lost)    full  (lost)  unused  (lost)  value T
+osat_kr/chip_le                         754122     8   0.000   0.000   0.939   0.939   0.005   0.005   0.0477
+fab_us_mature_1/chip_mat_raw            320737     4   0.000   0.000   3.407   3.407   0.021   0.021   0.0357
+fab_us_leading_3/chip_le_raw             63548     4   0.000   0.000   0.609   0.609   0.004   0.004   0.0309
+osat_tw/chip_le                         423770     8   0.000   0.000   0.531   0.531   0.029   0.029   0.0283
+osat_my/chip_le                        1021626     8   0.000   0.000   0.427   0.427   0.067   0.067   0.0250
+fab_eu_mature_1/chip_mat_raw            648680     4   0.000   0.000   0.612   0.612   1.020   1.020   0.0170
+osat_tw/chip_mat                        382458    13   0.000   0.000   0.005   0.005   1.372   1.372   0.0143
+fab_us_leading_1/chip_le_raw             63548     4   0.000   0.000   0.275   0.275   0.003   0.003   0.0140
+fab_us_leading_2/chip_le_raw             63548     4   0.000   0.000   0.244   0.244   0.002   0.002   0.0124
+osat_cn/chip_mat                       1923359     5   0.000   0.000   0.350   0.350   0.644   0.644   0.0103
+fab_us_mature_2/chip_mat_raw            320737     6   0.000   0.000   0.804   0.804   0.006   0.006   0.0084
+osat_ph/chip_le                         239085     8   0.000   0.000   0.156   0.156   0.002   0.002   0.0080
+fab_jp_memory_1/chip_le_raw             518018     5   0.000   0.000   0.073   0.073   0.072   0.072   0.0073
+fab_eu_leading_1/chip_le_raw             88513     4   0.000   0.000   0.075   0.075   0.052   0.052   0.0064
+osat_my/chip_mat                       1243275    11   0.000   0.000   0.000   0.000   0.351   0.351   0.0037
+osat_vn/chip_le                         109609     8   0.000   0.000   0.026   0.026   0.000   0.000   0.0013
+osat_sg/chip_mat                        335509    11   0.000   0.000   0.014   0.014   0.097   0.097   0.0012
+osat_sg/chip_le                          27652     8   0.000   0.000   0.015   0.015   0.000   0.000   0.0008
+osat_ph/chip_mat                        325677    11   0.000   0.000   0.000   0.000   0.038   0.038   0.0004
+fab_row_leading_1/chip_le_raw            54472     4   0.000   0.000   0.000   0.000   0.007   0.007   0.0003
+fab_tw_mature_1/chip_mat_raw            423891     6   0.000   0.000   0.005   0.005   0.015   0.015   0.0002
+fab_tw_mature_2/chip_mat_raw            423891     4   0.000   0.000   0.002   0.002   0.013   0.013   0.0002
+sink_in/chip_mat                        168411     0   0.009   0.009   0.000   0.000   0.000   0.000   0.0001
+fab_kr_memory_1/chip_le_raw            1097982     7   0.000   0.000   0.000   0.000   0.002   0.002   0.0001
+fab_kr_leading_1/chip_le_raw            128495     5   0.000   0.000   0.000   0.000   0.000   0.000   0.0000
+fab_tw_leading_1/chip_le_raw            497740     6   0.000   0.000   0.000   0.000   0.000   0.000   0.0000
+fab_cn_mature_1/chip_mat_raw           1572052     5   0.000   0.000   0.000   0.000   0.000   0.000   0.0000
+fab_sea_mature_1/chip_mat_raw           500292     4   0.000   0.000   0.000   0.000   0.000   0.000   0.0000
+TOTAL M units: {'full': 8.57, 'full_lostwk': 8.57, 'unused': 3.823, 'unused_lostwk': 3.823, 'blocked': 0.009, 'blocked_lostwk': 0.009} value 0.2740 T

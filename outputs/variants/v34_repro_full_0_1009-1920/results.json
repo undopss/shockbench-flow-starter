@@ -1,0 +1,116 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:1,0,0,0",
+ "results": {
+  "jpow": {
+   "J": [
+    478022210632130
+   ],
+   "rss": 0.8706145043955744,
+   "levels": {
+    "1": 0.8706145043955744,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 31,
+   "spec": {
+    "agent": "agents/mpc_jpow"
+   }
+  },
+  "combo_as_jpow": {
+   "J": [
+    478022210632130
+   ],
+   "rss": 0.8706145043955744,
+   "levels": {
+    "1": 0.8706145043955744,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 29,
+   "spec": {
+    "agent": "agents/mpc_combo",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2
+    }
+   },
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "better_share": 0.0
+  },
+  "final": {
+   "J": [
+    473664773267382
+   ],
+   "rss": 0.884020332081629,
+   "levels": {
+    "1": 0.884020332081629,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 30,
+   "spec": {
+    "agent": "agents/mpc_final"
+   },
+   "interval": [
+    0.013405827686054583,
+    0.013405827686054583
+   ],
+   "better_share": 100.0
+  },
+  "combo_as_final": {
+   "J": [
+    473664773267382
+   ],
+   "rss": 0.884020332081629,
+   "levels": {
+    "1": 0.884020332081629,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 31,
+   "spec": {
+    "agent": "agents/mpc_combo",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5
+    }
+   },
+   "interval": [
+    0.013405827686054583,
+    0.013405827686054583
+   ],
+   "better_share": 100.0
+  }
+ }
+}

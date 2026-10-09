@@ -1,0 +1,4 @@
+{"imit_room": {"agent": "agents/mpc_imit_room"},
+ "calm_off": {"agent": "agents/mpc_calm"},
+ "calm_small": {"agent": "agents/mpc_calm", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "calm_switch": {"wafer_buffer": 2.0, "pp_value": 10.0}}},
+ "calm_big": {"agent": "agents/mpc_calm", "params": {"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "calm_switch": {"wafer_buffer": 4.0, "pp_value": 10.0}}}}

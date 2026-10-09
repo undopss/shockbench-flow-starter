@@ -1,0 +1,36 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "qedge": {
+  "agent": "agents/mpc_jpow",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true
+  }
+ },
+ "qedge_safe6": {
+  "agent": "agents/mpc_jpow",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_safety": {
+    "crude": 6.0
+   }
+  }
+ }
+}

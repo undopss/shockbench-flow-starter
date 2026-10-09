@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v30g_small_0_1009-0918: task small, entropy 0, episodes dev, baseline base
+references ready in 811 s (20 episodes)
+  played base in 27 s: RSS 0.7823
+  played qedge_fb2 in 28 s: RSS 0.7994
+
+small, entropy 0, 20 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.7823  0.811  0.751  0.795  0.670  +0.0000  [+0.0000, +0.0000]     nan%      0
+qedge_fb2                 0.7994  0.840  0.756  0.806  0.676  +0.0171  [+0.0051, +0.0283]    99.6%      0  <-- better
+
+results: outputs/variants/v30g_small_0_1009-0918/results.json

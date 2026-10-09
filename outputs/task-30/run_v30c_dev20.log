@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v30c_full_0_1009-0853: task full, entropy 0, episodes dev, baseline base
+references ready in 1 s (20 episodes)
+  played base in 129 s: RSS 0.8228
+  played qedge in 134 s: RSS 0.8278
+  played qedge_safe6 in 124 s: RSS 0.8222
+
+full, entropy 0, 20 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     nan%      0
+qedge                     0.8278  0.831  0.856  0.793  0.760  +0.0051  [+0.0007, +0.0096]    97.8%      0  <-- better
+qedge_safe6               0.8222  0.821  0.853  0.796  0.755  -0.0006  [-0.0142, +0.0107]    49.8%      0
+
+results: outputs/variants/v30c_full_0_1009-0853/results.json

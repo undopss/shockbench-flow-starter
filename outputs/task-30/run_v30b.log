@@ -1,0 +1,14 @@
+round v30b_full_0_1009-0851: task full, entropy 0, episodes devpick:2,2,1,1, baseline base
+references ready in 1 s (6 episodes)
+  baseline base: reused full_0_devpick-2-2-1-1_f8d60554249f41c6.json
+  played base in 0 s: RSS 0.8535
+  played qedge in 52 s: RSS 0.8645
+  played qedge_safe6 in 51 s: RSS 0.8624
+
+full, entropy 0, 6 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8535  0.845  0.875  0.842  0.846  +0.0000  [+0.0000, +0.0000]     nan%      0
+qedge                     0.8645  0.860  0.875  0.864  0.843  +0.0110  [+0.0038, +0.0190]   100.0%      0  <-- better
+qedge_safe6               0.8624  0.860  0.869  0.865  0.830  +0.0089  [+0.0017, +0.0170]   100.0%      0  <-- better
+
+results: outputs/variants/v30b_full_0_1009-0851/results.json

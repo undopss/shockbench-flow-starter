@@ -1,0 +1,51 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "kct": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true
+  }
+ },
+ "stack3": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5
+  }
+ },
+ "k_sw8": {
+  "agent": "agents/mpc_final",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "fb_kappa_ct": true,
+   "safety_weeks": 8.0
+  }
+ }
+}

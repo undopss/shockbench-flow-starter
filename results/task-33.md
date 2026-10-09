@@ -1,4 +1,4 @@
-Status: stage 4 done; running Full dev 20 on 6 candidates
+Status: Full dev 20 done; running fresh Full seed 12 (kct, stack3, sw8)
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,
@@ -102,3 +102,27 @@ k_sw6_pe0.5_wg0.5_sc0.5   0.8659  0.856  0.877  0.878  0.843  +0.0124  [+0.0104,
 
 ```
 safety_weeks is not monotone on 6 episodes (5: +0.011, 6: +0.009, 8: +0.019, 10: +0.006); L4 drops as it grows.
+
+## Full dev 20, `outputs/task-33/v33_dev20.json`, round v33_dev20_full_0_1009-0931
+```
+full, entropy 0, 20 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8228  0.821  0.858  0.791  0.755  +0.0000  [+0.0000, +0.0000]     nan%      0
+kct                       0.8251  0.823  0.863  0.790  0.757  +0.0023  [+0.0011, +0.0036]    99.9%      0  <-- better
+k_sw5                     0.8241  0.821  0.859  0.798  0.753  +0.0014  [-0.0054, +0.0072]    65.5%      0
+k_sw8                     0.8283  0.832  0.860  0.794  0.741  +0.0056  [-0.0019, +0.0127]    88.3%      0
+stack3                    0.8270  0.826  0.861  0.797  0.757  +0.0043  [+0.0003, +0.0082]    96.4%      0  <-- better
+k_sw6_pe0.5_wg0.5         0.8240  0.821  0.857  0.800  0.756  +0.0013  [-0.0049, +0.0079]    62.5%      0
+k_sw8_pe0.5_wg0.5         0.8256  0.825  0.858  0.800  0.749  +0.0028  [-0.0057, +0.0117]    68.0%      0
+
+```
+The devpick gains of the safety_weeks variants mostly vanish on dev 20 (devpick fit). kct and stack3 stay above 0.
+
+## Guard (renamed / missing grid names), `outputs/task-33/guard_test.py`, Full dev episode 0
+```
+A J 483699973623863 fallback_weeks 0   params as shipped
+B J 483699973623863 fallback_weeks 0   + "grid_nope" in pulse_grids and pp_direct  -> identical to A
+C J 480973011179722 fallback_weeks 0   config with grid_cn renamed everywhere (planners all built: True True True)
+D J 480973011179722 fallback_weeks 0   pp_direct without grid_cn                      -> identical to C
+```
+Missing grid names are skipped silently; no crash, no fallback week. No code change was needed.

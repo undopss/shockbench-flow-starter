@@ -29,7 +29,7 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
                  buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, cq_edges=False,
-                 cq_drain=False, cq_kappa=False):
+                 cq_drain=False, cq_kappa=False, nd_open=False):
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
@@ -47,6 +47,11 @@ class ChipPlanner:
         # (as jp_qedge does for tankers) instead of all at once; cq_kappa: the routes through a chokepoint share its
         # kappa_ct at the week they reach it
         self.cq_edges, self.cq_drain, self.cq_kappa = bool(cq_edges), bool(cq_drain), bool(cq_kappa)
+        # task 37 (off by default): a chokepoint's open fraction o scales only its throughput kappa = kappa0 mu o
+        # (marks.py (9)), never the edges' capacity, and cq_kappa already shares that kappa_ct. nd_open stops scaling
+        # each lane's capacity by o (a strait 14% open all episode capped every lane through it at 14% of its edges
+        # while the strait released half its kappa); a closed chokepoint (o = 0) still closes its lanes
+        self.nd_open = bool(nd_open)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -324,8 +329,9 @@ class ChipPlanner:
             lead[j] = max(1, sum(int(tau[e]) for e in route))
             freight = sum(float(c[e]) for e in route)
             cap = min(float(u[e]) for e in route) if mask[ls["slot"]] else 0.0
-            cap *= max(min((float(open_now[self.chk_pos[q]]) for q in ls["chk"] if q in self.chk_pos), default=1.0),
-                       0.0)
+            o_min = max(min((float(open_now[self.chk_pos[q]]) for q in ls["chk"] if q in self.chk_pos), default=1.0),
+                        0.0)
+            cap *= (1.0 if o_min > 1e-9 else 0.0) if self.nd_open else o_min
             stop = min((banned.get((e, ls["k"]), 10**9) - week for e in route), default=10**9)
             for t in range(H):
                 cost[j * H + t] = freight
@@ -535,5 +541,7 @@ class ChipPlanner:
             return None
         x = res.x
         # kept for diagnostics (task 37): the solution and its layout
-        self.last = {"week": week, "H": H, "x": x, "off_I": off_I, "off_d": off_d, "off_f": off_f, "hi_f": hi[off_f:off_o]}
+        self.last = {"week": week, "H": H, "x": x, "off_I": off_I, "off_d": off_d, "off_f": off_f, "hi_f": hi[off_f:off_o],
+                     "off_s": off_s, "dem": dem, "fixed": fixed, "I0": I0, "lead": lead, "hi": hi, "eload": eload,
+                     "u": np.array(u, dtype=float)}
         return {ls["slot"]: max(float(x[j * H]), 0.0) for j, ls in enumerate(self.lp_slots)}

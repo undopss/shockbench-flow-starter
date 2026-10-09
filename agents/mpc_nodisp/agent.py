@@ -82,6 +82,12 @@ PARAMS = {
     "cq_edges": False,
     "cq_drain": False,
     "cq_kappa": False,
+    # task 37 (chips.py): lanes through a partly open chokepoint keep their edge capacity (the open fraction only
+    # scales the strait's kappa, which cq_kappa shares); sell_buffer: task 19's buffer sized by sellable starts
+    "nd_open": False,
+    "nd_open_e": False,  # the same for the energy LP's tanker lanes (kappa_lp shares the strait's kappa_tb)
+    "sell_buffer": False,
+    "sell_frac": 0.9,
     "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
 }
 if (HERE / "params.json").is_file():
@@ -117,7 +123,9 @@ class Agent:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"],
                                             wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
                                             sell_end=PARAMS["sell_end"], cq_edges=PARAMS["cq_edges"],
-                                            cq_drain=PARAMS["cq_drain"], cq_kappa=PARAMS["cq_kappa"])
+                                            cq_drain=PARAMS["cq_drain"], cq_kappa=PARAMS["cq_kappa"],
+                                            nd_open=PARAMS["nd_open"], sell_buffer=PARAMS["sell_buffer"],
+                                            sell_frac=PARAMS["sell_frac"])
         except Exception:
             pass
 
@@ -463,7 +471,7 @@ class Agent:
             for t in range(H):
                 v = j * H + t
                 cost[v] = freight
-                factor = open_frac
+                factor = (1.0 if open_frac > 1e-9 else 0.0) if PARAMS["nd_open_e"] else open_frac
                 if t > 0 and warn is not None and PARAMS["warn_gain"] > 0:
                     for q in ls["chk"]:
                         wi = self.warn_chk.get(q)

@@ -1,0 +1,21 @@
+round v37a_full_0_1009-2313: task full, entropy 0, episodes devpick:2,2,1,1, baseline cq
+references ready in 1 s (6 episodes)
+  played cq in 56 s: RSS 0.8769
+  played nd_off in 54 s: RSS 0.8769
+  played open in 57 s: RSS 0.8841
+  played open_e in 54 s: RSS 0.8609
+  played open_both in 55 s: RSS 0.8715
+  played sellbuf in 74 s: RSS 0.8729
+  played open_sellbuf in 82 s: RSS 0.8839
+
+full, entropy 0, 6 episodes; diff = variant - cq, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+cq                        0.8769  0.881  0.882  0.868  0.840  +0.0000  [+0.0000, +0.0000]     nan%      0
+nd_off                    0.8769  0.881  0.882  0.868  0.840  +0.0000  [+0.0000, +0.0000]     0.0%      0
+open                      0.8841  0.885  0.899  0.868  0.844  +0.0073  [+0.0002, +0.0153]   100.0%      0  <-- better
+open_e                    0.8609  0.852  0.875  0.868  0.825  -0.0160  [-0.0332, -0.0007]     0.0%      0  <-- worse
+open_both                 0.8715  0.859  0.897  0.868  0.843  -0.0054  [-0.0188, +0.0095]    23.4%      0
+sellbuf                   0.8729  0.875  0.882  0.864  0.831  -0.0040  [-0.0079, -0.0006]     0.0%      0  <-- worse
+open_sellbuf              0.8839  0.886  0.902  0.864  0.837  +0.0071  [-0.0003, +0.0154]    94.8%      0
+
+results: outputs/variants/v37a_full_0_1009-2313/results.json

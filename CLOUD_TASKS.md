@@ -428,3 +428,52 @@ imit_target 0.8212** (intervals not recorded). Do, in order, pushing after each:
 ### 28 (rerun). Rule lawyer — finish it
 The first task-28 session hit the usage limit right after starting. Continue on `task-28-rulelawyer` if it has useful
 work (`git fetch origin task-28-rulelawyer`), otherwise start it from `cloud`. Same instructions as task 28 above.
+
+## Round 9 (2026-10-09): five big ideas on top of the final candidate (Full only)
+**Baseline for every task in this round: `{"agent": "agents/mpc_imit_room"}`** (its own params.json is kept by the fixed
+runner; Full dev 20 ≈ 0.823, Small 0.77). Read first: `results/task-20.md` (the map), `results/task-21.md`,
+`results/task-26.md`, `results/task-28.md` (rule lawyer table). Bar: **plausibly +0.05 RSS on Full** (0.01 RSS ≈ 0.034
+T/ep on Full). Funnel: `full 0 devpick:2,2,1,1` → `full 0 dev` → fresh Full seed 12 (write the root down) →
+`small 0 dev` (no-harm only). Small is NOT a target (the final is Full). New code: a new folder copied from
+`agents/mpc_imit_room`, new options off by default. **Time box: about 2 hours.** The account has a shared usage limit
+that has killed sessions before, so **push `results/task-N.md` after every milestone** (numbers so far, with intervals),
+so nothing is lost if you are cut off. Final candidate code must pass `sbf check` Small + Full (report CPU max/median).
+
+### 29. BUILD: an honest value of fab energy in the pulse planner (`agents/mpc_pval`)
+The same as task 23 above (read it), on the new baseline. The pulses' price in home shed is ≈ 0.19 T/ep on Full
+(task 20 item 2). Measure V (pp_value × estimate) against the true marginal value of fab energy per grid/week (chip
+LP duals or re-solve with +ε), then feed the planner that value. Report shed by grid and fab lots before/after.
+
+### 30. MEASURE + BUILD: more power for the JP / SEA / CN fabs (`agents/mpc_jpow`)
+The same as task 24 above (read it), on the new baseline. ≈ 0.18 T on Full devpick (task 21, task 20 items 3 and 6);
+task 28 row 1 + "facts worth knowing" (crude starts at 0, JP crude segment 5× fab headroom, crude stock-outs per grid).
+Ideas to test: stock crude/LNG ahead at JP/CN/EU (they shed from crude stock-outs), other lanes around Malacca,
+pulsing crude too. Don't change pplan's valuation (task 29 does); the two should combine.
+
+### 31. MEASURE + BUILD: the calm episodes (harm level 1 = 50% of the score) (`agents/mpc_calm`)
+RSS weights the harm levels 50/30/15/5. On Full dev 20 level 1 is 0.800, level 2 0.854 (task 20): the biggest weight
+has the second-worst score. 1. Split the gap to the oracle on the level-1 dev episodes into its parts (chip shortage,
+shed by grid, pulse price, buffer holding/disposal, end effects), vs the same on level 2-4. Is the agent too
+aggressive in calm episodes (pulses, buffers, kappa_lp built for storms)? 2. Find an online signal that tells calm from
+stormy (e.g. no closures/sanctions/energy shocks so far, warning scores, observed strait throughput) and switch
+parameters by it (e.g. smaller pulses / buffer in calm weeks). Use only what the agent sees; do not use the harm level
+itself. Watch level 1 and the pooled RSS.
+
+### 32. BUILD: steer power to the most valuable fab inside a grid (`agents/mpc_steer`)
+Task 28 row 3: leftover grid power is split between a grid's fabs ∝ e·p̂/R with p̂ = min(α·R·cap0, wafers on hand), and
+our wafer_buffer keeps 3 weeks of nameplate at **every** fab, so power is split by nameplate, not by value. Task 28
+gross ceiling ≈ 0.07 T at TW + KR, more if combined with pplan's knowledge of which weeks are partial. 1. Measure per
+grid and week: the power split we get vs the split that maximises chip value (which fab's chips are sellable now:
+task 20 item 1 says OSAT/fab out-edges at capacity cause most chip_le disposal). 2. Build: in partial-power weeks,
+control wafers on hand per fab (smaller buffer / fewer wafers at fabs whose chips can't get out, more at the
+valuable ones), so the split follows value. Report fab lots, disposal and shed before/after.
+
+### 33. BUILD + VERIFY: stack every small win into one final candidate (`agents/mpc_final`)
+We have several small wins measured separately; stacked they may reach +0.03-0.05. Start from `agents/mpc_imit_room`
+and test, one at a time and then combined: (a) pulse on TW+KR+JP+SEA (`pulse_grids`; Full dev 20 +0.0098 on
+mpc_pulse, fresh seeds +0.002/+0.005), (b) `fb_kappa_ct` from `agents/mpc_fb` on branch `task-25-feedback`
+(Full dev 20 +0.0032), (c) `imit_target` together with `imit_room`, (d) a small joint sweep of the most important
+existing params on Full devpick (pp_value, pulse_weeks, wafer_buffer weeks/cost, pp_direct grids), each value range
+written down. Keep only what is positive on Full dev 20 **and** the fresh Full seed 12. Then the guard: the agent must
+not crash or fall back if a grid name in params (pulse_grids, pp_direct) is missing from the map (skip it silently;
+test with a renamed grid). Deliver `agents/mpc_final` with its params.json, the tables, `sbf check` Small + Full.

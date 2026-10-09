@@ -1,4 +1,4 @@
-Status: Full dev 20 done; running fresh Full seed 12 (entropy 1255168353; kct, stack3, sw8)
+Status: fresh seed done; mpc_final = stack3; running Small dev no-harm check, then sbf check
 
 Plan: `agents/mpc_final` = copy of `agents/mpc_imit_room` + the `fb_kappa_ct` option from task-25-feedback (chip LP
 knows container queues drain at kappa_ct; off by default). Test (a) pulse_grids TW+KR+JP+SEA, (b) fb_kappa_ct,
@@ -126,3 +126,15 @@ C J 480973011179722 fallback_weeks 0   config with grid_cn renamed everywhere (p
 D J 480973011179722 fallback_weeks 0   pp_direct without grid_cn                      -> identical to C
 ```
 Missing grid names are skipped silently; no crash, no fallback week. No code change was needed.
+
+## Fresh Full seed, entropy 1255168353 (random), 12 episodes, round v33_fresh_full_1255168353_1009-0954
+```
+full, entropy 1255168353, 12 episodes; diff = variant - base, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base                      0.8110  0.798  0.862  0.817  0.478  +0.0000  [+0.0000, +0.0000]     nan%      0
+kct                       0.8132  0.801  0.866  0.815  0.479  +0.0022  [-0.0012, +0.0054]    85.2%      0
+stack3                    0.8139  0.801  0.868  0.812  0.492  +0.0029  [-0.0019, +0.0081]    84.0%      0
+k_sw8                     0.8128  0.804  0.869  0.792  0.493  +0.0018  [-0.0054, +0.0082]    66.5%      0
+
+```
+All three positive in point estimate, every interval holds 0.

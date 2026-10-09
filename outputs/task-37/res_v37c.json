@@ -1,0 +1,204 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:2,2,1,1",
+ "results": {
+  "cq": {
+   "J": [
+    476787324292725,
+    420538865241951,
+    480575628663256,
+    722203881536982,
+    597185219722784,
+    1055638271521896
+   ],
+   "rss": 0.8768603855168033,
+   "levels": {
+    "1": 0.8812744779378457,
+    "2": 0.8818224328789148,
+    "3": 0.8680458661407522,
+    "4": 0.8402565746146222
+   },
+   "fallback_weeks": 0,
+   "seconds": 0,
+   "spec": {
+    "agent": "agents/mpc_cq"
+   }
+  },
+  "open": {
+   "J": [
+    476787324292725,
+    417867442411214,
+    468370886920865,
+    722203881536982,
+    597185219722784,
+    1054210588452218
+   ],
+   "rss": 0.8841315677229491,
+   "levels": {
+    "1": 0.8854329766381475,
+    "2": 0.89897108715657,
+    "3": 0.8680458661407522,
+    "4": 0.844390976792795
+   },
+   "fallback_weeks": 0,
+   "seconds": 58,
+   "spec": {
+    "agent": "agents/mpc_nodisp",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true
+    }
+   },
+   "interval": [
+    0.00019021995251322643,
+    0.015284340708149324
+   ],
+   "better_share": 100.0
+  },
+  "openq": {
+   "J": [
+    476787324292725,
+    424839726732000,
+    483190832290832,
+    722203881536982,
+    597185219722784,
+    1057444327075924
+   ],
+   "rss": 0.8724528938537018,
+   "levels": {
+    "1": 0.8745794962558887,
+    "2": 0.8781478591909521,
+    "3": 0.8680458661407522,
+    "4": 0.8350264502438413
+   },
+   "fallback_weeks": 0,
+   "seconds": 52,
+   "spec": {
+    "agent": "agents/mpc_nodisp",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_openq": true
+    }
+   },
+   "interval": [
+    -0.009122909841032367,
+    -0.00024063309919386544
+   ],
+   "better_share": 0.0
+  },
+  "open_q": {
+   "J": [
+    476787324292725,
+    419007017094090,
+    466461902678569,
+    722203881536982,
+    597185219722784,
+    1054665888284131
+   ],
+   "rss": 0.8840712722755099,
+   "levels": {
+    "1": 0.8836590456141586,
+    "2": 0.9016533651992853,
+    "3": 0.8680458661407522,
+    "4": 0.8430724820534776
+   },
+   "fallback_weeks": 0,
+   "seconds": 52,
+   "spec": {
+    "agent": "agents/mpc_nodisp",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "nd_openq": true
+    }
+   },
+   "interval": [
+    0.00012955725065366686,
+    0.01522446086353002
+   ],
+   "better_share": 100.0
+  },
+  "open_q_sellbuf": {
+   "J": [
+    476319550112405,
+    421293619347350,
+    468816486916932,
+    722212475010906,
+    599184856735157,
+    1055219672388635
+   ],
+   "rss": 0.8808548632617045,
+   "levels": {
+    "1": 0.8808277475918584,
+    "2": 0.898332908409617,
+    "3": 0.8636875788894772,
+    "4": 0.8414687884491154
+   },
+   "fallback_weeks": 0,
+   "seconds": 82,
+   "spec": {
+    "agent": "agents/mpc_nodisp",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "nd_openq": true,
+     "sell_buffer": true
+    }
+   },
+   "interval": [
+    -0.0017741378684321685,
+    0.010381754892585304
+   ],
+   "better_share": 76.14999999999999
+  }
+ }
+}

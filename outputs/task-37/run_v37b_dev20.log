@@ -1,0 +1,13 @@
+round v37b_full_0_1009-2321: task full, entropy 0, episodes dev, baseline cq
+references ready in 1 s (20 episodes)
+  played cq in 139 s: RSS 0.8398
+  played open in 144 s: RSS 0.8456
+  played open_sellbuf in 216 s: RSS 0.8459
+
+full, entropy 0, 20 episodes; diff = variant - cq, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+cq                        0.8398  0.852  0.859  0.799  0.760  +0.0000  [+0.0000, +0.0000]     nan%      0
+open                      0.8456  0.855  0.872  0.802  0.764  +0.0057  [+0.0023, +0.0094]   100.0%      0  <-- better
+open_sellbuf              0.8459  0.853  0.876  0.801  0.765  +0.0061  [+0.0019, +0.0106]    99.5%      0  <-- better
+
+results: outputs/variants/v37b_full_0_1009-2321/results.json

@@ -85,6 +85,7 @@ PARAMS = {
     # task 37 (chips.py): lanes through a partly open chokepoint keep their edge capacity (the open fraction only
     # scales the strait's kappa, which cq_kappa shares); sell_buffer: task 19's buffer sized by sellable starts
     "nd_open": False,
+    "nd_openq": False,  # chips.py: chip cargo queued at a partly open chokepoint still drains (only o = 0 holds it)
     "nd_open_e": False,  # the same for the energy LP's tanker lanes (kappa_lp shares the strait's kappa_tb)
     "sell_buffer": False,
     "sell_frac": 0.9,
@@ -124,7 +125,7 @@ class Agent:
                                             wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
                                             sell_end=PARAMS["sell_end"], cq_edges=PARAMS["cq_edges"],
                                             cq_drain=PARAMS["cq_drain"], cq_kappa=PARAMS["cq_kappa"],
-                                            nd_open=PARAMS["nd_open"], sell_buffer=PARAMS["sell_buffer"],
+                                            nd_open=PARAMS["nd_open"], nd_openq=PARAMS["nd_openq"], sell_buffer=PARAMS["sell_buffer"],
                                             sell_frac=PARAMS["sell_frac"])
         except Exception:
             pass

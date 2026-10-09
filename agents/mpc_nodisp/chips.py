@@ -29,7 +29,7 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
                  buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, cq_edges=False,
-                 cq_drain=False, cq_kappa=False, nd_open=False):
+                 cq_drain=False, cq_kappa=False, nd_open=False, nd_openq=False):
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
@@ -52,6 +52,9 @@ class ChipPlanner:
         # each lane's capacity by o (a strait 14% open all episode capped every lane through it at 14% of its edges
         # while the strait released half its kappa); a closed chokepoint (o = 0) still closes its lanes
         self.nd_open = bool(nd_open)
+        # nd_openq: chip cargo queued at a partly open chokepoint (0 < o < 0.5) still drains (at kappa_ct, which
+        # carries o); before, it was treated as never arriving
+        self.nd_openq = bool(nd_openq)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -263,7 +266,7 @@ class ChipPlanner:
                 if queued[row] <= 0:
                     continue
                 pos = self.chk_pos.get(chk_node)
-                if pos is not None and open_now[pos] < 0.5:
+                if pos is not None and (open_now[pos] <= 1e-9 if self.nd_openq else open_now[pos] < 0.5):
                     continue
                 lane = self.lane_index.get(lane_key) if isinstance(lane_key, str) else lane_key
                 route = [next_edge] + (self.lane_rest.get((lane, next_edge), []) if lane is not None else [])

@@ -1,0 +1,90 @@
+6 episodes; M units/ep. full = out-edges >=95% used that week; unused (lost) = spare out-cap and a sink of the product lost sales that week; LPplan = LP planned that disposal at t=0 itself
+slot                                     cap    disp    full  unused  (lost) blocked  LPplan    T@pi    end
+osat_kr/chip_le                       754122   1.404   1.404   0.000   0.000   0.000   1.404  0.0709   0.19
+osat_my/chip_le                      1021626   1.037   0.975   0.061   0.061   0.000   1.036  0.0524   0.34
+fab_us_leading_3/chip_le_raw           63548   0.744   0.744   0.000   0.000   0.000   0.744  0.0376   0.03
+osat_tw/chip_le                       423770   0.645   0.609   0.036   0.036   0.000   0.645  0.0326   0.20
+fab_us_mature_1/chip_mat_raw          320737   3.005   2.994   0.011   0.011   0.000   3.005  0.0312   0.13
+osat_tw/chip_mat                      382458   1.567   0.003   1.564   1.564   0.000   1.565  0.0163   0.20
+fab_us_leading_2/chip_le_raw           63548   0.283   0.282   0.002   0.002   0.000   0.283  0.0143   0.01
+osat_ph/chip_le                       239085   0.233   0.233   0.000   0.000   0.000   0.233  0.0118   0.04
+osat_cn/chip_mat                     1923359   0.924   0.385   0.539   0.539   0.000   0.918  0.0096   0.52
+fab_jp_memory_1/chip_le_raw           518018   0.175   0.003   0.172   0.172   0.000   0.175  0.0088   0.00
+fab_us_mature_2/chip_mat_raw          320737   0.834   0.823   0.010   0.010   0.000   0.826  0.0087   0.03
+fab_us_leading_1/chip_le_raw           63548   0.169   0.169   0.000   0.000   0.000   0.169  0.0085   0.01
+fab_eu_mature_1/chip_mat_raw          648680   0.695   0.589   0.106   0.106   0.000   0.695  0.0072   0.15
+osat_vn/chip_le                       109609   0.123   0.123   0.000   0.000   0.000   0.123  0.0062   0.02
+fab_eu_leading_1/chip_le_raw           88513   0.067   0.057   0.010   0.010   0.000   0.067  0.0034   0.00
+osat_my/chip_mat                     1243275   0.186   0.000   0.186   0.186   0.000   0.186  0.0019   0.25
+osat_ph/chip_mat                      325677   0.045   0.000   0.045   0.045   0.000   0.045  0.0005   0.01
+osat_sg/chip_mat                      335509   0.044   0.002   0.042   0.042   0.000   0.044  0.0005   0.01
+osat_sg/chip_le                        27652   0.003   0.003   0.000   0.000   0.000   0.003  0.0001   0.00
+fab_tw_leading_1/wafer                497740   0.118   0.000   0.000   0.000   0.118   0.049  0.0000   0.03
+fab_tw_mature_1/wafer                 423891   0.027   0.000   0.000   0.000   0.027   0.000  0.0000   0.05
+fab_us_leading_1/wafer                 63548   0.022   0.000   0.000   0.000   0.022   0.008  0.0000   0.01
+fab_kr_leading_1/wafer                128495   0.006   0.000   0.000   0.000   0.006   0.001  0.0000   0.01
+fab_kr_memory_1/wafer                1097982   0.018   0.000   0.000   0.000   0.018   0.000  0.0000   0.12
+fab_us_leading_2/wafer                 63548   0.002   0.000   0.000   0.000   0.002   0.002  0.0000   0.01
+fab_jp_memory_1/wafer                 518018   0.049   0.000   0.000   0.000   0.049   0.000  0.0000   0.22
+fab_eu_leading_1/wafer                 88513   0.027   0.000   0.000   0.000   0.027   0.008  0.0000   0.02
+fab_row_leading_1/wafer                54472   0.041   0.000   0.000   0.000   0.041   0.019  0.0000   0.01
+fab_cn_mature_1/wafer                1572052   1.064   0.000   0.000   0.000   1.064   0.287  0.0000   0.25
+fab_us_mature_1/wafer                 320737   0.076   0.000   0.000   0.000   0.076   0.021  0.0000   0.05
+fab_eu_mature_1/wafer                 648680   0.226   0.000   0.000   0.000   0.226   0.015  0.0000   0.18
+fab_sea_mature_1/wafer                500292   0.312   0.000   0.000   0.000   0.312   0.246  0.0000   0.45
+fab_tw_mature_2/wafer                 423891   0.019   0.000   0.000   0.000   0.019   0.000  0.0000   0.04
+fab_us_mature_2/wafer                 320737   0.089   0.000   0.000   0.000   0.089   0.021  0.0000   0.05
+TOTAL {'disp': np.float64(14.277), 'full': np.float64(9.398), 'unused': np.float64(2.784), 'unused_lost': np.float64(2.784), 'blocked': np.float64(2.095), 'planned_too': np.float64(12.842), 'T': np.float64(0.3226)}
+
+fabs: lots M/ep real vs LP-planned starts at t=0 (sum), weeks real>1.05*plan+1000, excess lots in those weeks, mean LP cap / cap0
+fab_tw_leading_1     chip_le_raw  real   7.55 plan   1.49 over_w  63.3 over   6.74 under   0.68 capfrac 0.74
+fab_tw_mature_1      chip_mat_raw real   5.33 plan   0.77 over_w  65.7 over   5.07 under   0.51 capfrac 0.74
+fab_us_leading_1     chip_le_raw  real   1.22 plan   0.22 over_w  74.0 over   1.03 under   0.02 capfrac 0.91
+fab_kr_leading_1     chip_le_raw  real   2.28 plan   0.56 over_w  67.7 over   1.93 under   0.21 capfrac 0.81
+fab_kr_memory_1      chip_le_raw  real  17.18 plan   1.56 over_w  68.8 over  16.28 under   0.66 capfrac 0.86
+fab_us_leading_2     chip_le_raw  real   0.83 plan   0.11 over_w  64.3 over   0.72 under   0.01 capfrac 0.91
+fab_jp_memory_1      chip_le_raw  real   4.52 plan   0.87 over_w  28.5 over   3.93 under   0.28 capfrac 0.45
+fab_us_leading_3     chip_le_raw  real   1.16 plan   0.00 over_w  83.8 over   1.16 under   0.00 capfrac 0.92
+fab_eu_leading_1     chip_le_raw  real   1.01 plan   0.25 over_w  41.3 over   0.88 under   0.12 capfrac 0.54
+fab_row_leading_1    chip_le_raw  real   0.58 plan   0.22 over_w  42.3 over   0.50 under   0.14 capfrac 0.54
+fab_cn_mature_1      chip_mat_raw real  23.84 plan  10.72 over_w  56.7 over  17.55 under   4.43 capfrac 0.71
+fab_us_mature_1      chip_mat_raw real   6.45 plan   0.87 over_w  78.0 over   5.67 under   0.09 capfrac 0.92
+fab_eu_mature_1      chip_mat_raw real   7.72 plan   1.64 over_w  44.5 over   7.13 under   1.05 capfrac 0.54
+fab_sea_mature_1     chip_mat_raw real   1.38 plan   0.68 over_w  11.2 over   1.18 under   0.48 capfrac 0.17
+fab_tw_mature_2      chip_mat_raw real   5.08 plan   0.66 over_w  65.7 over   4.90 under   0.47 capfrac 0.75
+fab_us_mature_2      chip_mat_raw real   6.74 plan   2.13 over_w  67.0 over   4.75 under   0.15 capfrac 0.91
+lost sales T/ep: {'sink_us/chip_le': 0.672, 'sink_sea/chip_le': 0.201, 'sink_eu/chip_le': 0.168, 'sink_row/chip_le': 0.161, 'sink_cn/chip_mat': 0.154, 'sink_jp/chip_le': 0.122, 'sink_us/chip_mat': 0.115, 'sink_kr/chip_le': 0.104, 'sink_eu/chip_mat': 0.085, 'sink_row/chip_mat': 0.06, 'sink_sea/chip_mat': 0.057, 'sink_in/chip_le': 0.039, 'sink_jp/chip_mat': 0.023, 'sink_kr/chip_mat': 0.016, 'sink_in/chip_mat': 0.01}
+costs T/ep: {'shortage': 0.0199, 'disposal': 0.0001, 'shed': 0.0416, 'holding': 0.0003} (J in cents -> /1e14 = T USD)
+
+route-level class (M units/ep): route = some route from the slot had every edge <95% used that week and (packaged) its sink lost sales on arrival
+fab_us_mature_1/chip_mat_raw       routes_full   3.005 route   0.000 {}
+osat_tw/chip_mat                   routes_full   1.551 route   0.015 {'sink_jp': 0.014, 'sink_sea': 0.002}
+osat_kr/chip_le                    routes_full   1.404 route   0.000 {}
+fab_cn_mature_1/wafer              routes_full   1.064 route   0.000 {}
+osat_my/chip_le                    routes_full   1.037 route   0.000 {}
+osat_cn/chip_mat                   routes_full   0.824 route   0.100 {'sink_kr': 0.022, 'sink_sea': 0.077}
+fab_us_mature_2/chip_mat_raw       routes_full   0.834 route   0.000 {}
+fab_us_leading_3/chip_le_raw       routes_full   0.744 route   0.000 {}
+fab_eu_mature_1/chip_mat_raw       routes_full   0.695 route   0.000 {}
+osat_tw/chip_le                    routes_full   0.645 route   0.000 {}
+fab_sea_mature_1/wafer             routes_full   0.312 route   0.000 {}
+fab_us_leading_2/chip_le_raw       routes_full   0.283 route   0.000 {}
+osat_ph/chip_le                    routes_full   0.233 route   0.000 {}
+fab_eu_mature_1/wafer              routes_full   0.226 route   0.000 {}
+osat_my/chip_mat                   routes_full   0.163 route   0.023 {'sink_row': 0.011, 'sink_cn': 0.013}
+fab_jp_memory_1/chip_le_raw        routes_full   0.175 route   0.000 {}
+fab_us_leading_1/chip_le_raw       routes_full   0.169 route   0.000 {}
+osat_vn/chip_le                    routes_full   0.122 route   0.001 {'sink_row': 0.001}
+fab_tw_leading_1/wafer             routes_full   0.118 route   0.000 {}
+fab_us_mature_2/wafer              routes_full   0.089 route   0.000 {}
+fab_us_mature_1/wafer              routes_full   0.076 route   0.000 {}
+fab_eu_leading_1/chip_le_raw       routes_full   0.067 route   0.000 {}
+fab_jp_memory_1/wafer              routes_full   0.049 route   0.000 {}
+osat_ph/chip_mat                   routes_full   0.031 route   0.014 {'sink_cn': 0.014}
+osat_sg/chip_mat                   routes_full   0.043 route   0.001 {'sink_cn': 0.001}
+fab_row_leading_1/wafer            routes_full   0.041 route   0.000 {}
+fab_eu_leading_1/wafer             routes_full   0.027 route   0.000 {}
+fab_tw_mature_1/wafer              routes_full   0.027 route   0.000 {}
+fab_us_leading_1/wafer             routes_full   0.022 route   0.000 {}
+fab_tw_mature_2/wafer              routes_full   0.019 route   0.000 {}
+fab_kr_memory_1/wafer              routes_full   0.018 route   0.000 {}

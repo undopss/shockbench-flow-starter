@@ -1,0 +1,18 @@
+round v37c_full_0_1009-2329: task full, entropy 0, episodes devpick:2,2,1,1, baseline cq
+references ready in 1 s (6 episodes)
+  baseline cq: reused full_0_devpick-2-2-1-1_cd4624c8f49b92f7.json
+  played cq in 0 s: RSS 0.8769
+  played open in 58 s: RSS 0.8841
+  played openq in 52 s: RSS 0.8725
+  played open_q in 52 s: RSS 0.8841
+  played open_q_sellbuf in 82 s: RSS 0.8809
+
+full, entropy 0, 6 episodes; diff = variant - cq, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+cq                        0.8769  0.881  0.882  0.868  0.840  +0.0000  [+0.0000, +0.0000]     nan%      0
+open                      0.8841  0.885  0.899  0.868  0.844  +0.0073  [+0.0002, +0.0153]   100.0%      0  <-- better
+openq                     0.8725  0.875  0.878  0.868  0.835  -0.0044  [-0.0091, -0.0002]     0.0%      0  <-- worse
+open_q                    0.8841  0.884  0.902  0.868  0.843  +0.0072  [+0.0001, +0.0152]   100.0%      0  <-- better
+open_q_sellbuf            0.8809  0.881  0.898  0.864  0.841  +0.0040  [-0.0018, +0.0104]    76.1%      0
+
+results: outputs/variants/v37c_full_0_1009-2329/results.json

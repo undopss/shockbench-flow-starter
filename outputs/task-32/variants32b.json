@@ -1,0 +1,93 @@
+{
+ "base": {
+  "agent": "agents/mpc_imit_room"
+ },
+ "steer_max_twkr": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw",
+    "grid_kr"
+   ]
+  }
+ },
+ "steer_max_kr": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_kr"
+   ]
+  }
+ },
+ "steer_max_tw": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_tw"
+   ]
+  }
+ },
+ "steer_mean_twkr": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_stat": "mean",
+   "steer_grids": [
+    "grid_tw",
+    "grid_kr"
+   ]
+  }
+ },
+ "steer_max_us": {
+  "agent": "agents/mpc_steer",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "steer": true,
+   "steer_grids": [
+    "grid_us"
+   ]
+  }
+ }
+}

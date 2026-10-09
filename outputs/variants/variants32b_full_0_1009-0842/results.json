@@ -1,0 +1,237 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:2,2,1,1",
+ "results": {
+  "base": {
+   "J": [
+    477823180522180,
+    442817400501339,
+    483699973623863,
+    723828043474706,
+    609316418822504,
+    1053528370268748
+   ],
+   "rss": 0.8535042852893208,
+   "levels": {
+    "1": 0.8449818829996156,
+    "2": 0.8751503946782452,
+    "3": 0.8416054421778827,
+    "4": 0.8463666003773511
+   },
+   "fallback_weeks": 0,
+   "seconds": 0,
+   "spec": {
+    "agent": "agents/mpc_imit_room"
+   }
+  },
+  "steer_max_twkr": {
+   "J": [
+    478185512034107,
+    443147848668624,
+    485142968258009,
+    724345345325531,
+    617436674921693,
+    1058568717967136
+   ],
+   "rss": 0.8480230813056469,
+   "levels": {
+    "1": 0.8439034601597526,
+    "2": 0.8723960187633736,
+    "3": 0.823907025707693,
+    "4": 0.8317703465269337
+   },
+   "fallback_weeks": 0,
+   "seconds": 64,
+   "spec": {
+    "agent": "agents/mpc_steer",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "steer": true,
+     "steer_grids": [
+      "grid_tw",
+      "grid_kr"
+     ]
+    }
+   },
+   "interval": [
+    -0.006236683150595113,
+    -0.004813612114246024
+   ],
+   "better_share": 0.0
+  },
+  "steer_max_kr": {
+   "J": [
+    477588205741503,
+    444202570079438,
+    485730618648792,
+    725221076862970,
+    616973816991833,
+    1057796349237251
+   ],
+   "rss": 0.847384184204264,
+   "levels": {
+    "1": 0.8431914200616114,
+    "2": 0.8703398481951685,
+    "3": 0.824915842709168,
+    "4": 0.8340070354861362
+   },
+   "fallback_weeks": 0,
+   "seconds": 62,
+   "spec": {
+    "agent": "agents/mpc_steer",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "steer": true,
+     "steer_grids": [
+      "grid_kr"
+     ]
+    }
+   },
+   "interval": [
+    -0.008032767545314345,
+    -0.004429941205468135
+   ],
+   "better_share": 0.0
+  },
+  "steer_max_tw": {
+   "J": [
+    480694115646313,
+    444088870667433,
+    483046218331678,
+    724891770393493,
+    610515882152438,
+    1054856751077073
+   ],
+   "rss": 0.8497032927369245,
+   "levels": {
+    "1": 0.8385335638427492,
+    "2": 0.8745743512160696,
+    "3": 0.8389911648331062,
+    "4": 0.8425197658634275
+   },
+   "fallback_weeks": 0,
+   "seconds": 64,
+   "spec": {
+    "agent": "agents/mpc_steer",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "steer": true,
+     "steer_grids": [
+      "grid_tw"
+     ]
+    }
+   },
+   "interval": [
+    -0.005331935499285012,
+    -0.0020685036544854096
+   ],
+   "better_share": 0.0
+  },
+  "steer_mean_twkr": {
+   "J": [
+    482739965640873,
+    443308119803792,
+    488178518741308,
+    725436191665116,
+    621903338877151,
+    1062550890166666
+   ],
+   "rss": 0.8404780283788563,
+   "levels": {
+    "1": 0.8365642338545691,
+    "2": 0.866598095790348,
+    "3": 0.8141717565301636,
+    "4": 0.8202384444085533
+   },
+   "fallback_weeks": 0,
+   "seconds": 55,
+   "spec": {
+    "agent": "agents/mpc_steer",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "steer": true,
+     "steer_stat": "mean",
+     "steer_grids": [
+      "grid_tw",
+      "grid_kr"
+     ]
+    }
+   },
+   "interval": [
+    -0.018306824492931195,
+    -0.008257156729094661
+   ],
+   "better_share": 0.0
+  },
+  "steer_max_us": {
+   "J": [
+    478625605854261,
+    442344739296423,
+    483485352369947,
+    726726223279284,
+    610939452988414,
+    1055090615111364
+   ],
+   "rss": 0.8512223293771816,
+   "levels": {
+    "1": 0.844468552171398,
+    "2": 0.8713797767667405,
+    "3": 0.8380679755927474,
+    "4": 0.8418425231382707
+   },
+   "fallback_weeks": 0,
+   "seconds": 60,
+   "spec": {
+    "agent": "agents/mpc_steer",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "steer": true,
+     "steer_grids": [
+      "grid_us"
+     ]
+    }
+   },
+   "interval": [
+    -0.004242883836599098,
+    -6.287526930137677e-05
+   ],
+   "better_share": 0.0
+  }
+ }
+}

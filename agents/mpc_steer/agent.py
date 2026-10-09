@@ -74,6 +74,7 @@ PARAMS = {
     "steer_margin": 1.2,  # that estimate is multiplied by this
     "steer_stat": "max",  # "max" or "mean" of the look-back weeks
     "steer_buf": 1.0,  # wafer buffer at a held-back fab, in weeks of its allowance
+    "steer_grids": [],  # grid ids steered (empty = every grid with two or more fabs; unknown ids are skipped)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -108,7 +109,8 @@ class Agent:
                                             wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
                                             sell_end=PARAMS["sell_end"], steer=PARAMS["steer"],
                                             steer_weeks=PARAMS["steer_weeks"], steer_margin=PARAMS["steer_margin"],
-                                            steer_stat=PARAMS["steer_stat"], steer_buf=PARAMS["steer_buf"])
+                                            steer_stat=PARAMS["steer_stat"], steer_buf=PARAMS["steer_buf"],
+                                            steer_grids=PARAMS["steer_grids"])
         except Exception:
             pass
 

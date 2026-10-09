@@ -29,7 +29,7 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
                  buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, steer=False,
-                 steer_weeks=4, steer_margin=1.2, steer_stat="max", steer_buf=1.0):
+                 steer_weeks=4, steer_margin=1.2, steer_stat="max", steer_buf=1.0, steer_grids=None):
         # task 32 (off by default): power steering inside a grid. The simulator splits a base_first grid's leftover
         # power among its fabs in proportion to e * p_hat / R, p_hat = min(cap, wafers on hand), so wafers decide who
         # gets it. Rank a grid's fabs by chip value per unit of energy (pi / e); estimate the leftover fab power from
@@ -38,6 +38,7 @@ class ChipPlanner:
         # allowance = R * max(0, margin * E - draw of the better fabs) / e. Its wafer buffer is steer_buf weeks of it.
         self.steer, self.steer_weeks, self.steer_margin = bool(steer), int(steer_weeks), float(steer_margin)
         self.steer_stat, self.steer_buf = steer_stat, float(steer_buf)
+        steer_ids = set(steer_grids or [])  # grid ids steered (empty = every multi-fab grid); unknown ids are ignored
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
@@ -127,7 +128,8 @@ class ChipPlanner:
                 f["vpe"] = raw_pi.get(self.pos[f["out"]]["k"], 0.0) / f["e"]
                 self.steer_grids.setdefault(f["grid_pos"], []).append(fi)
         self.steer_grids = {g: sorted(fis, key=lambda fi: -self.fabs[fi]["vpe"])
-                            for g, fis in self.steer_grids.items() if len(fis) >= 2}
+                            for g, fis in self.steer_grids.items() if len(fis) >= 2
+                            and (not steer_ids or nodes[layout["grids"][g]].get("id") in steer_ids)}
         # materials: supply refills the stock up to storage
         self.materials = [i for i, p in enumerate(self.pos) if p["kind"] == "material"]
 

@@ -1,4 +1,4 @@
-Status: running Full test (partial log below)
+Status: running Full test: references ready, playing variants (partial log below)
 
 Run: `uv run python outputs/variants.py full 242617957 20 outputs/v51b.json 4` (v51b.json copied to results/task-51D-v51b.json; full final params + one change each).
 

@@ -750,3 +750,23 @@ planner must keep its process_time deadline (pp_deadline) and fall back to the d
    sha256. **Do not upload.**
 5. `results/task-43.md`: status line first (pushed after every run), every table as printed, CPU per variant, verdict,
    final params.json. Branch `task-43-cpu`.
+
+### 44 A / B / C. VERIFY: the final candidate on fresh seeds (three sessions in parallel, one root each)
+Get the code: `git fetch origin task-44-final && git checkout origin/task-44-final -- agents/mpc_final agents/mpc_pleak
+agents/mpc_best`. `agents/mpc_final` = mpc_pleak (task 40) + `pulse_weeks 1.0` (39C) + code-review fixes that must not
+change play (try around the term_store loop in _setup; HiGHS `time_limit` 1.5 s on the energy LP and the main chip
+LP) + two options, off in its params.json: `pl_ucap` (cap task 40's releases at the terminal->grid edge capacity left:
+every such edge carries lng AND crude, TW's only ~6.1k/week) and `pp_scen_K` (task 43's scenario pulses; pplan.py
+copied from task-43-cpu). Deadline today 23:59 Kyiv: **report within ~1.5 h**, push after every run.
+Roots: **44A = 540469033, 44B = 1730880025, 44C = 910653604** (20 episodes each; none was used to pick these options).
+1. Smoke first (devpick:1,0,0,0 or one episode, all four variants below): 0 exceptions, 0 fallbacks.
+   **44A only:** reproduction on `full 0 devpick:1,0,0,0`: mpc_final with mpc_pleak's params.json must give exactly
+   mpc_pleak's J (the fixes are neutral); write both J. If not equal, stop and report.
+2. variants.json vs baseline `{"agent": "agents/mpc_best"}`, each `{"agent": "agents/mpc_final", "params": {<full
+   mpc_final params.json> + change}}`: `final` (as is), `final_cap` (+ `"pl_ucap": true`), `final_scen` (+
+   `"pp_scen_K": 8`), `final_cap_scen` (both). Run `full <root> 20` (4 jobs). Print the table as is.
+3. **44A only, after its root:** `small 0 dev` (no-harm), `sbf check mpc_final --task=full` and `--task=small` (CPU max
+   / median, for final and final_cap_scen params), `outputs/task-34/guard_test.py 0 agents/mpc_final`,
+   `uv run sbf pack mpc_final` + sha256. **Do not upload.**
+4. `results/task-44X.md` (X = A/B/C): status line first, table(s), J reproduction (A), checks (A). Branch
+   `task-44X-final`. No verdict needed: the team pools the three roots.

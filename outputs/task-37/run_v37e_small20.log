@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v37e_small_0_1009-2350: task small, entropy 0, episodes dev, baseline cq
+references ready in 924 s (20 episodes)
+  played cq in 31 s: RSS 0.7969
+  played open in 24 s: RSS 0.8026
+
+small, entropy 0, 20 episodes; diff = variant - cq, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+cq                        0.7969  0.839  0.754  0.800  0.670  +0.0000  [+0.0000, +0.0000]     nan%      0
+open                      0.8026  0.836  0.759  0.829  0.683  +0.0058  [-0.0002, +0.0122]    94.2%      0
+
+results: outputs/variants/v37e_small_0_1009-2350/results.json

@@ -1,0 +1,43 @@
+Full devpick:2,2,1,1, per episode. Disposal (M units), mpc_cq -> nd_open, slots with >= 0.05 M either side:
+  fab_us_mature_1/chip_mat_raw      3.023 ->  3.005
+  osat_cn/chip_mat                  1.825 ->  0.924
+  osat_tw/chip_mat                  1.711 ->  1.567
+  osat_kr/chip_le                   1.247 ->  1.404
+  fab_eu_mature_1/chip_mat_raw      1.100 ->  0.695
+  fab_cn_mature_1/wafer             0.901 ->  1.064
+  osat_my/chip_le                   1.037 ->  1.037
+  fab_us_mature_2/chip_mat_raw      0.837 ->  0.834
+  osat_my/chip_mat                  0.814 ->  0.186
+  fab_us_leading_3/chip_le_raw      0.744 ->  0.744
+  osat_tw/chip_le                   0.659 ->  0.645
+  fab_sea_mature_1/wafer            0.312 ->  0.312
+  fab_us_leading_2/chip_le_raw      0.283 ->  0.283
+  osat_ph/chip_le                   0.256 ->  0.233
+  fab_eu_mature_1/wafer             0.196 ->  0.226
+  fab_jp_memory_1/chip_le_raw       0.222 ->  0.175
+  osat_sg/chip_mat                  0.208 ->  0.044
+  osat_ph/chip_mat                  0.176 ->  0.045
+  fab_us_leading_1/chip_le_raw      0.169 ->  0.169
+  fab_tw_leading_1/wafer            0.157 ->  0.118
+  fab_eu_leading_1/chip_le_raw      0.123 ->  0.067
+  osat_vn/chip_le                   0.105 ->  0.123
+  fab_us_mature_2/wafer             0.058 ->  0.089
+  fab_us_mature_1/wafer             0.000 ->  0.076
+  TOTAL                            16.354 -> 14.277
+Lost sales (T USD at pi), sinks with >= 0.01 T:
+  sink_us/chip_le      0.6698 -> 0.6721  (+0.0023)
+  sink_sea/chip_le     0.2082 -> 0.2006  (-0.0076)
+  sink_cn/chip_mat     0.1679 -> 0.1536  (-0.0142)
+  sink_eu/chip_le      0.1654 -> 0.1675  (+0.0021)
+  sink_row/chip_le     0.1626 -> 0.1614  (-0.0011)
+  sink_jp/chip_le      0.1230 -> 0.1222  (-0.0008)
+  sink_us/chip_mat     0.1157 -> 0.1153  (-0.0004)
+  sink_kr/chip_le      0.1037 -> 0.1035  (-0.0002)
+  sink_eu/chip_mat     0.0864 -> 0.0848  (-0.0016)
+  sink_row/chip_mat    0.0669 -> 0.0604  (-0.0065)
+  sink_sea/chip_mat    0.0603 -> 0.0568  (-0.0035)
+  sink_in/chip_le      0.0374 -> 0.0387  (+0.0013)
+  sink_jp/chip_mat     0.0250 -> 0.0231  (-0.0019)
+  sink_kr/chip_mat     0.0183 -> 0.0155  (-0.0028)
+  sink_in/chip_mat     0.0099 -> 0.0104  (+0.0005)
+  TOTAL                2.0204 -> 1.9860  (-0.0343)

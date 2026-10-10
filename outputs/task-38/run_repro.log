@@ -1,2 +1,18 @@
 warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
 round v38_repro_full_0_1010-0629: task full, entropy 0, episodes devpick:1,0,0,0, baseline combo
+references ready in 494 s (1 episodes)
+  played combo in 33 s: RSS 0.8766
+  played best_as_combo in 31 s: RSS 0.8766
+  played nodisp in 29 s: RSS 0.8744
+  played best_as_nodisp in 29 s: RSS 0.8744
+  played best in 29 s: RSS 0.8855
+
+full, entropy 0, 1 episodes; diff = variant - combo, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+combo                     0.8766  0.877      -      -      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+best_as_combo             0.8766  0.877      -      -      -  +0.0000  [+0.0000, +0.0000]     0.0%      0
+nodisp                    0.8744  0.874      -      -      -  -0.0022  [-0.0022, -0.0022]     0.0%      0  <-- worse
+best_as_nodisp            0.8744  0.874      -      -      -  -0.0022  [-0.0022, -0.0022]     0.0%      0  <-- worse
+best                      0.8855  0.886      -      -      -  +0.0089  [+0.0089, +0.0089]   100.0%      0  <-- better
+
+results: outputs/variants/v38_repro_full_0_1010-0629/results.json

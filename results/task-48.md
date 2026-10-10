@@ -1,4 +1,4 @@
-Status: running Full test (started 16:04 UTC; expect table ~17:05-17:20 UTC)
+Status: playing variants (references ready in 1037 s at ~16:22 UTC; expect table ~17:00-17:15 UTC)
 
 Plan: smoke mpc_final cl_safety 4 on full 0 devpick:1,0,0,0, then v48.json (cl2, cl4, cl4_all, cl4_h8 vs mpc_final) on full 1341342961 20, 4 jobs.
 

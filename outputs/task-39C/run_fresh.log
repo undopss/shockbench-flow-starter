@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v39c_conf_full_342100426_1010-0844: task full, entropy 342100426, episodes 20, baseline best
+references ready in 463 s (20 episodes)
+  played best in 177 s: RSS 0.8248
+  played pulse_weeks_1.0 in 177 s: RSS 0.8250
+
+full, entropy 342100426, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8248  0.828  0.852  0.806  0.716  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_weeks_1.0           0.8250  0.828  0.852  0.806  0.716  +0.0002  [+0.0000, +0.0004]    99.9%      0  <-- better
+
+results: outputs/variants/v39c_conf_full_342100426_1010-0844/results.json

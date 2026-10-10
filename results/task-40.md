@@ -1,4 +1,4 @@
-Status: measurement done; running the devpick-6 probe of the fixes
+Status: probe done (overflow / smart2 / end4 above 0 on devpick 6); running Full dev 20
 
 # Task 40: lost generation during pulses (`agents/mpc_pleak`)
 
@@ -50,3 +50,27 @@ Split of the pulse-related shed (+0.202 T/ep):
 
 Ceiling for task 40 = (b) + the dumped fuel's cost ≈ **0.034 T ≈ +0.01 RSS**, with the non-fuel 0.007 T unreachable,
 so realistically ≤ +0.005..0.008.
+
+## 2. Options built (`agents/mpc_pleak` = mpc_best + `_pleak()` in agent.py, all off by default)
+Applied to the terminal -> grid slots of the planned / pulsed grids after the hold rule and the planner (before
+imit_grid's clip). They only raise a release, never lower one.
+- `pl_trickle` f: mini pulses, release at least f x terminal stock every week (the user's fixed trickle).
+- `pl_smart` + `pl_smart_w` w: smart mini pulse, release the terminal stock the next full week does not need:
+  everything above `w x segment (share G-bar) + psi I-bar - grid stock - arrivals at the grid this week`.
+- `pl_overflow`: release at least what would overflow the terminal's storage after this week's arrivals.
+- `pl_end` N: in the last N weeks of the episode release everything (nothing held is worth anything at the end).
+
+## 3. Probe, Full devpick:2,2,1,1 (6 episodes)
+```
+full, entropy 0, 6 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8864  0.890  0.895  0.873  0.857  +0.0000  [+0.0000, +0.0000]     nan%      0
+trickle10                 0.8858  0.887  0.900  0.875  0.828  -0.0006  [-0.0022, +0.0011]    19.6%      0
+trickle25                 0.8739  0.868  0.894  0.872  0.815  -0.0124  [-0.0254, -0.0010]     0.0%      0  <-- worse
+smart1                    0.8771  0.871  0.898  0.872  0.827  -0.0093  [-0.0223, +0.0052]    18.2%      0
+smart2                    0.8901  0.891  0.905  0.876  0.849  +0.0038  [+0.0005, +0.0074]   100.0%      0  <-- better
+overflow                  0.8900  0.891  0.904  0.876  0.850  +0.0036  [+0.0003, +0.0073]   100.0%      0  <-- better
+end4                      0.8880  0.892  0.895  0.874  0.857  +0.0016  [+0.0004, +0.0029]   100.0%      0  <-- better
+```
+(`outputs/variants/v40_probe_full_0_1010-1023/results.json`). A fixed trickle starves the pulse (10% flat, 25% clearly
+worse); the smart trickle with a 1-week need also starves it, with a 2-week need it helps.

@@ -1,0 +1,14 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v51b_full_419979470_1010-1829: task full, entropy 419979470, episodes 20, baseline final
+references ready in 1337 s (20 episodes)
+  played final in 312 s: RSS 0.8483
+  played tw_safety_7 in 315 s: RSS 0.8468
+  played pulse_w075 in 321 s: RSS 0.8485
+
+full, entropy 419979470, 20 episodes; diff = variant - final, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final                     0.8483  0.883  0.835  0.820  0.664  +0.0000  [+0.0000, +0.0000]     nan%      0
+tw_safety_7               0.8468  0.881  0.833  0.819  0.667  -0.0015  [-0.0039, +0.0006]    12.7%      0
+pulse_w075                0.8485  0.883  0.836  0.818  0.664  +0.0003  [-0.0007, +0.0012]    66.6%      0
+
+results: outputs/variants/v51b_full_419979470_1010-1829/results.json

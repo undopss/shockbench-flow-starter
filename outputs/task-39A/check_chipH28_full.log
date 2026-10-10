@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+1. the scorer's checks of chip_H_28.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 108,562 bytes zipped, 108,068 unpacked
+  sha256 aad38cf6e473331739c82222216cc50a4ca3c4eb109603e8b8c09f1770c53c49 (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of full, CPU seconds per week (budget 4 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.413 s, median act 0.3589 s, max 0.512 s
+all checks passed; next: uv run sbf upload outputs/variants/v39a_train_full_20261010_1010-0730/chip_H_28
+
+real	0m41.519s
+user	0m40.769s
+sys	0m1.124s

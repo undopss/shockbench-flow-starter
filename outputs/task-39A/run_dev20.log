@@ -1,0 +1,12 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v39a_confirm_full_0_1010-0816: task full, entropy 0, episodes dev, baseline best
+references ready in 459 s (20 episodes)
+  played best in 157 s: RSS 0.8454
+  played wafer_buffer_3.5 in 159 s: RSS 0.8454
+
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+wafer_buffer_3.5          0.8454  0.849  0.874  0.813  0.769  +0.0000  [-0.0028, +0.0025]    51.7%      0
+
+results: outputs/variants/v39a_confirm_full_0_1010-0816/results.json

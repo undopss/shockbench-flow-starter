@@ -1,0 +1,197 @@
+{
+ "best": {
+  "agent": "agents/mpc_best"
+ },
+ "wafer_buffer_2": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "wafer_buffer": 2
+  }
+ },
+ "wafer_buffer_2.5": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "wafer_buffer": 2.5
+  }
+ },
+ "wafer_buffer_3.5": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "wafer_buffer": 3.5
+  }
+ },
+ "wafer_buffer_4": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "wafer_buffer": 4
+  }
+ },
+ "buffer_cost_300": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "buffer_cost": 300
+  }
+ },
+ "buffer_cost_3000": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "buffer_cost": 3000
+  }
+ },
+ "chip_H_20": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "chip_H": 20
+  }
+ },
+ "chip_H_28": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "chip_H": 28
+  }
+ }
+}

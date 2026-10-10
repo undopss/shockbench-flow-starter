@@ -1,14 +1,13 @@
-Status: running Full root 540469033 (20 ep, 4 variants vs mpc_best)
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round smoke_full_0_1010-1224: task full, entropy 0, episodes devpick:1,0,0,0, baseline pleak
+references ready in 1865 s (1 episodes)
+  played pleak in 36 s: RSS 0.8871
+  played final_pleakparams in 33 s: RSS 0.8871
+  played final in 33 s: RSS 0.8881
+  played final_cap in 33 s: RSS 0.8874
+  played final_scen in 94 s: RSS 0.8902
+  played final_cap_scen in 96 s: RSS 0.8895
 
-# Task 44A — final candidate on fresh root 540469033
-
-## 1. Smoke + J reproduction (full 0 devpick:1,0,0,0 = dev episode 0... first L1 dev episode)
-
-J reproduction: **equal**. mpc_pleak (own params.json) J = 472673747613092; mpc_final with mpc_pleak's params.json
-J = 472673747613092 (identical, cents). The code-review fixes are neutral on this episode.
-Smoke: 0 fallback weeks in all 6 runs, no traceback/exception in the log.
-
-```
 full, entropy 0, 1 episodes; diff = variant - pleak, 90% paired interval
 variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
 pleak                     0.8871  0.887      -      -      -  +0.0000  [+0.0000, +0.0000]     nan%      0
@@ -19,7 +18,4 @@ final_scen                0.8902  0.890      -      -      -  +0.0031  [+0.0031,
 final_cap_scen            0.8895  0.890      -      -      -  +0.0025  [+0.0025, +0.0025]   100.0%      0  <-- better
 
 results: outputs/variants/smoke_full_0_1010-1224/results.json
-```
-(per-episode wall: final/final_cap ~33 s, scen variants ~95 s.)
-Note: building the reference for this one dev episode took 1865 s here although cache/sbf-cache.tgz was unpacked
-(joblib _cuts_compute missed and was recomputed).
+exit 0

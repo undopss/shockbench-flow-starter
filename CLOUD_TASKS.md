@@ -863,3 +863,12 @@ Baseline `{"agent": "agents/mpc_final"}`. Variants (full params.json + one chang
 1. Smoke `full 0 devpick:1,0,0,0` with us_nobuf (0 exceptions). Then `uv run python outputs/variants.py full <root> 20
    <v51.json> 4`. Push the table the moment it is printed.
 2. `results/task-51X.md`: status first, the table as printed. Branch `task-51X-ideas`. **Do not upload.**
+
+### 51 D / E / F. Two more ideas, same code and roots as 51 A/B/C (3 more sessions)
+Same code (`git fetch origin task-51-ideas && git checkout origin/task-51-ideas -- agents/mpc_final`), same baseline,
+same hard deadline **22:50 Kyiv (19:50 UTC)**. Roots: **51D = 242617957, 51E = 419979470, 51F = 722245388** (= A/B/C).
+Variants (full params.json + one change):
+`tw_safety_7` (`"jp_grids": ["grid_tw"], "jp_safety": {"lng": 7.0, "crude": 7.0}`: 7 weeks of safety stock at TW only,
+whose terminal->grid edge is the narrowest, 6.1k/week), `pulse_w075` (`"pulse_weeks": 0.75`).
+1. `uv run python outputs/variants.py full <root> 20 <v51b.json> 4`; push the table the moment it is printed.
+2. `results/task-51X.md` (X = D/E/F): status first, the table as printed. Branch `task-51X-ideas`. **Do not upload.**

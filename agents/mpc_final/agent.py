@@ -97,6 +97,12 @@ PARAMS = {
     "pp_scen_risk": 0.0,
     # task 44 (review): cap the task-40 releases at the terminal -> grid edge's capacity left this week
     "pl_ucap": False,
+    # task 48 ("closure mode"): while a chokepoint on one of a pool's supply lanes is not fully open (and cl_hold
+    # weeks after), add cl_safety weeks of burn to that pool's floor in the energy LP (fab grids only if cl_fab)
+    "cl_safety": 0.0,
+    "cl_open": 0.99,
+    "cl_hold": 4,
+    "cl_fab": True,
     # task 40 (pulse leak), applied to the terminal -> grid slots of pulsed / planned grids after the pulse rule and the
     # planner (before imit_grid's clip). All off by default
     "pl_trickle": 0.0,  # mini pulses: release at least this share of the terminal's stock every week (0 = off)
@@ -522,6 +528,19 @@ class Agent:
 
         # burn per week, thresholds
         burn = np.zeros(P)
+        cl_add = np.zeros(P)
+        if PARAMS["cl_safety"] > 0:
+            try:
+                if not hasattr(self, "cl_until"):
+                    self.cl_until = {}
+                for ls in self.lp_slots:
+                    if any(float(open_now[q]) < PARAMS["cl_open"] for q in ls["chk"]):
+                        self.cl_until[ls["pool"]] = week + int(PARAMS["cl_hold"])
+                for p_i, until in self.cl_until.items():
+                    if week <= until and (not PARAMS["cl_fab"] or self.grid_has_fab.get(self.pools[p_i]["grid"])):
+                        cl_add[p_i] = PARAMS["cl_safety"]
+            except Exception:
+                cl_add[:] = 0.0
         floor = np.zeros(P)
         thr = np.zeros(P)
         cap = np.zeros(P)
@@ -534,6 +553,7 @@ class Agent:
             sw = PARAMS["safety_weeks"]
             if PARAMS["jp_safety"] and self._jp_grid(p["grid"]):
                 sw = float(PARAMS["jp_safety"].get(self.commodities[p["k"]], sw))
+            sw += cl_add[p_i]
             floor[p_i] = max(thr[p_i] + sw * burn[p_i],
                              PARAMS["cover_frac"] * p["cover_days"] / 7.0 * burn[p_i])
             cap[p_i] = max(p["cap"], floor[p_i] + burn[p_i])

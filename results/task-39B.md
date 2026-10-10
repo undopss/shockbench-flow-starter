@@ -1,4 +1,4 @@
-Status: running diagnostic confirmation of cover_frac 1.0 (full 0 dev, then 342100426)
+Status: done. Verdict: nothing kept; mpc_best's energy params stay as they are
 
 Plan: one-at-a-time sweep of mpc_best's energy params (H, safety_weeks, cover_frac, imit_burn, end_weeks) on the
 training root `full 20261010 20`, then the winners' combination, confirmed once on `full 0 dev` and fresh root 342100426.
@@ -48,3 +48,41 @@ Still no interval above 0, so **nothing is kept** by the rule.
 Because cover_frac 1.0 was the closest to the bar (89% better share), I ran it once on `full 0 dev` and fresh root
 342100426 so the team knows whether the lean is real. These runs do not change the verdict above unless both are
 clearly positive, and even then the gain is far under the +0.05 bar.
+
+### full 0 dev (20)
+```
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+cover_frac_1.0            0.8443  0.849  0.872  0.808  0.769  -0.0011  [-0.0019, -0.0002]     2.5%      0  <-- worse
+```
+(outputs/variants/v39b_conf_full_0_1010-0920/results.json)
+
+cover_frac 1.0 is **worse** on dev 20 (-0.0011, interval below 0), so the training-root lean did not carry over.
+It would have needed to be positive on both confirmations, so I **skipped the 342100426 run** (it cannot change the
+verdict, and that seed stays unused by this task).
+
+## 4. CPU (H raises the LP size)
+`sbf check --task=full` (1 dev episode, this machine, budget 4 s): mpc_best (H 12) week 1 0.493 s, median 0.516 s,
+max 0.819 s; mpc_best with H 16 week 1 0.636 s, median 0.555 s, max 0.869 s. Both pass. (H 16 not kept anyway.)
+
+## Every value tried (training root full 20261010 20, diff vs mpc_best)
+| param | values (diff) | kept |
+|---|---|---|
+| H (12) | 10 -0.0014, 16 -0.0001 | no |
+| safety_weeks (4) | 3 -0.0016, 5 +0.0012 | no |
+| cover_frac (0.8) | 0.6 -0.0071, 1.0 +0.0060, 1.2 +0.0053, 1.4 +0.0050 | no (1.0 worse on dev 20: -0.0011) |
+| imit_burn (0.9) | 0.8 +0.0001, 1.0 +0.0006 | no |
+| end_weeks (3) | 2 -0.0026 (worse), 4 -0.0003 | no |
+| leaners combo | cover_frac 1.0 + safety_weeks 5 + imit_burn 1.0: +0.0050 | no |
+
+## Verdict
+The energy side of mpc_best is at a flat optimum: no listed value has an interval above 0 on the training root, the one
+lean (cover_frac >= 1.0, all in harm level 1) reverses on Full dev 20, and every effect is ~10x below the +0.05 bar.
+**Final kept params = mpc_best's params.json unchanged** (no combination or confirmation of winners to run).
+
+Choices I made without asking (nobody could answer during the run):
+- Ran an extra follow-up on the training root (cover_frac 1.2/1.4, leaners combo) because cover_frac was the only trend.
+- Ran one diagnostic confirmation of cover_frac 1.0 on full 0 dev even though it did not pass the training bar, and
+  skipped the 342100426 run once dev came out negative.
+- No upload (sbf check suggests one; ignored as the rules say).

@@ -1,4 +1,4 @@
-Status: probe done (overflow / smart2 / end4 above 0 on devpick 6); running Full dev 20
+Status: dev 20 round 1 done (smart3 +0.0024, end4 +0.0009 above 0); running round 2 (smart3+end4 combo)
 
 # Task 40: lost generation during pulses (`agents/mpc_pleak`)
 
@@ -74,3 +74,19 @@ end4                      0.8880  0.892  0.895  0.874  0.857  +0.0016  [+0.0004,
 ```
 (`outputs/variants/v40_probe_full_0_1010-1023/results.json`). A fixed trickle starves the pulse (10% flat, 25% clearly
 worse); the smart trickle with a 1-week need also starves it, with a 2-week need it helps.
+
+## 4. Full dev 20, round 1
+```
+full, entropy 0, 20 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+trickle10                 0.8410  0.845  0.873  0.804  0.758  -0.0044  [-0.0074, -0.0015]     0.4%      0  <-- worse
+overflow                  0.8457  0.849  0.876  0.811  0.766  +0.0003  [-0.0019, +0.0028]    58.4%      0
+smart2                    0.8463  0.850  0.878  0.809  0.769  +0.0009  [-0.0012, +0.0033]    76.0%      0
+smart3                    0.8478  0.851  0.879  0.811  0.770  +0.0024  [+0.0002, +0.0048]    95.9%      0  <-- better
+end4                      0.8463  0.852  0.874  0.811  0.768  +0.0009  [+0.0002, +0.0017]   100.0%      0  <-- better
+ovf_end4                  0.8467  0.850  0.877  0.812  0.767  +0.0013  [-0.0011, +0.0038]    80.0%      0
+smart2_ovf_end4           0.8477  0.851  0.879  0.811  0.769  +0.0023  [+0.0001, +0.0047]    96.0%      0  <-- better
+```
+(`outputs/variants/v40_dev_full_0_1010-1030/results.json`). The devpick-6 gains of overflow / smart2 shrank on dev 20
+(as in task 33); the fixed trickle (user's mini pulse, 10%) is reliably harmful.

@@ -68,7 +68,46 @@ PARAMS = {
     "imit_margin": 1.0,  # weeks of burn above the rationing line the grid ends the week with ("target")
     "imit_burn": 0.9,  # share of this week's possible burn counted on when sizing the release (load can be < 1)
     "lp_overflow_cost": 100.0,  # energy LP: USD per unit of fuel planned above the pool's storage (task 26)
+    # task 30 (more power for the JP / SEA / CN fabs). Crude starts at 0 at every grid and sits at the CN / EU / JP
+    # terminals while the grid's crude segment is short (a fab grid's headroom is smaller than its crude segment, so any
+    # crude gap darkens the fabs), and the Gulf / US crude sources throw supply away at their caps.
+    "jp_grids": [],  # grid ids the options below apply to (empty = every grid with fabs)
+    "jp_safety": {},  # fuel id -> safety weeks of burn in the energy LP's floor at those grids (stock up ahead)
+    "jp_fill": [],  # fuel ids whose terminal -> grid release is at least what fills this week's segment (no holding)
+    # tanker queues drain onto each next edge at most at its capacity (the simulator's eta_u), in the energy LP and the
+    # pulse planner (needs kappa_lp). Without it a queue behind a cut edge was forecast to arrive at once
+    "jp_qedge": False,
+    # task 35 (chip LP, chips.py): later edges of chip routes are shared (cq_edges), queued chip cargo drains at
+    # min(next-edge, kappa_ct) shares (cq_drain), routes share each chokepoint's kappa_ct (cq_kappa)
+    "cq_edges": False,
+    "cq_drain": False,
+    "cq_kappa": False,
+    # task 37 (chips.py): lanes through a partly open chokepoint keep their edge capacity (the open fraction only
+    # scales the strait's kappa, which cq_kappa shares); sell_buffer: task 19's buffer sized by sellable starts
+    "nd_open": False,
+    "nd_openq": False,  # chips.py: chip cargo queued at a partly open chokepoint still drains (only o = 0 holds it)
+    "nd_open_e": False,  # the same for the energy LP's tanker lanes (kappa_lp shares the strait's kappa_tb)
+    "sell_buffer": False,
+    "sell_frac": 0.9,
+    "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
     "fb_kappa_ct": False,  # task 25: the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
+    # task 43: the pulse planner scores each release sequence against pp_scen_K sampled futures of the arrivals
+    # (0 = off, one forecast); pp_scen_risk 0 = best mean, a in (0, 1) = best mean of the worst a share (CVaR)
+    "pp_scen_K": 0,
+    "pp_scen_risk": 0.0,
+    # task 44 (review): cap the task-40 releases at the terminal -> grid edge's capacity left this week
+    "pl_ucap": False,
+    # task 40 (pulse leak), applied to the terminal -> grid slots of pulsed / planned grids after the pulse rule and the
+    # planner (before imit_grid's clip). All off by default
+    "pl_trickle": 0.0,  # mini pulses: release at least this share of the terminal's stock every week (0 = off)
+    "pl_smart": False,  # release the terminal stock the next full week does not need (above segment + psi I-bar - I)
+    "pl_smart_w": 1.0,  # weeks of full segment the next pulse is assumed to need (pl_smart)
+    "pl_overflow": False,  # release at least what would overflow the terminal's storage after this week's arrivals
+    "pl_end": 0,  # in the last pl_end weeks of the episode release everything (no holding)
+    # task 42/45 (announcement messages; off by default). A live TIES threat (ties_threat, naming an edge, no date)
+    # becomes a pending prohibition of every commodity of that edge from week max(t + 1, announced + msg_ties_lag)
+    # (0 = off)
+    "msg_ties_lag": 0,
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -90,7 +129,10 @@ class Agent:
                                                  end_value=PARAMS["pp_end"], time_limit=PARAMS["pp_time"],
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
-                                                 split=PARAMS["pp_split"])
+                                                 split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"],
+                                                 arrfb=PARAMS["jp_arrfb"], scen_K=PARAMS["pp_scen_K"],
+                                                 scen_risk=PARAMS["pp_scen_risk"],
+                                                 seed=int((config or {}).get("policy_seed", 0) or 0) % (2**32))
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -101,7 +143,11 @@ class Agent:
         try:
             self.chips = _chips.ChipPlanner(config, H=int(PARAMS["chip_H"]), fab_cap_mode=PARAMS["fab_cap_mode"],
                                             wafer_buffer=PARAMS["wafer_buffer"], buffer_cost=PARAMS["buffer_cost"],
-                                            sell_end=PARAMS["sell_end"], kappa_ct=PARAMS["fb_kappa_ct"])
+                                            sell_end=PARAMS["sell_end"], kappa_ct=PARAMS["fb_kappa_ct"],
+                                            cq_edges=PARAMS["cq_edges"], cq_drain=PARAMS["cq_drain"],
+                                            cq_kappa=PARAMS["cq_kappa"], nd_open=PARAMS["nd_open"],
+                                            nd_openq=PARAMS["nd_openq"], sell_buffer=PARAMS["sell_buffer"],
+                                            sell_frac=PARAMS["sell_frac"])
         except Exception:
             pass
 
@@ -116,6 +162,7 @@ class Agent:
         self.edges = edges
         n_edges = len(edges["head"])
         commodities = static["commodities"]["id"]
+        self.commodities = list(commodities)
 
         self.stock_index_early = {tuple(row): i for i, row in enumerate(layout["stock_slots"])}
         # grids: one (grid, fuel) pool per modelled fuel
@@ -152,6 +199,21 @@ class Agent:
                         storage = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", 0.0)
                         self.pools[p_i]["cap"] += float(storage)
 
+        self.T_ep = int(static.get("T", inst.get("T", 10**6)))
+        self.slot_edge = list(slots["edge"])
+        self.term_store = {}
+        try:  # only pl_overflow reads it: a malformed terminal must not switch the whole agent off
+            for e in range(n_edges):
+                tail = edges["tail"][e]
+                if nodes[tail].get("type") == "terminal":
+                    for k in edges["K"][e] or []:
+                        st_ = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
+                        self.term_store[(tail, k)] = float(np.inf if st_ is None else st_)
+        except Exception:
+            self.term_store = {}
+        self.edge_slots = {}
+        for s_, e_ in enumerate(self.slot_edge):
+            self.edge_slots.setdefault(int(e_), []).append(s_)
         self.tg_slots = []  # (slot, terminal stock index, weekly burn share key)
         for s_, (edge, k, lane) in enumerate(zip(slots["edge"], slots["k"], slots["lane"])):
             tail, head = edges["tail"][edge], edges["head"][edge]
@@ -205,8 +267,50 @@ class Agent:
                 self.warn_chk[chokepoint_pos[unit[1]]] = i
 
     # ------------------------------------------------------------------ act
+    def _msg_obs(self, obs):
+        """Task 42: observation with the message-derived pending prohibitions added."""
+        if "messages.msg_id" not in obs:
+            return obs
+        seen = np.asarray(obs["messages.msg_id.observed"], dtype=bool)
+        if not seen.any():
+            return obs
+        week = int(obs["week"][0])
+        ch, kind = np.asarray(obs["messages.channel"]), np.asarray(obs["messages.kind"])
+        tk, tgt = np.asarray(obs["messages.target_kind"]), np.asarray(obs["messages.target"])
+        mid = np.asarray(obs["messages.msg_id"])
+        ann = np.asarray(obs["messages.announced_week"])
+        gone = {int(mid[i]) for i in np.flatnonzero(seen & (kind == 4))}  # withdrawn threads
+        obs = dict(obs)
+        lag = int(PARAMS["msg_ties_lag"])
+        add = {}
+        for i in np.flatnonzero(seen & (ch == 4) & (tk == 1)):
+            if int(mid[i]) in gone:
+                continue
+            e = int(tgt[i])
+            if not 0 <= e < len(self.edges["K"]):
+                continue
+            w = max(week + 1, int(ann[i]) + lag)
+            for k in self.edges["K"][e] or []:
+                add[(e, int(k))] = min(add.get((e, int(k)), 10**9), w)
+        if add:
+            pe = np.asarray(obs.get("pending_prohibitions.edge", np.zeros(0, dtype=np.int64)))
+            po = np.asarray(obs.get("pending_prohibitions.edge.observed", np.zeros(0, dtype=np.int8)))
+            pk = np.asarray(obs.get("pending_prohibitions.k", np.zeros(0, dtype=np.int64)))
+            pw = np.asarray(obs.get("pending_prohibitions.effective_week", np.zeros(0, dtype=np.int64)))
+            keys = list(add)
+            obs["pending_prohibitions.edge"] = np.concatenate([pe, [e for e, _ in keys]]).astype(np.int64)
+            obs["pending_prohibitions.k"] = np.concatenate([pk, [k for _, k in keys]]).astype(np.int64)
+            obs["pending_prohibitions.effective_week"] = np.concatenate([pw, [add[x] for x in keys]]).astype(np.int64)
+            obs["pending_prohibitions.edge.observed"] = np.concatenate([po, np.ones(len(keys))]).astype(po.dtype)
+        return obs
+
     def act(self, observation):
         start = time.process_time()
+        if self.ok and PARAMS["msg_ties_lag"] > 0:
+            try:
+                observation = self._msg_obs(observation)
+            except Exception:
+                pass
         self.planned_arrivals = None
         if self.pplan is not None:
             self.pplan.other_use = {}
@@ -257,6 +361,16 @@ class Agent:
                         flows[s_] = q
             except Exception:
                 pass
+        if self.ok and (PARAMS["pl_trickle"] > 0 or PARAMS["pl_smart"] or PARAMS["pl_overflow"] or PARAMS["pl_end"] > 0):
+            try:
+                self._pleak(observation, flows)
+            except Exception:
+                pass
+        if PARAMS["jp_fill"] and self.ok:
+            try:
+                self._jp_fill(observation, flows)
+            except Exception:
+                pass
         if PARAMS["imit_grid"] and self.ok:
             try:
                 self._imit_clip(observation, flows)
@@ -265,6 +379,93 @@ class Agent:
         action = dict(action)
         action["flows"] = np.maximum(flows, 0.0) * observation["action_mask"]
         return action
+
+    def _jp_grid(self, g):
+        if PARAMS["jp_grids"]:
+            return self.node_ids[g] in PARAMS["jp_grids"]
+        return bool(self.grid_has_fab.get(g))
+
+    def _grid_arrivals(self, obs):
+        week = int(obs["week"][0])
+        arr = {}
+        for edge, k, aw, qty, ok in zip(obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.arrival_week"],
+                                        obs["pipeline.qty"], obs["pipeline.qty.observed"]):
+            if ok and int(aw) == week:
+                p_i = self.grid_arr_keys.get((self.edges["head"][int(edge)], int(k)))
+                if p_i is not None:
+                    arr[p_i] = arr.get(p_i, 0.0) + float(qty)
+        return arr
+
+    def _pleak(self, obs, flows):
+        """Task 40: fuel held at a pulsed grid's terminal that the pulse cannot use leaks (end of the episode, terminal
+        overflow, rationing): release it. Only raises a release, never lowers one."""
+        week = int(obs["week"][0])
+        stock, seen = obs["stock.qty"], obs["stock.qty.observed"]
+        G_bar = obs["graph_now.grid.G_bar"]
+        grids = set()
+        if self.pplan is not None:
+            grids |= {gr["node"] for gr in self.pplan.grids}
+        if PARAMS["pulse_weeks"] > 0 and isinstance(PARAMS["pulse_grids"], list):
+            grids |= {g for g in self.grid_pos if self.node_ids[g] in PARAMS["pulse_grids"]}
+        arr_t = {}
+        if PARAMS["pl_overflow"]:
+            for edge, k, aw, qty, ok in zip(obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.arrival_week"],
+                                            obs["pipeline.qty"], obs["pipeline.qty.observed"]):
+                if ok and int(aw) == week:
+                    key = (self.edges["head"][int(edge)], int(k))
+                    arr_t[key] = arr_t.get(key, 0.0) + float(qty)
+        arr_g = self._grid_arrivals(obs) if PARAMS["pl_smart"] else {}
+        end = PARAMS["pl_end"] > 0 and week > self.T_ep - int(PARAMS["pl_end"])
+        for s_, si, p_i in self.tg_slots:
+            p = self.pools[p_i]
+            if p["grid"] not in grids or si is None or not seen[si]:
+                continue
+            T = float(stock[si])
+            if T <= 0 or flows[s_] >= T:
+                continue
+            want = flows[s_]
+            if end:
+                want = T
+            if PARAMS["pl_trickle"] > 0:
+                want = max(want, PARAMS["pl_trickle"] * T)
+            if PARAMS["pl_smart"]:
+                gi = self.stock_index.get((p["grid"], p["k"]))
+                if gi is not None and seen[gi]:
+                    gpos = self.grid_pos.get(p["grid"])
+                    cap = p["share"] * (float(G_bar[gpos]) if gpos is not None else p["deliverable"])
+                    thr = self.psi * p["ibar"] if p["rationed"] else 0.0
+                    need = PARAMS["pl_smart_w"] * cap + thr - float(stock[gi]) - arr_g.get(p_i, 0.0)
+                    want = max(want, T - max(need, 0.0))
+            if PARAMS["pl_overflow"]:
+                tail = self.edges["tail"][self.slot_edge[s_]]
+                stor = self.term_store.get((tail, p["k"]), np.inf)
+                want = max(want, T + arr_t.get((tail, p["k"]), 0.0) - stor)
+            new = min(max(want, flows[s_]), T)
+            if PARAMS["pl_ucap"]:
+                # the edge is shared by the lng and crude slots; past u the simulator scales all of them pro rata
+                e_ = int(self.slot_edge[s_])
+                other = sum(float(flows[j]) for j in self.edge_slots.get(e_, ()) if j != s_)
+                new = max(float(flows[s_]), min(new, float(obs["graph_now.u"][e_]) - other))
+            flows[s_] = new
+
+    def _jp_fill(self, obs, flows):
+        """Task 30: release at least what fills this week's segment of the listed fuels (they are not rationed, so
+        holding them at the terminal only sheds homes now and darkens the fabs)."""
+        stock, seen = obs["stock.qty"], obs["stock.qty.observed"]
+        G_bar = obs["graph_now.grid.G_bar"]
+        arr = self._grid_arrivals(obs)
+        for s_, si, p_i in self.tg_slots:
+            p = self.pools[p_i]
+            if self.commodities[p["k"]] not in PARAMS["jp_fill"] or not self._jp_grid(p["grid"]) or si is None:
+                continue
+            gi = self.stock_index.get((p["grid"], p["k"]))
+            if gi is None or not seen[gi] or not seen[si]:
+                continue
+            gpos = self.grid_pos.get(p["grid"])
+            cap = p["share"] * (float(G_bar[gpos]) if gpos is not None else p["deliverable"])
+            need = cap - float(stock[gi]) - arr.get(p_i, 0.0)
+            if need > 0:
+                flows[s_] = max(flows[s_], min(need, float(stock[si])))
 
     def _imit_clip(self, obs, flows):
         """Task 26: cap each terminal -> grid release so the grid ends the week at most full (or at the target)."""
@@ -333,7 +534,7 @@ class Agent:
         queue_tb = {}  # chokepoint position -> tanker cargo queued there (kappa_lp)
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
-            drain = _pplan.queue_release(obs, self.lot_keys, self.chk_node_pos, self.tb_k, H) if PARAMS["kappa_lp"] else {}
+            drain = _pplan.queue_release(obs, self.lot_keys, self.chk_node_pos, self.tb_k, H, PARAMS["jp_qedge"]) if PARAMS["kappa_lp"] else {}
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue
@@ -376,7 +577,10 @@ class Agent:
             G = float(G_bar[gpos]) if gpos is not None else p["deliverable"]
             burn[p_i] = p["share"] * G
             thr[p_i] = self.psi * p["ibar"] if p["rationed"] else 0.0
-            floor[p_i] = max(thr[p_i] + PARAMS["safety_weeks"] * burn[p_i],
+            sw = PARAMS["safety_weeks"]
+            if PARAMS["jp_safety"] and self._jp_grid(p["grid"]):
+                sw = float(PARAMS["jp_safety"].get(self.commodities[p["k"]], sw))
+            floor[p_i] = max(thr[p_i] + sw * burn[p_i],
                              PARAMS["cover_frac"] * p["cover_days"] / 7.0 * burn[p_i])
             cap[p_i] = max(p["cap"], floor[p_i] + burn[p_i])
             voll[p_i] = p["voll"] * (1.0 + PARAMS["fab_boost"] * self.grid_has_fab.get(p["grid"], 0.0))
@@ -403,7 +607,7 @@ class Agent:
             for t in range(H):
                 v = j * H + t
                 cost[v] = freight
-                factor = open_frac
+                factor = (1.0 if open_frac > 1e-9 else 0.0) if PARAMS["nd_open_e"] else open_frac
                 if t > 0 and warn is not None and PARAMS["warn_gain"] > 0:
                     for q in ls["chk"]:
                         wi = self.warn_chk.get(q)
@@ -533,7 +737,8 @@ class Agent:
         if time.process_time() - start > PARAMS["time_limit"]:
             return None
         res = linprog(cost, A_ub=A_ub, b_ub=np.array(rhs_ub), A_eq=A_eq, b_eq=np.array(rhs_eq),
-                      bounds=np.column_stack([lo, hi]), method="highs")
+                      bounds=np.column_stack([lo, hi]), method="highs",
+                      options={"time_limit": 1.5})  # a hung solve returns None (fallback flows), not an over-budget week
         if res.status != 0:
             return None
         x = res.x

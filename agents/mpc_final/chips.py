@@ -28,7 +28,8 @@ CHIP_TYPES = ("material", "fab", "osat", "sink")
 
 class ChipPlanner:
     def __init__(self, config, H=24, fab_cap_mode="full", recent_weeks=4, growth=1.25, wafer_buffer=0.0,
-                 buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, kappa_ct=False):
+                 buffer_cost=1000.0, sell_buffer=False, sell_end=False, sell_frac=0.9, kappa_ct=False,
+                 cq_edges=False, cq_drain=False, cq_kappa=False, nd_open=False, nd_openq=False):
         self.fab_cap_mode, self.recent_weeks, self.growth = fab_cap_mode, recent_weeks, growth
         # keep wafer_buffer weeks of nameplate starts on hand at every fab (soft, buffer_cost USD per missing wafer and
         # week): a fab only starts the wafers it holds, so a week with spare power and no wafers is power thrown away
@@ -41,6 +42,22 @@ class ChipPlanner:
         # task 25 (off by default): container lots queued at a chokepoint drain FIFO at its kappa_ct (all chip LP
         # commodities are container cargo), and the LP's new shipments through it wait behind that queue
         self.kappa_ct = bool(kappa_ct)
+        # task 35 (all off by default). The simulator clips a dispatch only on its first edge; a later edge (after a
+        # chokepoint) caps what the queue releases onto it (chokepoint.py: eta_u = min(1, u_e / queued onto e), then
+        # kappa_ct), so cargo above it waits in the strait queue. cq_edges: every later edge of every chip route gets a
+        # shared capacity row at the week the cargo reaches it, net of the cargo already under way or queued for it;
+        # cq_drain: chip cargo already queued at a strait drains FIFO by cohort at min(next-edge, kappa_ct) shares
+        # (as jp_qedge does for tankers) instead of all at once; cq_kappa: the routes through a chokepoint share its
+        # kappa_ct at the week they reach it
+        self.cq_edges, self.cq_drain, self.cq_kappa = bool(cq_edges), bool(cq_drain), bool(cq_kappa)
+        # task 37 (off by default): a chokepoint's open fraction o scales only its throughput kappa = kappa0 mu o
+        # (marks.py (9)), never the edges' capacity, and cq_kappa already shares that kappa_ct. nd_open stops scaling
+        # each lane's capacity by o (a strait 14% open all episode capped every lane through it at 14% of its edges
+        # while the strait released half its kappa); a closed chokepoint (o = 0) still closes its lanes
+        self.nd_open = bool(nd_open)
+        # nd_openq: chip cargo queued at a partly open chokepoint (0 < o < 0.5) still drains (at kappa_ct, which
+        # carries o); before, it was treated as never arriving
+        self.nd_openq = bool(nd_openq)
         static, layout = config["static"], config["layout"]
         inst = static["instance"]
         nodes = inst["nodes"]
@@ -136,7 +153,7 @@ class ChipPlanner:
         self.lane_index = {lid: i for i, lid in enumerate(lanes["id"])}
         self.lot_keys = layout.get("lot_keys")
         pools = static["commodities"].get("pool") or []
-        self.ct_k = {k for k, p in enumerate(pools) if p == "ct"}
+        self.ct_k = {k for k, p in enumerate(pools) if p == "ct"} or set(chip_k)
         # weeks from an OSAT receiving raw chips to a sink receiving the package: OSAT tau + one shipping week each way
         self.tail_lead = 2 + max((o["tau"] for o in self.osats), default=2)
 
@@ -185,6 +202,53 @@ class ChipPlanner:
                 out[row] = sched[i]
         return out
 
+    def _drain(self, obs, H):
+        """{lot row: (H,) release per week} for queued container cargo (task 35, ``cq_drain``).
+
+        As chokepoint.py's default release: per chokepoint and week, arrival cohorts in order; inside a cohort each lot
+        releases onto its next edge at most that edge's capacity left (eta_u, pro rata), then the cohort shares the
+        container throughput kappa_ct (eta_k). A closed chokepoint releases nothing (its rows are skipped by the
+        caller). Later arrivals into the queue are not modelled (they are younger cohorts and go after these).
+        """
+        q = obs["queue_lots.qty"]
+        kap = obs["graph_now.kappa.ct"]
+        u = obs["graph_now.u"]
+        by_chk = {}
+        for row, (chk_node, k, _lane, _next) in enumerate(self.lot_keys):
+            if int(k) in self.ct_k and q[row].sum() > 0:
+                by_chk.setdefault(chk_node, []).append(row)
+        out = {}
+        for chk_node, rows in by_chk.items():
+            pos = self.chk_pos.get(chk_node)
+            kc = float(kap[pos]) if pos is not None else np.inf
+            sub = q[rows].astype(float)
+            cols = [c for c in range(sub.shape[1]) if sub[:, c].sum() > 0]
+            nxt = [int(self.lot_keys[r_][3]) for r_ in rows]
+            left = sub.copy()
+            sched = np.zeros((len(rows), H))
+            for w in range(H):
+                budget = kc
+                ures = {e: float(u[e]) for e in set(nxt)}
+                for c in cols:
+                    y = left[:, c]
+                    if budget <= 0 or y.sum() <= 0:
+                        continue
+                    tot = {}
+                    for i, e in enumerate(nxt):
+                        tot[e] = tot.get(e, 0.0) + y[i]
+                    eta_u = np.array([min(1.0, max(ures[e], 0.0) / tot[e]) if tot[e] > 0 else 0.0 for e in nxt])
+                    tot2 = float((eta_u * y).sum())
+                    eta_k = min(1.0, budget / tot2) if tot2 > 0 else 0.0
+                    rel = eta_k * eta_u * y
+                    for i, e in enumerate(nxt):
+                        ures[e] -= rel[i]
+                    left[:, c] -= rel
+                    sched[:, w] += rel
+                    budget -= float(rel.sum())
+            for i, row in enumerate(rows):
+                out[row] = sched[i]
+        return out
+
     # ------------------------------------------------------------------------------------------------------------
     def plan(self, obs):
         """{slot: quantity} for this week's chip slots, or None when the LP does not solve."""
@@ -220,27 +284,54 @@ class ChipPlanner:
             dest = self.edges["head"][rest[-1]] if rest else self.edges["head"][int(edge)]
             arrive(self.pos_index.get((dest, int(k))), int(arr) - week + sum(int(tau[e]) for e in rest), float(qty))
         queue0 = {}  # chokepoint position -> container cargo queued there (kappa_ct)
+        cq = self.cq_edges or self.cq_kappa
+        eload, kload = {}, {}  # edge / chokepoint position -> (H,) container cargo already bound to pass it (task 35)
+
+        def load(route, off, qty):
+            # cargo that enters route[0] in week + off: it uses each edge (and the chokepoint at its tail) in turn
+            for e in route:
+                if 0 <= off < H:
+                    eload.setdefault(int(e), np.zeros(H))[off] += qty
+                    q = self.chk_pos.get(self.edges["tail"][e])
+                    if q is not None:
+                        kload.setdefault(q, np.zeros(H))[off] += qty
+                off += int(tau[e])
+
+        if cq:
+            for edge, k, lane, qty, arr, seen, lane_seen in zip(
+                obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.lane"], obs["pipeline.qty"],
+                obs["pipeline.arrival_week"], obs["pipeline.qty.observed"], obs["pipeline.lane.observed"],
+            ):
+                if seen and lane_seen and int(k) in self.ct_k:
+                    load(self.lane_rest.get((int(lane), int(edge)), []), int(arr) - week, float(qty))
         if self.lot_keys is not None and "queue_lots.qty" in obs:
             queued = obs["queue_lots.qty"].sum(axis=1)
-            drain = self._ct_release(obs, H) if self.kappa_ct else {}
+            # task 38: cq_drain's schedule (next edge and kappa_ct) wins over kappa_ct's (kappa_ct only)
+            ct_drain = self._ct_release(obs, H) if self.kappa_ct else {}
+            drain = self._drain(obs, H) if self.cq_drain else ct_drain
             for row, (chk_node, k, lane_key, next_edge) in enumerate(self.lot_keys):
                 if queued[row] <= 0:
                     continue
                 pos = self.chk_pos.get(chk_node)
-                if row in drain and pos is not None:
+                if row in ct_drain and pos is not None:
                     queue0[pos] = queue0.get(pos, 0.0) + float(queued[row])
-                if pos is not None and open_now[pos] < 0.5 and row not in drain:
+                if pos is not None and (open_now[pos] <= 1e-9 if self.nd_openq else open_now[pos] < 0.5):
                     continue
                 lane = self.lane_index.get(lane_key) if isinstance(lane_key, str) else lane_key
                 route = [next_edge] + (self.lane_rest.get((lane, next_edge), []) if lane is not None else [])
                 dest = self.edges["head"][route[-1]]
                 lead_q = sum(int(tau[e]) for e in route)
-                if row in drain:
-                    for o, qd in enumerate(drain[row]):
-                        if qd > 0:
-                            arrive(self.pos_index.get((dest, int(k))), o + lead_q, float(qd))
+                sched = drain.get(row)
+                if sched is None:
+                    arrive(self.pos_index.get((dest, int(k))), lead_q, float(queued[row]))
+                    if cq and int(k) in self.ct_k:
+                        load(route, 0, float(queued[row]))
                     continue
-                arrive(self.pos_index.get((dest, int(k))), lead_q, float(queued[row]))
+                for w in range(H):
+                    if sched[w] > 0:
+                        arrive(self.pos_index.get((dest, int(k))), w + lead_q, float(sched[w]))
+                        if cq:
+                            load(route, w, float(sched[w]))
         for node, k, qty, out, seen in zip(obs["wip.node"], obs["wip.k"], obs["wip.qty"], obs["wip.out_week"],
                                            obs["wip.qty.observed"]):
             if seen:
@@ -290,8 +381,9 @@ class ChipPlanner:
             lead[j] = max(1, sum(int(tau[e]) for e in route))
             freight = sum(float(c[e]) for e in route)
             cap = min(float(u[e]) for e in route) if mask[ls["slot"]] else 0.0
-            cap *= max(min((float(open_now[self.chk_pos[q]]) for q in ls["chk"] if q in self.chk_pos), default=1.0),
-                       0.0)
+            o_min = max(min((float(open_now[self.chk_pos[q]]) for q in ls["chk"] if q in self.chk_pos), default=1.0),
+                        0.0)
+            cap *= (1.0 if o_min > 1e-9 else 0.0) if self.nd_open else o_min
             stop = min((banned.get((e, ls["k"]), 10**9) - week for e in route), default=10**9)
             for t in range(H):
                 cost[j * H + t] = freight
@@ -420,6 +512,36 @@ class ChipPlanner:
                     rows.append(r); cols.append(j * H + t); vals.append(1.0)
                 b.append(float(u[e]))
                 r += 1
+        # task 35: every later edge of a chip route (cq_edges) and every chokepoint it passes (cq_kappa) is shared, at
+        # the week the cargo gets there, by all slots that use it, net of the cargo already bound for it
+        if cq:
+            later_e, later_q = {}, {}
+            for j, ls in enumerate(self.lp_slots):
+                off = 0
+                for i, e in enumerate(ls["route"]):
+                    if i > 0:
+                        later_e.setdefault(int(e), []).append((j, off))
+                        q = self.chk_pos.get(self.edges["tail"][e])
+                        if q is not None:
+                            later_q.setdefault(q, []).append((j, off))
+                    off += int(tau[e])
+            groups = []
+            if self.cq_edges:
+                groups += [(js, float(u[e]), eload.get(e)) for e, js in later_e.items()]
+            if self.cq_kappa:
+                kct = obs["graph_now.kappa.ct"]
+                groups += [(js, float(kct[q]), kload.get(q)) for q, js in later_q.items()]
+            for js, capw, fl in groups:
+                if not np.isfinite(capw):
+                    continue
+                for t in range(H):
+                    terms = [j * H + t - off for j, off in js if t - off >= 0]
+                    if not terms:
+                        continue
+                    for col in terms:
+                        rows.append(r); cols.append(col); vals.append(1.0)
+                    b.append(max(capw - (float(fl[t]) if fl is not None else 0.0), 0.0))
+                    r += 1
         # an OSAT's throughput is shared by its packaged commodities
         for oi, o in enumerate(self.osats):
             qs = [q for q, (oo, _p) in enumerate(pairs) if oo == oi]
@@ -490,7 +612,7 @@ class ChipPlanner:
                         if ff == fi:
                             b[rr] = max(b[rr], -want)
 
-        res = linprog(cost, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs")
+        res = linprog(cost, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs", options={"time_limit": 1.5})
         if res.status != 0:
             return None
         x = res.x

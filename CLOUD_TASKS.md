@@ -816,3 +816,16 @@ Baseline `{"agent": "agents/mpc_final"}` (own params.json). Each variant = full 
    four sessions). Push the printed table the moment it is done.
 2. `results/task-47X.md`: status first, the table as printed, wall time. No verdict needed (the team pools the 4 roots).
    Branch `task-47X-last`. **Do not upload.**
+
+### 48. TEST: "closure mode" on the uploaded final (one session, root 1341342961)
+Code: `git fetch origin task-48-closure && git checkout origin/task-48-closure -- agents/mpc_final` (commit 945fd19 =
+the uploaded mpc_final + option `cl_safety`, default 0 = unchanged). While a chokepoint on one of a fuel pool's supply
+lanes is not fully open (open < cl_open 0.99), and for cl_hold weeks after, the energy LP adds cl_safety weeks of burn to
+that pool's floor (fab grids only if cl_fab), so fuel is pulled in early / via longer routes before the fabs go dark.
+**Hard deadline: push the table by 20:45 Kyiv (17:45 UTC).**
+1. Smoke on `full 0 devpick:1,0,0,0` with `cl_safety 4`: 0 exceptions, 0 fallbacks (quick, ~2 min; skip the
+   reproduction, default 0 is the uploaded code path).
+2. variants vs baseline `{"agent": "agents/mpc_final"}` (own params.json), each = full params.json + change:
+   `cl2` (cl_safety 2), `cl4` (cl_safety 4), `cl4_all` (cl_safety 4, cl_fab false), `cl4_h8` (cl_safety 4, cl_hold 8).
+   `uv run python outputs/variants.py full 1341342961 20 <v48.json> 4`. Push the table the moment it is printed.
+3. `results/task-48.md`: status first, the table as printed. Branch `task-48-closure`. **Do not upload.**

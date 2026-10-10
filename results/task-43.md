@@ -1,4 +1,4 @@
-Status: building references for full 20261010 (20 ep) and 342100426; then the training run
+Status: running the training run (full 20261010 20: base, milp_H8, milp_H12, scen_K8, scen_K16, scen_K8_cvar20)
 
 ## So far
 - `agents/mpc_cpu` = copy of mpc_best (task-38-best) + new params `pp_scen_K`, `pp_scen_risk` (default off).
@@ -19,3 +19,8 @@ Status: building references for full 20261010 (20 ep) and 342100426; then the tr
   terminals** (std 0.000 at TW, CN, US, SEA; JP k0), non-zero at a few: dev ep 0 term_kr k1 std 0.84 (92% of weeks off
   by >10%), term_kr k0 std 0.14; dev ep 7 term_jp k1 std 0.21. Grid_cn / grid_eu ratios are polluted by the planner's
   own pipe releases, so scenarios leave those grids' arrivals at the forecast.
+- Sanity (`outputs/task-43/sanity.py`, dev ep 0, 60 weeks, K 8): 420 grid enumerations, 0 exceptions, **only 1 changed
+  release** vs the one-forecast plan. Expect scenarios to be close to a no-op.
+- Note: the reference cache in `cache/sbf-cache.tgz` was not used on this machine (a different generator digest dir
+  `full/7740c8824dd9c8ed` instead of `93b801effce44fbf`, same shockbench-flow 0.1.2), so the naive quantiles, cut points
+  and the dev references are rebuilt here (~40 min).

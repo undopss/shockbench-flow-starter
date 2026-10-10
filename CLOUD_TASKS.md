@@ -770,3 +770,22 @@ Roots: **44A = 540469033, 44B = 1730880025, 44C = 910653604** (20 episodes each;
    `uv run sbf pack mpc_final` + sha256. **Do not upload.**
 4. `results/task-44X.md` (X = A/B/C): status line first, table(s), J reproduction (A), checks (A). Branch
    `task-44X-final`. No verdict needed: the team pools the three roots.
+
+### 45 A / B. STACK + REHEARSE: last small wins on top of the uploaded final (two sessions, one new root each)
+The uploaded final is `agents/mpc_final` on branch **`task-44-final`** (commit bb9674a; params.json has `pp_scen_K 8`,
+`pl_ucap` off, `pulse_weeks 1.0`; zip sha256 3ef5c2e9...c2093). Get it with `git fetch origin task-44-final &&
+git checkout origin/task-44-final -- agents/mpc_final`. Deadline today 23:59 Kyiv: **report within ~1.5 h**, push after
+every run. Roots: **45A = 995215227, 45B = 1827351891** (new, drawn with SystemRandom; nobody used them).
+Two small "leaners" were positive but never confirmed: `pl_overflow` (task 40: smart3_ovf_end4 +0.0039 vs smart3_end4
++0.0035 on dev) and the TIES-threat reaction `msg_ties_lag 4` (task 42 "ties4": +0.0021 [-0.0002, +0.0046] on dev).
+1. Port `msg_ties_lag` from `agents/mpc_msg` (branch task-42-msg; diff it against agents/mpc_best) into
+   agents/mpc_final behind its param (default 0). Reproduction on `full 0 devpick:1,0,0,0`: mpc_final with
+   msg_ties_lag 0 must give exactly the J of the unchanged mpc_final. Push the code (both sessions do the same port;
+   45B may instead wait ~10 min and take 45A's pushed agents/mpc_final from branch task-45A-stack).
+2. variants vs baseline `{"agent": "agents/mpc_final"}` (its own params.json), each = full params + change:
+   `ovf` (+ `"pl_overflow": true`), `ties4` (+ `"msg_ties_lag": 4`), `ovf_ties4` (both). `full <root> 20`, 4 jobs.
+3. **Rehearsal** (mentor's advice): from the baseline run, report the per-episode RSS distribution of mpc_final
+   (min / p10 / median / p90 / max, per level), the 3 worst and 3 best episodes with their level and top cost items
+   (reuse outputs/task-41/map41.py if quick), and fallback/CPU per week (max, median) from the run.
+4. 45A only: `sbf check` of mpc_final with the best variant's params, `--task=full` and `--task=small` (CPU).
+5. `results/task-45X.md`: status first, tables, rehearsal summary. Branch `task-45X-stack`. **Do not upload.**

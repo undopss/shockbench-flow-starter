@@ -91,12 +91,6 @@ PARAMS = {
     "sell_frac": 0.9,
     "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
     "fb_kappa_ct": False,  # task 25: the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
-    # task 43: the pulse planner scores each release sequence against pp_scen_K sampled futures of the arrivals
-    # (0 = off, one forecast); pp_scen_risk 0 = best mean, a in (0, 1) = best mean of the worst a share (CVaR)
-    "pp_scen_K": 0,
-    "pp_scen_risk": 0.0,
-    # task 44 (review): cap the task-40 releases at the terminal -> grid edge's capacity left this week
-    "pl_ucap": False,
     # task 40 (pulse leak), applied to the terminal -> grid slots of pulsed / planned grids after the pulse rule and the
     # planner (before imit_grid's clip). All off by default
     "pl_trickle": 0.0,  # mini pulses: release at least this share of the terminal's stock every week (0 = off)
@@ -126,9 +120,7 @@ class Agent:
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
                                                  split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"],
-                                                 arrfb=PARAMS["jp_arrfb"], scen_K=PARAMS["pp_scen_K"],
-                                                 scen_risk=PARAMS["pp_scen_risk"],
-                                                 seed=int((config or {}).get("policy_seed", 0) or 0) % (2**32))
+                                                 arrfb=PARAMS["jp_arrfb"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -198,18 +190,12 @@ class Agent:
         self.T_ep = int(static.get("T", inst.get("T", 10**6)))
         self.slot_edge = list(slots["edge"])
         self.term_store = {}
-        try:  # only pl_overflow reads it: a malformed terminal must not switch the whole agent off
-            for e in range(n_edges):
-                tail = edges["tail"][e]
-                if nodes[tail].get("type") == "terminal":
-                    for k in edges["K"][e] or []:
-                        st_ = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
-                        self.term_store[(tail, k)] = float(np.inf if st_ is None else st_)
-        except Exception:
-            self.term_store = {}
-        self.edge_slots = {}
-        for s_, e_ in enumerate(self.slot_edge):
-            self.edge_slots.setdefault(int(e_), []).append(s_)
+        for e in range(n_edges):
+            tail = edges["tail"][e]
+            if nodes[tail].get("type") == "terminal":
+                for k in edges["K"][e] or []:
+                    st_ = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
+                    self.term_store[(tail, k)] = float(np.inf if st_ is None else st_)
         self.tg_slots = []  # (slot, terminal stock index, weekly burn share key)
         for s_, (edge, k, lane) in enumerate(zip(slots["edge"], slots["k"], slots["lane"])):
             tail, head = edges["tail"][edge], edges["head"][edge]
@@ -394,13 +380,7 @@ class Agent:
                 tail = self.edges["tail"][self.slot_edge[s_]]
                 stor = self.term_store.get((tail, p["k"]), np.inf)
                 want = max(want, T + arr_t.get((tail, p["k"]), 0.0) - stor)
-            new = min(max(want, flows[s_]), T)
-            if PARAMS["pl_ucap"]:
-                # the edge is shared by the lng and crude slots; past u the simulator scales all of them pro rata
-                e_ = int(self.slot_edge[s_])
-                other = sum(float(flows[j]) for j in self.edge_slots.get(e_, ()) if j != s_)
-                new = max(float(flows[s_]), min(new, float(obs["graph_now.u"][e_]) - other))
-            flows[s_] = new
+            flows[s_] = min(max(want, flows[s_]), T)
 
     def _jp_fill(self, obs, flows):
         """Task 30: release at least what fills this week's segment of the listed fuels (they are not rationed, so
@@ -691,8 +671,7 @@ class Agent:
         if time.process_time() - start > PARAMS["time_limit"]:
             return None
         res = linprog(cost, A_ub=A_ub, b_ub=np.array(rhs_ub), A_eq=A_eq, b_eq=np.array(rhs_eq),
-                      bounds=np.column_stack([lo, hi]), method="highs",
-                      options={"time_limit": 1.5})  # a hung solve returns None (fallback flows), not an over-budget week
+                      bounds=np.column_stack([lo, hi]), method="highs")
         if res.status != 0:
             return None
         x = res.x

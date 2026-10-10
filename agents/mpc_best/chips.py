@@ -612,7 +612,7 @@ class ChipPlanner:
                         if ff == fi:
                             b[rr] = max(b[rr], -want)
 
-        res = linprog(cost, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs", options={"time_limit": 1.5})
+        res = linprog(cost, A_ub=A_ub, b_ub=b, A_eq=A_eq, b_eq=rhs, bounds=bounds, method="highs")
         if res.status != 0:
             return None
         x = res.x

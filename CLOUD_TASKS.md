@@ -552,3 +552,25 @@ Start from **`agents/mpc_cq`** → `agents/mpc_nodisp`, new options off by defau
    before/after, by node.
 4. `results/task-37.md`: measurement, tables, verdict, and a short port note (which files/options) so the change can
    be copied into the final agent (mpc_combo + cq).
+
+### 38. BUILD + VERIFY: the final candidate (`agents/mpc_best`) = mpc_combo + cq + nd_open
+Read `results/task-34.md`, `results/task-35.md`, `results/task-37.md`. Three verified wins, never tested together:
+`agents/mpc_combo` (jpow + final; its chips.py comes from mpc_final: `fb_kappa_ct`), `agents/mpc_cq` (chips.py options
+`cq_edges`, `cq_drain`, `cq_kappa`, built on mpc_jpow's chips.py) and `agents/mpc_nodisp` (= mpc_cq + `nd_open` in
+chips.py). Deadline today 23:59 Kyiv, so work carefully but report fast.
+1. Build `agents/mpc_best` from `agents/mpc_combo`: merge **by hand** the chips.py changes of mpc_nodisp (cq_* and
+   nd_open) into combo's chips.py (which has fb_kappa_ct), plus the PARAMS and the `ChipPlanner(...)` arguments in
+   agent.py. Diff every file against its sources first. params.json = mpc_combo's + `"cq_edges": true, "cq_drain": true,
+   "cq_kappa": true, "nd_open": true` (and nothing from nd_open_e / sell_buffer: they were harmful).
+   Reproduction checks on one Full dev episode, same J exactly: mpc_best with combo's params.json = mpc_combo; mpc_best
+   with mpc_nodisp's params.json = mpc_nodisp. Write the J values down. Run `outputs/task-35/smoke35.py`-style smoke
+   (all options on, every week, 0 LP failures; the agent swallows exceptions).
+2. Variants vs baseline `{"agent": "agents/mpc_combo"}`: `best` (all), `best_no_nd` (without nd_open),
+   `nodisp` (agents/mpc_nodisp). Runs, pushing after each: `full 0 dev` (20); fresh roots **540469033**, **1730880025**,
+   **910653604** (20 each, the seeds tasks 34/35/37 used); and one **new** fresh root ×20 nobody has used (write it
+   down; this is the untouched overfit guard). Then `small 0 dev` (no harm only). Report each table as printed and a
+   pooled mean over the Full sets.
+3. `sbf check` Small + Full for `best` (CPU max / median) and `outputs/task-34/guard_test.py 0 agents/mpc_best`.
+4. Pack it: `uv run sbf pack mpc_best` and report the zip's sha256 (**do not upload**).
+5. `results/task-38.md`: tables, verdict (is mpc_best the final? if a part hurts, drop it), the final params.json, the
+   zip sha256. Status line first, updated after every run.

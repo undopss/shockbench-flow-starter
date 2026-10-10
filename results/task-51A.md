@@ -1,4 +1,4 @@
-Status: building references for root 242617957 (still going at 18:56 UTC, ~28 min so far)
+Status: playing variants (baseline RSS 0.8153 in 462 s; references took 1712 s)
 
 Plan: task 51A, variants us_nobuf / jp_pulse / safety_6 vs mpc_final (final.zip params, from origin/task-51-ideas) on full root 242617957, 20 episodes.
 

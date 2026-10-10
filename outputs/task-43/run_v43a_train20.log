@@ -1,0 +1,27 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v43a_full_20261010_1010-1041: task full, entropy 20261010, episodes 20, baseline base_pw1
+references ready in 2 s (20 episodes)
+  played base_pw1 in 596 s: RSS 0.8147
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+  played milp_H8 in 828 s: RSS 0.7376
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+  played milp_H12 in 561 s: RSS 0.7325
+  played scen_K8 in 766 s: RSS 0.8173
+  played scen_K16 in 1032 s: RSS 0.8165
+  played scen_K8_cvar20 in 1049 s: RSS 0.8165
+
+full, entropy 20261010, 20 episodes; diff = variant - base_pw1, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base_pw1                  0.8147  0.807  0.819  0.819      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+milp_H8                   0.7376  0.751  0.729  0.730      -  -0.0771  [-0.1019, -0.0545]     0.0%      0  <-- worse
+milp_H12                  0.7325  0.749  0.725  0.716      -  -0.0822  [-0.1088, -0.0586]     0.0%      0  <-- worse
+scen_K8                   0.8173  0.809  0.820  0.827      -  +0.0026  [+0.0010, +0.0044]    99.8%      0  <-- better
+scen_K16                  0.8165  0.808  0.821  0.825      -  +0.0018  [+0.0000, +0.0036]    95.7%      0  <-- better
+scen_K8_cvar20            0.8165  0.807  0.821  0.827      -  +0.0018  [-0.0002, +0.0038]    93.0%      0
+
+results: outputs/variants/v43a_full_20261010_1010-1041/results.json

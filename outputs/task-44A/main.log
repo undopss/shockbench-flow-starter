@@ -1,0 +1,19 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_full_540469033_1010-1301: task full, entropy 540469033, episodes 20, baseline mpc_best
+references ready in 489 s (20 episodes)
+  played mpc_best in 206 s: RSS 0.8589
+  played final in 201 s: RSS 0.8605
+  played final_cap in 193 s: RSS 0.8603
+  played final_scen in 500 s: RSS 0.8613
+  played final_cap_scen in 492 s: RSS 0.8613
+
+full, entropy 540469033, 20 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8589  0.866  0.829  0.885      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+final                     0.8605  0.869  0.829  0.885      -  +0.0016  [-0.0001, +0.0033]    93.5%      0
+final_cap                 0.8603  0.868  0.829  0.885      -  +0.0015  [-0.0002, +0.0031]    92.5%      0
+final_scen                0.8613  0.869  0.831  0.884      -  +0.0025  [+0.0002, +0.0047]    96.4%      0  <-- better
+final_cap_scen            0.8613  0.869  0.831  0.884      -  +0.0025  [+0.0004, +0.0045]    97.6%      0  <-- better
+
+results: outputs/variants/variants_full_540469033_1010-1301/results.json
+exit 0

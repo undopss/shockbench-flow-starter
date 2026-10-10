@@ -1,0 +1,2 @@
+per-episode RSS(runner seed) - RSS(replay seed): mean +0.0027, sd 0.0035, min -0.0003, max +0.0138, differ on 19/20
+pooled RSS runner 0.8318186185679721 replay 0.8293033597145405

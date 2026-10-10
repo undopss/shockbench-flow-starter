@@ -1,0 +1,8 @@
+WORST 3 (RSS from the runner's seed; cost items from the replay seed)
+  ep  3 L2 RSS 0.5009, gap to oracle 1,798 B USD, cpu max 0.94 s; top gap items: shortage 1,590 B (88%), shed 172 B (10%), tariff 14 B (1%)
+  ep 15 L1 RSS 0.6671, gap to oracle 942 B USD, cpu max 0.75 s; top gap items: shortage 903 B (96%), holding 20 B (2%), tariff 14 B (2%)
+  ep 17 L2 RSS 0.6849, gap to oracle 1,109 B USD, cpu max 0.80 s; top gap items: shortage 1,018 B (92%), shed 68 B (6%), disposal 13 B (1%)
+BEST 3 (RSS from the runner's seed; cost items from the replay seed)
+  ep  5 L1 RSS 0.9424, gap to oracle 249 B USD, cpu max 0.75 s; top gap items: shed 128 B (52%), shortage 93 B (38%), holding 19 B (8%)
+  ep 12 L4 RSS 0.9373, gap to oracle 218 B USD, cpu max 0.97 s; top gap items: shed 101 B (46%), tariff 42 B (19%), disposal 34 B (16%)
+  ep  8 L2 RSS 0.9357, gap to oracle 209 B USD, cpu max 0.76 s; top gap items: shed 139 B (67%), disposal 30 B (14%), holding 20 B (9%)

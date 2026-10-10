@@ -1,0 +1,185 @@
+{
+ "task": "full",
+ "entropy": 722245388,
+ "episodes": "4",
+ "results": {
+  "mpc_final": {
+   "J": [
+    459097282787150,
+    828109033338424,
+    833261031162813,
+    295278883522713
+   ],
+   "rss": 0.873801765702564,
+   "levels": {
+    "1": 0.8714998168471361,
+    "2": null,
+    "3": 0.8804715184740581,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 66,
+   "spec": {
+    "agent": "agents/mpc_final"
+   }
+  },
+  "us_nobuf": {
+   "J": [
+    460748202842981,
+    835613289210122,
+    834808185247938,
+    294941844771050
+   ],
+   "rss": 0.8663318680049517,
+   "levels": {
+    "1": 0.8687263597039312,
+    "2": null,
+    "3": 0.8593939781348398,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 65,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 5.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8,
+     "buffer_skip": [
+      "fab_us"
+     ]
+    }
+   },
+   "interval": [
+    -0.014533947258926982,
+    -0.0017953465740399022
+   ],
+   "better_share": 0.3
+  },
+  "jp_pulse": {
+   "J": [
+    459371555374558,
+    827060696674624,
+    833094626742874,
+    294337765534382
+   ],
+   "rss": 0.8751577583317852,
+   "levels": {
+    "1": 0.8723075603222404,
+    "2": null,
+    "3": 0.8834160287223909,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 63,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 5.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8,
+     "pulse_grids": [
+      "grid_tw",
+      "grid_kr",
+      "grid_jp"
+     ]
+    }
+   },
+   "interval": [
+    0.0001579497922877815,
+    0.0026180175347753076
+   ],
+   "better_share": 96.65
+  },
+  "safety_6": {
+   "J": [
+    457729958779723,
+    826943241232681,
+    834331369836520,
+    293615650551881
+   ],
+   "rss": 0.8760545705083926,
+   "levels": {
+    "1": 0.8734000315314236,
+    "2": null,
+    "3": 0.8837459310948501,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 63,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 6.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8
+    }
+   },
+   "interval": [
+    -0.0010152596311001627,
+    0.004551399173214676
+   ],
+   "better_share": 94.75
+  }
+ }
+}

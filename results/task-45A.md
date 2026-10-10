@@ -1,4 +1,4 @@
-Status: Full root done (ovf +0.0005 [-0.0003,+0.0012], ties4 -0.0010 worse); J reproduction smoke + rehearsal + sbf check running
+Status: Full root done; J reproduction done (equal with pp_scen_K 0; with K 8 J moves because policy_seed follows the code sha); gap map + sbf check running
 
 # Task 45A — stack leaners on mpc_final, root 995215227
 

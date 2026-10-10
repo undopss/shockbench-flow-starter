@@ -1,0 +1,11 @@
+round smoke2_full_0_1010-1505: task full, entropy 0, episodes devpick:1,0,0,0, baseline unchanged_K0
+references ready in 1 s (1 episodes)
+  played unchanged_K0 in 29 s: RSS 0.8881
+  played ported_K0 in 28 s: RSS 0.8881
+
+full, entropy 0, 1 episodes; diff = variant - unchanged_K0, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+unchanged_K0              0.8881  0.888      -      -      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+ported_K0                 0.8881  0.888      -      -      -  +0.0000  [+0.0000, +0.0000]     0.0%      0
+
+results: outputs/variants/smoke2_full_0_1010-1505/results.json

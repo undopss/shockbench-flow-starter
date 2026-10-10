@@ -1,0 +1,15 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round smoke_full_0_1010-1431: task full, entropy 0, episodes devpick:1,0,0,0, baseline final_unchanged
+references ready in 1808 s (1 episodes)
+  played final_unchanged in 66 s: RSS 0.8902
+  played final_ported in 66 s: RSS 0.8905
+  played ties4 in 70 s: RSS 0.8883
+
+full, entropy 0, 1 episodes; diff = variant - final_unchanged, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final_unchanged           0.8902  0.890      -      -      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+final_ported              0.8905  0.890      -      -      -  +0.0003  [+0.0003, +0.0003]   100.0%      0  <-- better
+ties4                     0.8883  0.888      -      -      -  -0.0019  [-0.0019, -0.0019]     0.0%      0  <-- worse
+
+results: outputs/variants/smoke_full_0_1010-1431/results.json
+exit 0

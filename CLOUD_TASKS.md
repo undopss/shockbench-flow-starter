@@ -653,3 +653,8 @@ seeds, no Small, no reference building). Use `full 0 devpick:<a,b,c,d>` (6 episo
    agents/mpc_pleak`, `uv run sbf pack mpc_pleak` + sha256. **Do not upload.**
 5. `results/task-40.md`: status line first (pushed after every run), the measurement table, every variant table as
    printed, verdict, final params.json. Branch `task-40-pleak`.
+6. **Must-test variant from the user ("mini pulses"):** while fuel is being held for a big pulse, release a small
+   trickle to the grid (all of it goes to homes under base_first) instead of holding everything. Smart version: release
+   only the fuel the coming pulse does **not** need to push fabs above home demand (e.g. fuel that would overflow
+   terminal storage, be left at the end, or arrive in excess of the pulse's need). Try a fixed trickle fraction too
+   (e.g. 10%, 25% of the held fuel per week) to see the trade-off. Same funnel as step 3.

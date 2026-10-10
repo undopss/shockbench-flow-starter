@@ -1,0 +1,17 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v42c_full_0_1010-1139: task full, entropy 0, episodes dev, baseline best
+references ready in 2 s (20 episodes)
+  baseline best: reused full_0_dev_96471f42db117752.json
+  played best in 0 s: RSS 0.8454
+  played ties1 in 265 s: RSS 0.8453
+  played ties2 in 271 s: RSS 0.8453
+  played ties3 in 275 s: RSS 0.8462
+
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+ties1                     0.8453  0.850  0.873  0.811  0.770  -0.0001  [-0.0021, +0.0017]    44.9%      0
+ties2                     0.8453  0.849  0.874  0.811  0.771  -0.0002  [-0.0021, +0.0017]    44.1%      0
+ties3                     0.8462  0.850  0.876  0.811  0.769  +0.0008  [-0.0012, +0.0029]    73.0%      0
+
+results: outputs/variants/v42c_full_0_1010-1139/results.json

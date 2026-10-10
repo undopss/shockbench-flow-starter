@@ -1,0 +1,144 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:1,0,0,0",
+ "results": {
+  "combo": {
+   "J": [
+    476070749797006
+   ],
+   "rss": 0.8766182505201661,
+   "levels": {
+    "1": 0.8766182505201661,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 33,
+   "spec": {
+    "agent": "agents/mpc_combo"
+   }
+  },
+  "best_as_combo": {
+   "J": [
+    476070749797006
+   ],
+   "rss": 0.8766182505201661,
+   "levels": {
+    "1": 0.8766182505201661,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 31,
+   "spec": {
+    "agent": "agents/mpc_best",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5
+    }
+   },
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "better_share": 0.0
+  },
+  "nodisp": {
+   "J": [
+    476787324292725
+   ],
+   "rss": 0.8744136808592121,
+   "levels": {
+    "1": 0.8744136808592121,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 29,
+   "spec": {
+    "agent": "agents/mpc_nodisp"
+   },
+   "interval": [
+    -0.002204569660953948,
+    -0.002204569660953948
+   ],
+   "better_share": 0.0
+  },
+  "best_as_nodisp": {
+   "J": [
+    476787324292725
+   ],
+   "rss": 0.8744136808592121,
+   "levels": {
+    "1": 0.8744136808592121,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 29,
+   "spec": {
+    "agent": "agents/mpc_best",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true
+    }
+   },
+   "interval": [
+    -0.002204569660953948,
+    -0.002204569660953948
+   ],
+   "better_share": 0.0
+  },
+  "best": {
+   "J": [
+    473182951504551
+   ],
+   "rss": 0.8855026757132688,
+   "levels": {
+    "1": 0.8855026757132688,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 29,
+   "spec": {
+    "agent": "agents/mpc_best"
+   },
+   "interval": [
+    0.00888442519310273,
+    0.00888442519310273
+   ],
+   "better_share": 100.0
+  }
+ }
+}

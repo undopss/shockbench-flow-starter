@@ -1,0 +1,2 @@
+options {'fb_kappa_ct': True, 'cq_edges': True, 'cq_drain': True, 'cq_kappa': True, 'nd_open': True}
+J 592768001516988  chip LP calls 104 in 104 weeks, exceptions 0, None 0, CPU mean 0.163 max 0.433 s

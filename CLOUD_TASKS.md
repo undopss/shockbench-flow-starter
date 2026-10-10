@@ -872,3 +872,14 @@ Variants (full params.json + one change):
 whose terminal->grid edge is the narrowest, 6.1k/week), `pulse_w075` (`"pulse_weeks": 0.75`).
 1. `uv run python outputs/variants.py full <root> 20 <v51b.json> 4`; push the table the moment it is printed.
 2. `results/task-51X.md` (X = D/E/F): status first, the table as printed. Branch `task-51X-ideas`. **Do not upload.**
+
+### 52 A-F. REHEARSAL: final.zip alone on as many new Full roots as possible until 23:00 Kyiv (6 sessions)
+Code: `git fetch origin task-51-ideas && git checkout origin/task-51-ideas -- agents/mpc_final` (params.json = final.zip,
+safety_weeks 5; buffer_skip off = identical play). Only ONE variant: `{"final": {"agent": "agents/mpc_final"}}`.
+Each session plays its first root, pushes the line, then its second root if it can finish before the deadline.
+**Hard deadline: last push by 22:55 Kyiv (19:55 UTC)**; push after every root.
+Roots: 52A 1573653351 then 1707488080; 52B 1223270889 then 333249916; 52C 1312640225 then 491505603;
+52D 1268454195 then 1473186083; 52E 1310201536 then 1368250166; 52F 718502598 then 669099318.
+1. `uv run python outputs/variants.py full <root> 20 <v52.json> 4` per root (8 jobs if the machine has the cores).
+2. `results/task-52X.md`: status first, one line per root: root, RSS, L1..L4, episodes per level, fallback weeks.
+   Branch `task-52X-rehearse`. **Do not upload.**

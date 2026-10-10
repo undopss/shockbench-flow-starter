@@ -1,4 +1,4 @@
-Status: Full dev 20 done for lags 4/8/16 + mid2 (ties4 +0.0021, interval touches 0; mid2 worse); running lags 1/2/3
+Status: done — verdict: nothing kept (no message reaction beats mpc_best reliably on Full dev 20); mpc_best stays the final
 
 # Task 42: act on the announcement messages (`agents/mpc_msg`)
 
@@ -123,3 +123,56 @@ mid2                      0.8442  0.848  0.873  0.810  0.768  -0.0012  [-0.0025,
 
 results: outputs/variants/v42b_full_0_1010-1116/results.json
 ```
+
+Full dev 20, shorter lags:
+```
+round v42c_full_0_1010-1139: task full, entropy 0, episodes dev, baseline best
+references ready in 2 s (20 episodes)
+  baseline best: reused full_0_dev_96471f42db117752.json
+  played best in 0 s: RSS 0.8454
+  played ties1 in 265 s: RSS 0.8453
+  played ties2 in 271 s: RSS 0.8453
+  played ties3 in 275 s: RSS 0.8462
+
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+ties1                     0.8453  0.850  0.873  0.811  0.770  -0.0001  [-0.0021, +0.0017]    44.9%      0
+ties2                     0.8453  0.849  0.874  0.811  0.771  -0.0002  [-0.0021, +0.0017]    44.1%      0
+ties3                     0.8462  0.850  0.876  0.811  0.769  +0.0008  [-0.0012, +0.0029]    73.0%      0
+
+results: outputs/variants/v42c_full_0_1010-1139/results.json
+```
+
+## Verdict
+**Nothing is kept; mpc_best stays.** No variant's 90% interval on Full dev 20 is above 0.
+- TIES threats as pending prohibitions: by lag 1 −0.0001, 2 −0.0002, 3 +0.0008, **4 +0.0021 [−0.0002, +0.0046]
+  (92.5% better)**, 8 +0.0009, 16 +0.0009. Never loses at L1/L2, but the curve over the lag is not smooth (lags 1-2 ≈
+  0, 4 the peak, 8/16 lower): ties4 is the best of six tries on the same 20 episodes, and with no fresh-seed check it
+  is most likely a noise peak. If the team wants to gamble on it, `{"msg_ties_lag": 4}` is the one; I would not.
+- MID threats as chokepoint warnings: mid1 ≈ 0 on devpick (+0.0001), **mid2 −0.0012 [−0.0025, −0.0001] (worse)**.
+  Expected: real MID threads arrive at the closure (lead ≤ 0 in 17/29), and decoys/long threats cut lanes for nothing.
+- Tariffs: not built (perfect-foresight ceiling +0.0010 RSS).
+- Why so little: the whole sanction class is worth +0.017 RSS even with perfect foresight; a TIES threat gives an edge
+  but no date, 44% are decoys that look identical until their effect week, and the official (legal) part is already
+  used through `pending_prohibitions`. The measured gain (≤ +0.002) is in line with the ~+0.005 rough ceiling.
+- Overfit note: all numbers are on the Full dev episodes only (as the task asked); no fresh-seed check.
+
+`agents/mpc_msg/params.json` = mpc_best's params.json (both options off, so it plays exactly as mpc_best). No
+`sbf check` / guard test / pack, since nothing is kept. Never uploaded.
+
+## Choices made without asking
+- The cost per channel is the perfect-foresight ceiling of the event class (drop the class from omega, replay agent
+  and oracle), not a "gap in the weeks after the message": it is exact w.r.t. the scorer and needs no attribution of
+  weekly costs; the per-episode numbers are noisy (the agent's reaction can go either way).
+- Classes run: tariff, sanction, militarised closure (the three announced types). Unannounced types were only counted
+  (task 15 measured their ceilings on mpc_buffer), to save the ~25 min of oracle solves.
+- Thread matching: same type, region, target kind and target, and first-seen week = the event's first announcement
+  week on the thread's channels (an exact rule; task 15 used a 12-week window).
+- `msg_ties_lag` applies to every commodity on the named edge (TIES threats name no k) and to every live,
+  not withdrawn thread; ties threads seen at week 1 (announced before the episode) get week max(2, announced + L).
+- After the probe I went straight to dev 20 for all TIES lags (agent plays are cheap, ~4.5 min per variant).
+
+## Files
+`outputs/task-42/msg42.py` (measurement), `msg42_full_0_dev.json` + `msg42_dev20.log`, `smoke42.py`,
+`v42a/b/c.json` + logs, `outputs/variants/v42{a,b,c}_*/results.json`, `agents/mpc_msg/`.

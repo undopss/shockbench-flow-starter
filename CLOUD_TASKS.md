@@ -839,3 +839,13 @@ Baseline `{"agent": "agents/mpc_final"}` (own params.json). Variants (full param
 cl_fab false, pl_smart_w 3.5, pl_end 6); `combo_cl` (cl_safety 4, cl_fab false, pl_smart_w 3.5, pl_end 6).
 1. `uv run python outputs/variants.py full <root> 20 <v49.json> 4`, same v49.json in both sessions.
 2. `results/task-49X.md`: status first, the table as printed. Branch `task-49X-confirm`. **Do not upload.**
+
+### 50 A / B / C. LAST ROUND: three param tweaks of final.zip on three new roots (3 sessions, same variants)
+Code: `git fetch origin task-48-closure && git checkout origin/task-48-closure -- agents/mpc_final` (commit 945fd19), then
+set `agents/mpc_final/params.json` `"safety_weeks": 5.0` (= final.zip, sha256 93be0efd..., the candidate being uploaded).
+**Hard deadline: push the table by 22:50 Kyiv (19:50 UTC)**; push partial tables (rows printed so far) if short of time.
+Roots (new): **50A = 242617957, 50B = 419979470, 50C = 722245388**, 20 episodes each, same v50.json everywhere.
+Baseline `{"agent": "agents/mpc_final"}`. Variants (full params.json + one change): `safety_6` (safety_weeks 6.0),
+`smart_3.5` (pl_smart_w 3.5), `end_6` (pl_end 6).
+1. `uv run python outputs/variants.py full <root> 20 <v50.json> 4`. Push the table the moment it is printed.
+2. `results/task-50X.md`: status first, the table as printed. Branch `task-50X-last`. **Do not upload.**

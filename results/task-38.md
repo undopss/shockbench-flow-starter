@@ -1,4 +1,4 @@
-Status: running sbf check + guard + pack
+Status: done. `agents/mpc_best` (= mpc_combo + cq_edges/cq_drain/cq_kappa + nd_open) beats mpc_combo on all 5 Full sets (dev 20 +0.0132, fresh 540469033 +0.0107, 1730880025 +0.0118, 910653604 +0.0122, new 342100426 +0.0099; every 90% interval above 0), pooled over 100 Full episodes 0.8468 vs 0.8352 (+0.0115); Small dev +0.0039 (holds 0, no harm). Recommended final; zip sha256 373cf60d...44cd. Not uploaded.
 
 ## 1. Build + reproduction
 `agents/mpc_best` = `agents/mpc_combo` (agent.py, pplan.py, fallback.py) + mpc_nodisp's chips.py changes (cq_edges,
@@ -90,3 +90,48 @@ nodisp                    0.8026  0.836  0.759  0.829  0.683  +0.0023  [-0.0032,
 
 ```
 (outputs/variants/v38_small_0_1010-0819/results.json)
+
+Fresh roots: 540469033, 1730880025, 910653604 (tasks 34/35/37), and the **new untouched root 342100426** (drawn with
+`random.SystemRandom`, not found anywhere in results/ or outputs/ before this task; `outputs/task-38/new_root.txt`).
+Level 4 was not drawn on roots 540469033 and 1730880025.
+
+### Pooled over the 5 Full sets (100 episodes, mean of the per-set RSS, 20 episodes each)
+```
+variant        RSS     diff vs combo   sets with interval > 0
+combo        0.8352    +0.0000         -
+best         0.8468    +0.0115         5/5
+best_no_nd   0.8437    +0.0085         5/5
+nodisp       0.8460    +0.0108         5/5
+```
+best vs nodisp (J per episode): best is cheaper in 60/100 episodes; the per-set gap is +0.0026 / +0.0046 / +0.0004 /
++0.0015 / -0.0027 RSS (dev, 540469033, 1730880025, 910653604, 342100426): combo's own parts (fb_kappa_ct,
+safety_weeks, pp_end, warn_gain) add only ~+0.001 on top of cq + nd_open, but they don't hurt on average, and best
+is the best variant on 3 of 5 Full sets and on Small. nd_open adds +0.003 on Full (best vs best_no_nd, positive on
+all 5 sets) and +0.008 on Small (best_no_nd alone is -0.0045 on Small, interval below 0: keep nd_open).
+
+## 3. sbf check + guard (agents/mpc_best, this cloud machine)
+- `sbf check mpc_best --task=small`: all checks passed; week 1 0.156 s, median act 0.1135 s, max 0.179 s (budget 2 s).
+- `sbf check mpc_best --task=full`: all checks passed; week 1 0.470 s, median act 0.3394 s, max 0.470 s (budget 4 s).
+- `outputs/task-34/guard_test.py 0 agents/mpc_best` (`outputs/task-38/guard.txt`): A J 471373496940634 = B (bogus grid
+  names ignored); C J 472073697812544 = D (renamed grid_cn reduces to pp_direct ["grid_eu"]); 0 fallback weeks; exit 0.
+
+## 4. Pack
+`uv run sbf pack mpc_best` -> `outputs/mpc_best.zip` (5 files, 108,548 bytes zipped),
+**sha256 373cf60d8f4b397c4a907c8bfda0134956c2979c45746b6450720863c0e444cd**. Not uploaded.
+
+## 5. Verdict
+**agents/mpc_best is the final candidate**, with its params.json as shipped:
+`{"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "jp_qedge": true, "jp_arrfb": 0.2, "fb_kappa_ct": true, "safety_weeks": 4.0, "pp_end": 0.7, "warn_gain": 0.5, "cq_edges": true, "cq_drain": true, "cq_kappa": true, "nd_open": true}`
+No part hurts: dropping nd_open costs on every set; nodisp (without combo's final parts) is within noise of best.
+The wins stack roughly additively here (cq + nd_open ≈ +0.011 on top of combo), but Full stays ≈ 0.847, below the
+team goal of 0.85 on the pooled 100 episodes (dev 20 0.8454).
+
+## Choices made without asking
+- Merge rule where both queue models are on: arrivals of queued chip cargo use cq_drain's schedule (it has the
+  next-edge cap and kappa_ct); fb_kappa_ct's cumulative kappa rows (with their queue0) stay in the LP next to
+  cq_kappa's per-week rows. Both reproductions are exact, so neither source changed with its own params.
+- I first tried reusing the home tgz cache by copying it under this machine's generator id (task 34's untested hint):
+  **it does not work** (strata.py refuses: "cut points of generator 7740c... cannot stratify a harm of generator
+  93b8..."). I deleted the copies and let the references rebuild. Don't repeat it.
+- Pooled mean = mean of the five per-set RSS (equal sizes), not a new bootstrap interval.
+- The runner was chained (`outputs/task-38/chain.sh`) over the 4 fresh roots and waited for in the foreground.

@@ -789,3 +789,15 @@ Two small "leaners" were positive but never confirmed: `pl_overflow` (task 40: s
    (reuse outputs/task-41/map41.py if quick), and fallback/CPU per week (max, median) from the run.
 4. 45A only: `sbf check` of mpc_final with the best variant's params, `--task=full` and `--task=small` (CPU).
 5. `results/task-45X.md`: status first, tables, rehearsal summary. Branch `task-45X-stack`. **Do not upload.**
+
+### 46. CHECK: the uploaded final on fresh Small episodes (does local match Codabench's 0.779?)
+`agents/mpc_final` from branch **`task-44-final`** (commit bb9674a, the uploaded zip sha256 3ef5c2e9...c2093; get it with
+`git fetch origin task-44-final && git checkout origin/task-44-final -- agents/mpc_final`). Codabench scored it
+**0.779** on its 200 private Small episodes; our local Small dev 20 gave 0.8076 (earlier uploads showed the same
+direction: imit_room local ~0.782 vs Codabench 0.7668). Question: is the dev split just easier, or does something differ?
+1. `outputs/variants.py small 993322846 120 <json with only {"final": {"agent": "agents/mpc_final"}}> 4` (fresh root;
+   the reference build is fine). Also pack the folder and confirm `sbf pack` prints the same sha256 3ef5c2e9...c2093.
+2. Report: RSS, per level, episodes per level, 90% interval of the score itself if the runner gives it (else a
+   bootstrap over episodes), fallback weeks. Compare with 0.779 and with dev 20 (0.8076, task 44A).
+3. If time allows (≤ 40 min more): a second fresh root `small 1360000001 120` the same way.
+4. `results/task-46.md`, status first, push after every run, branch `task-46-small`. **Do not upload.** Report within ~1 h.

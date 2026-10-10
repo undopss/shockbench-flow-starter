@@ -24,3 +24,5 @@ Status: running the training run (full 20261010 20: base, milp_H8, milp_H12, sce
 - Note: the reference cache in `cache/sbf-cache.tgz` was not used on this machine (a different generator digest dir
   `full/7740c8824dd9c8ed` instead of `93b801effce44fbf`, same shockbench-flow 0.1.2), so the naive quantiles, cut points
   and the dev references are rebuilt here (~40 min).
+- Partial (training root 20261010, 20 ep): base 0.8147, **milp_H8 0.7376, milp_H12 0.7325 (−0.08: out)**. Baseline on
+  Full dev 20 (this machine): 0.8459.

@@ -1,0 +1,16 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v51_full_242617957_1010-1828: task full, entropy 242617957, episodes 20, baseline baseline
+references ready in 1712 s (20 episodes)
+  played baseline in 462 s: RSS 0.8153
+  played us_nobuf in 476 s: RSS 0.8107
+  played jp_pulse in 449 s: RSS 0.8149
+  played safety_6 in 452 s: RSS 0.8132
+
+full, entropy 242617957, 20 episodes; diff = variant - baseline, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+baseline                  0.8153  0.835  0.831  0.732      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+us_nobuf                  0.8107  0.829  0.830  0.726      -  -0.0046  [-0.0072, -0.0022]     0.0%      0  <-- worse
+jp_pulse                  0.8149  0.835  0.831  0.731      -  -0.0004  [-0.0013, +0.0004]    23.3%      0
+safety_6                  0.8132  0.835  0.829  0.725      -  -0.0021  [-0.0051, +0.0008]    12.7%      0
+
+results: outputs/variants/v51_full_242617957_1010-1828/results.json

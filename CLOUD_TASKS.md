@@ -716,3 +716,37 @@ false-alarm rate "inconclusive"; nobody measured on Full **which messages preced
    mpc_msg` + sha256. **Do not upload.**
 5. `results/task-42.md`: status line first (pushed after every run), the message table, verdict, variant tables as
    printed, params.json. Branch `task-42-msg`.
+
+### 43. BUILD: spend the spare CPU — longer / exact / scenario pulse planning (`agents/mpc_cpu`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`)
++ `"pulse_weeks": 1.0` (task 39C's only kept value; use it in the baseline too: baseline = `{"agent": "agents/mpc_best",
+"params": <mpc_best params.json + pulse_weeks 1.0>}`). Deadline today 23:59 Kyiv: **report by ~16:30 Kyiv**, push often.
+Task 40 also edits the pulse side (lost generation); keep your changes in separate, param-gated code paths.
+
+Why: mpc_best uses ~0.5 s of the 4 s/week Full budget (cloud machine max 0.82 s). Bigger LP horizons gave nothing
+(39A chip_H 28, 39B H 16 flat), but the pulse planner was never given more CPU: `pp_enum_H` (6) was never swept (pp_H is
+a no-op under enum, task 39C), the `pp_method: "milp"` path was never compared, and the planner scores each release
+option against ONE forecast of arrivals (task 14: ~0.05 T/ep generation lost = fuel held for pulses that do not pay).
+An old whole-agent scenario planner (mpc_scen, Oct 6) was −0.09 on Full, but as a different, weaker agent.
+
+**CPU guard for every variant:** `sbf check <agent> --task=full` max ≤ 2.0 s/week on this machine (2× headroom); the
+planner must keep its process_time deadline (pp_deadline) and fall back to the deterministic plan when out of time.
+
+1. **Quick part:** variants `pp_enum_H` 8, 10; `pp_method: "milp"` (with pp_H 8 and 12). Training root
+   `full 20261010 20` (not dev, not the task 34/35/37/38 seeds), keep only intervals above 0, confirm once on
+   `full 0 dev` 20 and fresh root 342100426.
+2. **Scenario pulses:** in pplan, score each candidate release option against K sampled futures (K 8 and 16) instead
+   of one: sample per-week fuel arrivals for the pulse grids from the agent's own observed history (e.g. empirical
+   distribution of forecast error of arrivals: planned_arrivals vs what actually arrived, per fuel/grid), plus a
+   closure/queue-delay draw for lanes through chokepoints at the rates observed so far (graph_now.open history,
+   queue_lots). Pick the option with the best mean value (try also a 20%-quantile / CVaR variant). Seed the sampler
+   deterministically (per episode + week) so runs are reproducible. Behind params (`pp_scen_K`, `pp_scen_risk`),
+   default off. First measure on devpick that the arrivals forecast error is not zero (if it is ~0, say so: then
+   scenarios cannot help and stop part 2).
+3. Funnel for part 2: probe on `full 20261010` devpick-like subset, then `full 20261010 20`; winner(s) confirmed once on
+   `full 0 dev` 20 and fresh root 342100426; kept only if both intervals are above 0. Then the combination of all kept
+   parts on the same two confirmations.
+4. If kept: sbf check Small + Full (CPU), `outputs/task-34/guard_test.py 0 agents/mpc_cpu`, `uv run sbf pack mpc_cpu` +
+   sha256. **Do not upload.**
+5. `results/task-43.md`: status line first (pushed after every run), every table as printed, CPU per variant, verdict,
+   final params.json. Branch `task-43-cpu`.

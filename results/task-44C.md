@@ -1,4 +1,4 @@
-Status: running `full 910653604 20` (building references; ~30 min per episode on this box, 4 jobs)
+Status: running `full 910653604 20` (references ready in 472 s; playing variants)
 
 ## Smoke: `full 0 devpick:1,0,0,0` (0 exceptions, 0 fallbacks)
 
@@ -16,5 +16,5 @@ results: outputs/variants/v44c_full_0_1010-1223/results.json
 
 Notes / choices:
 - Variants file: `results/task-44C-variants.json` (baseline `agents/mpc_best`; the four mpc_final variants as specified).
-- The unpacked cache did not cover this dev episode's reference (1767 s to build), so the fresh root's 20 references
-  will take a while on 4 cores (~2.5 h estimated) — this run will likely finish after the ~1.5 h target.
+- The unpacked cache did not cover the smoke dev episode (1767 s to build that reference); the fresh root built 20
+  references in 472 s.

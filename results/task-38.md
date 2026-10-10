@@ -1,4 +1,4 @@
-Status: Full done (5 sets); running Small dev 20 (no-harm check)
+Status: running sbf check + guard + pack
 
 ## 1. Build + reproduction
 `agents/mpc_best` = `agents/mpc_combo` (agent.py, pplan.py, fallback.py) + mpc_nodisp's chips.py changes (cq_edges,
@@ -78,3 +78,15 @@ nodisp                    0.8276  0.826  0.860  0.811  0.716  +0.0126  [+0.0088,
 
 ```
 (outputs/variants/v38_full_342100426_1010-0800/results.json)
+
+### task small, entropy 0, episodes dev
+```
+small, entropy 0, 20 episodes; diff = variant - combo, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+combo                     0.8003  0.839  0.760  0.807  0.677  +0.0000  [+0.0000, +0.0000]     nan%      0
+best                      0.8042  0.835  0.764  0.828  0.685  +0.0039  [-0.0011, +0.0088]    90.0%      0
+best_no_nd                0.7958  0.836  0.753  0.802  0.670  -0.0045  [-0.0067, -0.0026]     0.0%      0  <-- worse
+nodisp                    0.8026  0.836  0.759  0.829  0.683  +0.0023  [-0.0032, +0.0084]    75.1%      0
+
+```
+(outputs/variants/v38_small_0_1010-0819/results.json)

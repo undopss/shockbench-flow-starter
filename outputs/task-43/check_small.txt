@@ -1,0 +1,8 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+1. the scorer's checks of mpc_cpu.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 113,196 bytes zipped, 112,702 unpacked
+  sha256 c7ebcce5db00ae246a587ba08bc4e5c00a9f292118edad852a25c62f775155b3 (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of small, CPU seconds per week (budget 2 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.130 s, median act 0.6645 s, max 0.833 s
+all checks passed; next: uv run sbf upload mpc_cpu

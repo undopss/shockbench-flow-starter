@@ -1,0 +1,6 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+A J 466698522647475 fallback_weeks 0
+B J 467466971339443 fallback_weeks 0
+C components: True True True
+C J 468928707602958 fallback_weeks 0
+D J 467698114506806 fallback_weeks 0

@@ -1,0 +1,13 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v43b_full_342100426_1010-1132: task full, entropy 342100426, episodes 20, baseline base_pw1
+references ready in 2 s (20 episodes)
+  baseline base_pw1: reused full_342100426_20_299c770219b404df.json
+  played base_pw1 in 0 s: RSS 0.8250
+  played scen_K8 in 1975 s: RSS 0.8265
+
+full, entropy 342100426, 20 episodes; diff = variant - base_pw1, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+base_pw1                  0.8250  0.828  0.852  0.806  0.716  +0.0000  [+0.0000, +0.0000]     nan%      0
+scen_K8                   0.8265  0.829  0.856  0.804  0.721  +0.0015  [+0.0005, +0.0026]    99.7%      0  <-- better
+
+results: outputs/variants/v43b_full_342100426_1010-1132/results.json

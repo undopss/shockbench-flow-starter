@@ -3,3 +3,4 @@ round v49_full_662778299_1010-1655: task full, entropy 662778299, episodes 20, b
 references ready in 2240 s (20 episodes)
   played baseline in 579 s: RSS 0.8404
   played safety_5 in 601 s: RSS 0.8429
+  played cl4_all in 551 s: RSS 0.8377

@@ -1,4 +1,4 @@
-Status: running Full test: references ready, playing variants (partial log below)
+Status: running Full test: playing variants (partial log below)
 
 Run: `uv run python outputs/variants.py full 242617957 20 outputs/v51b.json 4` (v51b.json copied to results/task-51D-v51b.json; full final params + one change each).
 
@@ -6,4 +6,5 @@ Run: `uv run python outputs/variants.py full 242617957 20 outputs/v51b.json 4` (
 round v51b_full_242617957_1010-1829: task full, entropy 242617957, episodes 20, baseline final
 references ready in 1642 s (20 episodes)
   played final in 439 s: RSS 0.8153
+  played tw_safety_7 in 442 s: RSS 0.8147
 ```

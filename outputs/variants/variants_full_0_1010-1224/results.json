@@ -1,0 +1,212 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:1,0,0,0",
+ "results": {
+  "best": {
+   "J": [
+    473182951504551
+   ],
+   "rss": 0.8855026757132688,
+   "levels": {
+    "1": 0.8855026757132688,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 27,
+   "spec": {
+    "agent": "agents/mpc_best"
+   }
+  },
+  "final": {
+   "J": [
+    472343460048138
+   ],
+   "rss": 0.8880854042453262,
+   "levels": {
+    "1": 0.8880854042453262,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 26,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0
+    }
+   },
+   "interval": [
+    0.0025827285320574322,
+    0.0025827285320574322
+   ],
+   "better_share": 100.0
+  },
+  "final_cap": {
+   "J": [
+    472565515530468
+   ],
+   "rss": 0.8874022418074808,
+   "levels": {
+    "1": 0.8874022418074808,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 25,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pl_ucap": true
+    }
+   },
+   "interval": [
+    0.0018995660942120463,
+    0.0018995660942120463
+   ],
+   "better_share": 100.0
+  },
+  "final_scen": {
+   "J": [
+    471653178604352
+   ],
+   "rss": 0.8902090822963615,
+   "levels": {
+    "1": 0.8902090822963615,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 64,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8
+    }
+   },
+   "interval": [
+    0.004706406583092737,
+    0.004706406583092737
+   ],
+   "better_share": 100.0
+  },
+  "final_cap_scen": {
+   "J": [
+    471875250899145
+   ],
+   "rss": 0.8895258681343114,
+   "levels": {
+    "1": 0.8895258681343114,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 63,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pl_ucap": true,
+     "pp_scen_K": 8
+    }
+   },
+   "interval": [
+    0.004023192421042654,
+    0.004023192421042654
+   ],
+   "better_share": 100.0
+  }
+ }
+}

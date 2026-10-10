@@ -579,6 +579,8 @@ class ChipPlanner:
         buf_rows = []  # (row, fab index, t)
         for fi in range(nB):
             f = self.fabs[fi]
+            if f["node"] in getattr(self, "buffer_skip", ()):  # task 51: no wafer buffer at these fabs
+                continue
             c0 = cap_eff[f["pos"]] if np.isfinite(cap_eff[f["pos"]]) else f["cap0"]
             want = min(self.wafer_buffer * max(c0, 0.0), 0.95 * self.pos[f["in"]]["cap"])
             if want <= 0:

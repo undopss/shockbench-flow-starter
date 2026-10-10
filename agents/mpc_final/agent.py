@@ -97,6 +97,7 @@ PARAMS = {
     "pp_scen_risk": 0.0,
     # task 44 (review): cap the task-40 releases at the terminal -> grid edge's capacity left this week
     "pl_ucap": False,
+    "buffer_skip": [],  # task 51: substrings of fab ids that keep no wafer buffer (e.g. "fab_us")
     # task 48 ("closure mode"): while a chokepoint on one of a pool's supply lanes is not fully open (and cl_hold
     # weeks after), add cl_safety weeks of burn to that pool's floor in the energy LP (fab grids only if cl_fab)
     "cl_safety": 0.0,
@@ -150,6 +151,10 @@ class Agent:
                                             cq_kappa=PARAMS["cq_kappa"], nd_open=PARAMS["nd_open"],
                                             nd_openq=PARAMS["nd_openq"], sell_buffer=PARAMS["sell_buffer"],
                                             sell_frac=PARAMS["sell_frac"])
+            if PARAMS["buffer_skip"]:
+                ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
+                self.chips.buffer_skip = {i for i, nid in enumerate(ids)
+                                          if any(str(sub) in str(nid) for sub in PARAMS["buffer_skip"])}
         except Exception:
             pass
 

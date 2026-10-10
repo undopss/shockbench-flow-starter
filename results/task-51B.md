@@ -1,4 +1,4 @@
-Status: partial (2 of 4 rows; jp_pulse, safety_6 still playing)
+Status: partial (3 of 4 rows; safety_6 still playing, due ~19:41 UTC)
 
 Task 51B: root 419979470, 20 Full episodes, `uv run python outputs/variants.py full 419979470 20 v51.json 4`
 (v51.json committed as results/task-51B-v51.json; each variant = mpc_final params.json + one change).
@@ -14,4 +14,5 @@ Choices made (no one to ask):
 variant          RSS     L1     L2     L3     L4     diff  interval  better%  fallb
 baseline      0.8483  0.883  0.835  0.820  0.664  +0.0000  [+0.0000, +0.0000]    nan%      0
 us_nobuf      0.8442  0.880  0.832  0.811  0.658  -0.0040  [-0.0053, -0.0029]    0.0%      0  <-- worse
+jp_pulse      0.8477  0.882  0.835  0.818  0.661  -0.0005  [-0.0017, +0.0005]   19.3%      0
 ```

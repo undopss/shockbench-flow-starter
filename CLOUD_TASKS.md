@@ -658,3 +658,31 @@ seeds, no Small, no reference building). Use `full 0 devpick:<a,b,c,d>` (6 episo
    only the fuel the coming pulse does **not** need to push fabs above home demand (e.g. fuel that would overflow
    terminal storage, be left at the end, or arrive in excess of the pulse's need). Try a fixed trickle fraction too
    (e.g. 10%, 25% of the held fuel per week) to see the trade-off. Same funnel as step 3.
+
+### 41. MEASURE + BUILD: the score-weighted gap map and the worst calm episodes (`agents/mpc_calm2`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`).
+Deadline today 23:59 Kyiv: **report within ~2 h**, push often. Task 40 (pulse leak) runs in parallel: don't touch
+pulse/pplan code here.
+
+Why: `scoring/rss.py` (56): RSS_G = sum_s p_s g-bar_s / sum_s p_s D-bar_s, p = (0.50, 0.30, 0.15, 0.05), with g-bar a mean
+over the stratum's episodes. With equal episodes per stratum, **one USD saved in a level-1 episode is worth 10× one USD
+in a level-4 episode**. Every gap map so far (tasks 20/34: "0.01 RSS = 0.034 T", shed 0.16 T, disposal 0.27 T) summed
+USD equally, so it is dominated by levels 3/4. Small-looking leaks (holding, freight, tariff, disposal, chips left at
+the end, buffer cost) may matter much more in RSS terms in level-1/2 episodes.
+
+**Speed rule: test ONLY on the cached Full dev episodes** (unpack `cache/sbf-cache.tgz`; `full 0 dev` = 20, 5 per
+level; `devpick` for quick probes). No new seeds, no Small.
+1. **Weighted gap map** of mpc_best on Full dev 20 (adapt `outputs/task-17/gap17.py` + `outputs/task-34/map34.py`):
+   every cost component (and shed by grid, chip lost sales split not made / disposed / rest, end stock) per level,
+   in USD **and in RSS points** = p_s / n_s × gap / sum_s p_s D-bar_s. Check that the RSS points add up to 1 − RSS.
+   Rank the components by RSS points.
+2. **Worst calm/medium episodes:** ep7 (L1, combo 0.788), ep10 (L1, 0.797), ep6 (L2, 0.724), ep0 (L2, 0.790) (re-rank
+   on mpc_best; take the 4 with the most RSS points lost at L1/L2). Week by week vs the oracle: what costs the agent
+   pays that the oracle does not (which fab/grid/edge/sink, which weeks), and why (forecast, horizon, rule, bug).
+3. **Build** a fix (behind a param, default off) for the biggest leak that is policy-reducible, one causal change per
+   variant. Probe on devpick, then `full 0 dev` 20 vs `{"agent": "agents/mpc_best"}`; keep only an interval above 0
+   that does not lose at L1/L2. Note: no fresh-seed check (overfit risk).
+4. If kept: `sbf check mpc_calm2 --task=full`, `outputs/task-34/guard_test.py 0 agents/mpc_calm2`, `uv run sbf pack
+   mpc_calm2` + sha256. **Do not upload.**
+5. `results/task-41.md`: status line first (pushed after every run), the weighted map, the episode deep-dives,
+   variant tables as printed, verdict, params.json. Branch `task-41-calm2`.

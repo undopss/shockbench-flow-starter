@@ -1,0 +1,8 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v51_full_722245388_1010-1857: task full, entropy 722245388, episodes 12, baseline mpc_final
+references ready in 169 s (12 episodes)
+  played mpc_final in 175 s: RSS 0.8692
+/home/user/shockbench-flow-starter/.venv/lib/python3.13/site-packages/joblib/externals/loky/backend/resource_tracker.py:359: UserWarning: resource_tracker: There appear to be 10 leaked semlock objects to clean up at shutdown
+  warnings.warn(
+/home/user/shockbench-flow-starter/.venv/lib/python3.13/site-packages/joblib/externals/loky/backend/resource_tracker.py:359: UserWarning: resource_tracker: There appear to be 4 leaked folder objects to clean up at shutdown
+  warnings.warn(

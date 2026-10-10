@@ -1,4 +1,4 @@
-Status: 4-episode table done (root 722245388, episodes 0-3); now extending to 12 episodes
+Status: running Full 20 episodes (references turned out cheap: 8 episodes in 169 s); 4-episode table below
 
 ## Table: full 722245388, 4 episodes (first 4 of the 20-episode root; episode seeds depend only on root + index, so they pool)
 ```

@@ -1,4 +1,4 @@
-Status: running Full dev 20
+Status: Full dev 20 done; running fresh Full roots (540469033, 1730880025, 910653604, new 342100426)
 
 ## 1. Build + reproduction
 `agents/mpc_best` = `agents/mpc_combo` (agent.py, pplan.py, fallback.py) + mpc_nodisp's chips.py changes (cq_edges,
@@ -17,3 +17,16 @@ Reproduction, Full dev devpick:1,0,0,0 (`outputs/task-38/run_repro.log`):
 
 Smoke (`outputs/task-38/smoke38.py full 0 3`, all options on): chip LP solved 104/104 weeks, 0 exceptions, 0 None,
 CPU mean 0.163 s, max 0.433 s.
+
+## 2. Variants vs `{"agent": "agents/mpc_combo"}` (`outputs/task-38/v38.json`)
+
+### Full dev 20 (root 0)
+```
+full, entropy 0, 20 episodes; diff = variant - combo, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+combo                     0.8322  0.837  0.857  0.799  0.761  +0.0000  [+0.0000, +0.0000]     nan%      0
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0132  [+0.0082, +0.0187]   100.0%      0  <-- better
+best_no_nd                0.8399  0.848  0.862  0.807  0.761  +0.0077  [+0.0044, +0.0112]   100.0%      0  <-- better
+nodisp                    0.8456  0.855  0.872  0.802  0.764  +0.0134  [+0.0073, +0.0196]   100.0%      0  <-- better
+
+```

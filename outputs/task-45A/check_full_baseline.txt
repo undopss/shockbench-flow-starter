@@ -1,0 +1,7 @@
+1. the scorer's checks of mpc_final.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 120,781 bytes zipped, 120,287 unpacked
+  sha256 585011256038ec193f2a87e372c37eb28235aef51c34f1985d67ee2181a92a0b (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of full, CPU seconds per week (budget 4 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.331 s, median act 0.6053 s, max 0.921 s
+all checks passed; next: uv run sbf upload agents/mpc_final

@@ -1,0 +1,55 @@
+6 episodes; levels [(1, 1), (2, 3), (3, 1), (4, 1)]; DEN = sum p_s Dbar_s = 4.3538 T
+official pooled RSS 0.88136; 1 - RSS = 0.11864; sum of RSS points = 0.11864
+one USD in an L1 episode is worth 10.0x one USD in an L4 episode
+
+RSS points (x100 = 'points of RSS') and USD gap per episode (T), per level; sorted by pooled points
+component                pooled pts   L1 pts   L2 pts   L3 pts   L4 pts    L1 T/ep  L2 T/ep  L3 T/ep  L4 T/ep  all T/ep
+short/le/b_disposed           5.882    3.334    1.547    0.507    0.494     0.2903   0.2244   0.1471   0.4303    0.2568
+short/le/c_rest               1.892    1.071    0.613    0.138    0.071     0.0933   0.0889   0.0400   0.0614    0.0769
+shed/tw                       1.849    0.731    0.491    0.539    0.088     0.0637   0.0713   0.1564   0.0764    0.0851
+short/le/c_endstock           1.753    1.261    0.387    0.041    0.064     0.1098   0.0561   0.0120   0.0556    0.0576
+shed/cn                       1.537    0.807    0.191    0.519    0.019     0.0703   0.0277   0.1507   0.0169    0.0535
+shed/eu                       1.314    1.213    0.045    0.003    0.054     0.1056   0.0065   0.0008   0.0474    0.0289
+short/mat/b_disposed          0.990    0.081    0.447    0.379    0.082     0.0071   0.0649   0.1100   0.0718    0.0639
+shed/jp                       0.632    0.015    0.200    0.411    0.006     0.0013   0.0290   0.1193   0.0050    0.0354
+holding                       0.479    0.282    0.132    0.046    0.019     0.0246   0.0192   0.0134   0.0162    0.0186
+short/mat/c_rest              0.474    0.262    0.153    0.043    0.017     0.0228   0.0222   0.0124   0.0147    0.0194
+disposal                      0.343    0.173    0.099    0.044    0.027     0.0150   0.0144   0.0128   0.0236    0.0158
+short/mat/c_endstock          0.296    0.103    0.144    0.038    0.011     0.0090   0.0209   0.0111   0.0094    0.0154
+shed/kr                       0.208    0.456   -0.254    0.073   -0.067     0.0397  -0.0369   0.0213  -0.0582   -0.0180
+freight                       0.173    0.094    0.052    0.020    0.006     0.0082   0.0076   0.0059   0.0054    0.0070
+shed/sea                      0.140   -0.021   -0.053    0.226   -0.012    -0.0018  -0.0077   0.0655  -0.0108    0.0050
+tariff                        0.139    0.002    0.012    0.119    0.005     0.0002   0.0018   0.0347   0.0043    0.0074
+shed/in                       0.004    0.000    0.000    0.004    0.000     0.0000   0.0000   0.0013   0.0000    0.0002
+queue_holding                 0.003   -0.000    0.006   -0.003    0.000    -0.0000   0.0009  -0.0007   0.0002    0.0003
+war_risk                      0.001    0.000    0.000    0.000   -0.000     0.0000   0.0000   0.0000  -0.0000    0.0000
+shed/(rest)                   0.000    0.000    0.000    0.000    0.000     0.0000   0.0000   0.0000   0.0000    0.0000
+short/(other)                 0.000    0.000    0.000   -0.000    0.000     0.0000   0.0000  -0.0000   0.0000   -0.0000
+shed/us                       0.000    0.000    0.000    0.000    0.000     0.0000   0.0000   0.0000   0.0000    0.0000
+(residual)                   -0.000    0.000   -0.000   -0.000   -0.000     0.0000  -0.0000  -0.0000  -0.0000   -0.0000
+salvage_credit               -0.162   -0.089   -0.048   -0.019   -0.006    -0.0077  -0.0070  -0.0056  -0.0052   -0.0066
+short/mat/a_notmade          -0.692    0.210   -0.702   -0.229    0.029     0.0182  -0.1018  -0.0663   0.0250   -0.0548
+short/le/a_notmade           -5.392   -5.615   -0.034    0.055    0.202    -0.4889  -0.0050   0.0159   0.1761   -0.0520
+TOTAL                        11.864    4.371    3.428    2.956    1.109     0.3806   0.4974   0.8580   0.9656    0.6161
+
+Groups (RSS points x100):
+  shed                      5.684   L1   3.202 L2   0.619 L3   1.775 L4   0.088
+  short/le                  4.135   L1   0.051 L2   2.512 L3   0.741 L4   0.831
+  short/mat                 1.069   L1   0.656 L2   0.043 L3   0.232 L4   0.139
+  holding                   0.479   L1   0.282 L2   0.132 L3   0.046 L4   0.019
+  disposal                  0.343   L1   0.173 L2   0.099 L3   0.044 L4   0.027
+  freight                   0.173   L1   0.094 L2   0.052 L3   0.020 L4   0.006
+  tariff                    0.139   L1   0.002 L2   0.012 L3   0.119 L4   0.005
+  queue_holding             0.003   L1  -0.000 L2   0.006 L3  -0.003 L4   0.000
+  war_risk                  0.001   L1   0.000 L2   0.000 L3   0.000 L4  -0.000
+  short/(other)             0.000   L1   0.000 L2   0.000 L3  -0.000 L4   0.000
+  (residual)               -0.000   L1   0.000 L2  -0.000 L3  -0.000 L4  -0.000
+  salvage_credit           -0.162   L1  -0.089 L2  -0.048 L3  -0.019 L4  -0.006
+
+Per-episode: RSS points lost (x100), episode RSS, J gap T, top 4 items (T)
+  ep 19 L1 pts  4.371 RSS_e 0.926 gap 0.381  short/le/a_notmade -0.489, short/le/b_disposed +0.290, short/le/c_endstock +0.110, shed/eu +0.106
+  ep  0 L3 pts  2.956 RSS_e 0.692 gap 0.858  shed/tw +0.156, shed/cn +0.151, short/le/b_disposed +0.147, shed/jp +0.119
+  ep 12 L2 pts  2.038 RSS_e 0.744 gap 0.887  short/le/a_notmade +0.660, short/mat/a_notmade -0.349, short/mat/b_disposed +0.169, shed/kr -0.112
+  ep 17 L4 pts  1.109 RSS_e 0.761 gap 0.966  short/le/b_disposed +0.430, short/le/a_notmade +0.176, shed/tw +0.076, short/mat/b_disposed +0.072
+  ep 13 L2 pts  0.907 RSS_e 0.923 gap 0.395  short/le/b_disposed +0.141, short/le/c_rest +0.099, short/le/a_notmade -0.079, shed/tw +0.075
+  ep  5 L2 pts  0.483 RSS_e 0.931 gap 0.210  short/le/a_notmade -0.596, short/le/b_disposed +0.422, short/le/c_endstock +0.107, short/le/c_rest +0.073

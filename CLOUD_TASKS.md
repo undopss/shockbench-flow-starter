@@ -598,3 +598,27 @@ RSS is normalized against the clairvoyant oracle: RSS = 1 exactly when J_policy 
 4. **Run a paired funnel, one causal change at a time.** Compare each candidate to the selected task-38 final on Full dev 20 and the untouched fresh Full 20; reuse an existing seed only as a diagnostic, not as the untouched guard. Include Small dev 20 as a no-harm check. Print the paired 90% interval, better share, RSS by stratum, and the component gap before/after. Do not add separately measured gains arithmetically: interactions must be tested in the combined candidate. Run sbf check Small and Full and the task-34 guard test on any final pick.
 
 5. **Deliverable:** update results/task-39.md with the status first, exact candidate and params, seed roots, RSS tables, a cost-to-oracle waterfall that reconciles to the scorer, confidence intervals, checks, and a verdict. Rank the top three remaining levers by recoverable RSS with evidence; label speculative ceilings and irreducible/foresight losses. Keep the best validated candidate if a new idea does not beat it reliably.
+
+### 39 A / B / C. TUNE: re-tune the parameters of `agents/mpc_best` after the new fixes (three sessions in parallel)
+`agents/mpc_best` (branch **`task-38-best`**, get it with `git fetch origin task-38-best && git checkout
+origin/task-38-best -- agents/mpc_best`) = combo + cq + nd_open: Full dev 20 0.8454 (+0.013 vs mpc_combo); task 38 is
+still running its fresh seeds. Its parameters were tuned before jpow / cq / nd_open changed how fuel and chips flow, and
+some were never tuned. Earlier sweeps were flat or overfit (task 33: devpick +0.014..0.019 shrank to +0.001..0.006 on
+dev 20; task 29: pp_value flat 5..80), so do it **honestly**:
+- **Tune on a training root nobody has used: `full 20261010 20`** (entropy root 20261010, 20 episodes; all three
+  sessions use the same root). Do **not** tune on `full 0 dev` or on the seeds of tasks 34/35/37/38.
+- Baseline `{"agent": "agents/mpc_best"}` (its own params.json). Each variant = `{"agent": "agents/mpc_best",
+  "params": {<mpc_best's params.json> + the one change}}` (the runner replaces params.json when "params" is given, so
+  always pass the full set). One parameter at a time, the values listed below, all in one variants.json if CPU allows.
+- Keep a value only if its interval on the training root is above 0. Then test **the combination of your winners**
+  once on the training root, and confirm **once** on `full 0 dev` and on fresh root **342100426** (task 38's untouched
+  seed). Report it as "kept" only if it is positive on both confirmations.
+- If a value makes CPU per week rise (chip_H, H, pp_enum_H), report `sbf check --task=full` max CPU for it.
+- `results/task-39X.md` (X = A/B/C): every table as printed, every value tried (also the losers), the final kept
+  params and their confirmation tables. Status line first, pushed after every run. Branch `task-39X-tune`.
+
+**39A (chips):** `wafer_buffer` 2, 2.5, 3.5, 4 (now 3); `buffer_cost` 300, 3000 (now 1000); `chip_H` 20, 28 (now 24).
+**39B (energy):** `H` 10, 16 (now 12); `safety_weeks` 3, 5 (now 4); `cover_frac` 0.6, 1.0 (now 0.8); `imit_burn` 0.8, 1.0
+(now 0.9); `end_weeks` 2, 4 (now 3).
+**39C (pulses + JP):** `pulse_weeks` 1.0, 2.0 (now 1.5); `jp_arrfb` 0.1, 0.35 (now 0.2); `pp_end` 0.5, 0.9 (now 0.7);
+`pp_H` 6, 10 (now 8; enum stays 6).

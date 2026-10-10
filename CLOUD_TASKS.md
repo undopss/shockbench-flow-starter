@@ -802,7 +802,7 @@ direction: imit_room local ~0.782 vs Codabench 0.7668). Question: is the dev spl
 3. If time allows (≤ 40 min more): a second fresh root `small 1360000001 120` the same way.
 4. `results/task-46.md`, status first, push after every run, branch `task-46-small`. **Do not upload.** Report within ~1 h.
 
-### 47 A / B / C / D. LAST CHANCE: one-step parameter variants of the uploaded final on 4 new roots (4 sessions)
+### 47 A / B / C / D. LAST CHANCE: one-step parameter variants of the uploaded final (team decision: only 47A runs, root 895331359)
 `agents/mpc_final` from branch **`task-44-final`** (commit bb9674a = the uploaded zip; `git fetch origin task-44-final &&
 git checkout origin/task-44-final -- agents/mpc_final`). Its Full RSS sits right at 0.850; the team needs a reliable
 +0.002..0.005. **Hard deadline: push the full table by 20:45 Kyiv (17:45 UTC)**; if time runs short, push what you have

@@ -1,6 +1,6 @@
 # Task 52D: rehearsal, final.zip (agents/mpc_final from task-51-ideas) alone on new Full roots
 
-**Status: running root 1268454195 (started 18:32 UTC).**
+**Status: root 1268454195 references built (1704 s), playing final.zip (19:01 UTC).**
 
 | root | RSS | L1 | L2 | L3 | L4 | episodes per level | fallback weeks |
 |---|---|---|---|---|---|---|---|

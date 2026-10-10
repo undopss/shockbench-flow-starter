@@ -1,4 +1,4 @@
-Status: building references (run started 18:38 UTC)
+Status: playing variants (references ready 19:08 UTC after 30 min)
 
 Task 51B: root 419979470, 20 Full episodes, `uv run python outputs/variants.py full 419979470 20 v51.json 4`
 (v51.json committed as results/task-51B-v51.json; each variant = mpc_final params.json + one change).

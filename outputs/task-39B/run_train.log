@@ -1,12 +1,18 @@
-Status: training sweep done (no value passes the bar); running a follow-up on cover_frac
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v39b_full_20261010_1010-0730: task full, entropy 20261010, episodes 20, baseline best
+references ready in 2131 s (20 episodes)
+  played best in 247 s: RSS 0.8144
+  played H_10 in 251 s: RSS 0.8130
+  played H_16 in 252 s: RSS 0.8143
+  played safety_weeks_3.0 in 230 s: RSS 0.8128
+  played safety_weeks_5.0 in 249 s: RSS 0.8156
+  played cover_frac_0.6 in 243 s: RSS 0.8073
+  played cover_frac_1.0 in 255 s: RSS 0.8205
+  played imit_burn_0.8 in 244 s: RSS 0.8145
+  played imit_burn_1.0 in 248 s: RSS 0.8150
+  played end_weeks_2.0 in 251 s: RSS 0.8118
+  played end_weeks_4.0 in 249 s: RSS 0.8141
 
-Plan: one-at-a-time sweep of mpc_best's energy params (H, safety_weeks, cover_frac, imit_burn, end_weeks) on the
-training root `full 20261010 20`, then the winners' combination, confirmed once on `full 0 dev` and fresh root 342100426.
-
-## 1. Training sweep: `full 20261010 20` (`outputs/task-39B/v39b.json`)
-Baseline `agents/mpc_best` with its own params.json; each variant = that params.json + one change.
-References for this root took 2131 s here; each variant ~250 s (4 jobs).
-```
 full, entropy 20261010, 20 episodes; diff = variant - best, 90% paired interval
 variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
 best                      0.8144  0.807  0.819  0.818      -  +0.0000  [+0.0000, +0.0000]     nan%      0
@@ -20,10 +26,5 @@ imit_burn_0.8             0.8145  0.808  0.819  0.818      -  +0.0001  [-0.0008,
 imit_burn_1.0             0.8150  0.808  0.819  0.820      -  +0.0006  [-0.0003, +0.0017]    82.6%      0
 end_weeks_2.0             0.8118  0.804  0.816  0.818      -  -0.0026  [-0.0047, -0.0007]     0.9%      0  <-- worse
 end_weeks_4.0             0.8141  0.808  0.817  0.818      -  -0.0003  [-0.0023, +0.0015]    36.8%      0
-```
-(outputs/variants/v39b_full_20261010_1010-0730/results.json)
 
-No interval is above 0, so by the task's rule **no value is kept**. end_weeks 2 is worse (interval below 0).
-H 10/16, imit_burn 0.8/1.0, end_weeks 4, safety_weeks 3/5 are flat (|diff| <= 0.0016).
-cover_frac is the only one that moves: 0.6 -0.0071 (8% better), 1.0 +0.0060 [-0.0008, +0.0142] (89% better), i.e.
-a monotone trend toward more cover.
+results: outputs/variants/v39b_full_20261010_1010-0730/results.json

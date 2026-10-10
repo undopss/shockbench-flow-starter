@@ -1,4 +1,4 @@
-Status: running Full dev 20 for the TIES variants (ties4 / ties8 / ties16) and mid2
+Status: Full dev 20 done for lags 4/8/16 + mid2 (ties4 +0.0021, interval touches 0; mid2 worse); running lags 1/2/3
 
 # Task 42: act on the announcement messages (`agents/mpc_msg`)
 
@@ -101,4 +101,25 @@ references ready in 2 s (6 episodes)
   warnings.warn(
 /home/user/shockbench-flow-starter/.venv/lib/python3.13/site-packages/joblib/externals/loky/backend/resource_tracker.py:359: UserWarning: resource_tracker: There appear to be 7 leaked folder objects to clean up at shutdown
   warnings.warn(
+```
+
+Full dev 20:
+```
+round v42b_full_0_1010-1116: task full, entropy 0, episodes dev, baseline best
+references ready in 2 s (20 episodes)
+  played best in 266 s: RSS 0.8454
+  played ties4 in 271 s: RSS 0.8475
+  played ties8 in 276 s: RSS 0.8463
+  played ties16 in 267 s: RSS 0.8463
+  played mid2 in 268 s: RSS 0.8442
+
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+ties4                     0.8475  0.852  0.877  0.811  0.769  +0.0021  [-0.0002, +0.0046]    92.5%      0
+ties8                     0.8463  0.851  0.875  0.811  0.768  +0.0009  [-0.0008, +0.0025]    81.0%      0
+ties16                    0.8463  0.851  0.875  0.811  0.769  +0.0009  [-0.0006, +0.0026]    81.0%      0
+mid2                      0.8442  0.848  0.873  0.810  0.768  -0.0012  [-0.0025, -0.0001]     3.4%      0  <-- worse
+
+results: outputs/variants/v42b_full_0_1010-1116/results.json
 ```

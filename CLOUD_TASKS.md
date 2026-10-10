@@ -658,3 +658,174 @@ seeds, no Small, no reference building). Use `full 0 devpick:<a,b,c,d>` (6 episo
    only the fuel the coming pulse does **not** need to push fabs above home demand (e.g. fuel that would overflow
    terminal storage, be left at the end, or arrive in excess of the pulse's need). Try a fixed trickle fraction too
    (e.g. 10%, 25% of the held fuel per week) to see the trade-off. Same funnel as step 3.
+
+### 41. MEASURE + BUILD: the score-weighted gap map and the worst calm episodes (`agents/mpc_calm2`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`).
+Deadline today 23:59 Kyiv: **report within ~2 h**, push often. Task 40 (pulse leak) runs in parallel: don't touch
+pulse/pplan code here.
+
+Why: `scoring/rss.py` (56): RSS_G = sum_s p_s g-bar_s / sum_s p_s D-bar_s, p = (0.50, 0.30, 0.15, 0.05), with g-bar a mean
+over the stratum's episodes. With equal episodes per stratum, **one USD saved in a level-1 episode is worth 10× one USD
+in a level-4 episode**. Every gap map so far (tasks 20/34: "0.01 RSS = 0.034 T", shed 0.16 T, disposal 0.27 T) summed
+USD equally, so it is dominated by levels 3/4. Small-looking leaks (holding, freight, tariff, disposal, chips left at
+the end, buffer cost) may matter much more in RSS terms in level-1/2 episodes.
+
+**Speed rule: test ONLY on the cached Full dev episodes** (unpack `cache/sbf-cache.tgz`; `full 0 dev` = 20, 5 per
+level; `devpick` for quick probes). No new seeds, no Small.
+1. **Weighted gap map** of mpc_best on Full dev 20 (adapt `outputs/task-17/gap17.py` + `outputs/task-34/map34.py`):
+   every cost component (and shed by grid, chip lost sales split not made / disposed / rest, end stock) per level,
+   in USD **and in RSS points** = p_s / n_s × gap / sum_s p_s D-bar_s. Check that the RSS points add up to 1 − RSS.
+   Rank the components by RSS points.
+2. **Worst calm/medium episodes:** ep7 (L1, combo 0.788), ep10 (L1, 0.797), ep6 (L2, 0.724), ep0 (L2, 0.790) (re-rank
+   on mpc_best; take the 4 with the most RSS points lost at L1/L2). Week by week vs the oracle: what costs the agent
+   pays that the oracle does not (which fab/grid/edge/sink, which weeks), and why (forecast, horizon, rule, bug).
+3. **Build** a fix (behind a param, default off) for the biggest leak that is policy-reducible, one causal change per
+   variant. Probe on devpick, then `full 0 dev` 20 vs `{"agent": "agents/mpc_best"}`; keep only an interval above 0
+   that does not lose at L1/L2. Note: no fresh-seed check (overfit risk).
+4. If kept: `sbf check mpc_calm2 --task=full`, `outputs/task-34/guard_test.py 0 agents/mpc_calm2`, `uv run sbf pack
+   mpc_calm2` + sha256. **Do not upload.**
+5. `results/task-41.md`: status line first (pushed after every run), the weighted map, the episode deep-dives,
+   variant tables as printed, verdict, params.json. Branch `task-41-calm2`.
+
+### 42. MEASURE + BUILD: act on the announcement messages (`agents/mpc_msg`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`).
+Deadline today 23:59 Kyiv: **report within ~2 h**, push often. Tasks 40 (pulses) and 41 (gap map) run in parallel:
+keep your changes in a separate, param-gated block.
+
+Why: `messages.*` (docs/fields/full.md: channel 0 tariff_formal, 1 tariff_informal, 2 tariff_final, 3 sanction_legal,
+4 ties_threat, 5 mid_threat; kind proposal / final_notice / threat / publication / withdrawal; region, target_kind,
+target, k, announced_week, stated_effective_week) are never used by mpc_best. An old Small study (Oct 6) only found the
+false-alarm rate "inconclusive"; nobody measured on Full **which messages precede a costly disruption and how early**.
+`pending_prohibitions` (already used) cover sanctions once they are official.
+
+**Speed rule: ONLY the cached Full dev episodes** (unpack `cache/sbf-cache.tgz`; `full 0 dev`, `devpick` probes).
+1. **Measure** on Full dev 20 (play mpc_best, log observations; use the episode's omega / event list as ground truth):
+   for every message thread: channel, kind sequence, target, announced / stated week, and what actually happened
+   (closure of which chokepoint and how much, sanction/prohibition, tariff change, conflict demand shock, factory
+   outage, nothing = false alarm), with the lead time in weeks. Table per channel: count, true-alarm rate, lead time
+   (median, range), and the cost the event caused (agent vs oracle gap in the weeks after it, USD and RSS points with
+   the level weights p_s / n_s as in task 41). Also: how many costly events had **no** message before them.
+2. **Decide:** a channel is usable if true-alarm rate × lead time × event cost is material (rough ceiling ≥ +0.003
+   RSS). If none is, stop and report (that is a fine result).
+3. **Build** (if usable), behind params (default off): e.g. on a credible mid_threat/ties_threat naming a chokepoint
+   or region, plan as if it closes / is cut at the stated (or typical) week — raise safety stock (safety_weeks) for
+   grids fed through it, pre-ship chips/wafers ahead, avoid committing cargo to the lane; drop it on withdrawal.
+   One causal change per variant; probe on devpick, then `full 0 dev` 20 vs `{"agent": "agents/mpc_best"}`. Keep only
+   an interval above 0 that does not lose at L1/L2. No fresh-seed check (note the overfit risk).
+4. If kept: `sbf check mpc_msg --task=full`, `outputs/task-34/guard_test.py 0 agents/mpc_msg`, `uv run sbf pack
+   mpc_msg` + sha256. **Do not upload.**
+5. `results/task-42.md`: status line first (pushed after every run), the message table, verdict, variant tables as
+   printed, params.json. Branch `task-42-msg`.
+
+### 43. BUILD: spend the spare CPU — longer / exact / scenario pulse planning (`agents/mpc_cpu`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`)
++ `"pulse_weeks": 1.0` (task 39C's only kept value; use it in the baseline too: baseline = `{"agent": "agents/mpc_best",
+"params": <mpc_best params.json + pulse_weeks 1.0>}`). Deadline today 23:59 Kyiv: **report by ~16:30 Kyiv**, push often.
+Task 40 also edits the pulse side (lost generation); keep your changes in separate, param-gated code paths.
+
+Why: mpc_best uses ~0.5 s of the 4 s/week Full budget (cloud machine max 0.82 s). Bigger LP horizons gave nothing
+(39A chip_H 28, 39B H 16 flat), but the pulse planner was never given more CPU: `pp_enum_H` (6) was never swept (pp_H is
+a no-op under enum, task 39C), the `pp_method: "milp"` path was never compared, and the planner scores each release
+option against ONE forecast of arrivals (task 14: ~0.05 T/ep generation lost = fuel held for pulses that do not pay).
+An old whole-agent scenario planner (mpc_scen, Oct 6) was −0.09 on Full, but as a different, weaker agent.
+
+**CPU guard for every variant:** `sbf check <agent> --task=full` max ≤ 2.0 s/week on this machine (2× headroom); the
+planner must keep its process_time deadline (pp_deadline) and fall back to the deterministic plan when out of time.
+
+1. **Quick part:** variants `pp_enum_H` 8, 10; `pp_method: "milp"` (with pp_H 8 and 12). Training root
+   `full 20261010 20` (not dev, not the task 34/35/37/38 seeds), keep only intervals above 0, confirm once on
+   `full 0 dev` 20 and fresh root 342100426.
+2. **Scenario pulses:** in pplan, score each candidate release option against K sampled futures (K 8 and 16) instead
+   of one: sample per-week fuel arrivals for the pulse grids from the agent's own observed history (e.g. empirical
+   distribution of forecast error of arrivals: planned_arrivals vs what actually arrived, per fuel/grid), plus a
+   closure/queue-delay draw for lanes through chokepoints at the rates observed so far (graph_now.open history,
+   queue_lots). Pick the option with the best mean value (try also a 20%-quantile / CVaR variant). Seed the sampler
+   deterministically (per episode + week) so runs are reproducible. Behind params (`pp_scen_K`, `pp_scen_risk`),
+   default off. First measure on devpick that the arrivals forecast error is not zero (if it is ~0, say so: then
+   scenarios cannot help and stop part 2).
+3. Funnel for part 2: probe on `full 20261010` devpick-like subset, then `full 20261010 20`; winner(s) confirmed once on
+   `full 0 dev` 20 and fresh root 342100426; kept only if both intervals are above 0. Then the combination of all kept
+   parts on the same two confirmations.
+4. If kept: sbf check Small + Full (CPU), `outputs/task-34/guard_test.py 0 agents/mpc_cpu`, `uv run sbf pack mpc_cpu` +
+   sha256. **Do not upload.**
+5. `results/task-43.md`: status line first (pushed after every run), every table as printed, CPU per variant, verdict,
+   final params.json. Branch `task-43-cpu`.
+
+### 44 A / B / C. VERIFY: the final candidate on fresh seeds (three sessions in parallel, one root each)
+Get the code: `git fetch origin task-44-final && git checkout origin/task-44-final -- agents/mpc_final agents/mpc_pleak
+agents/mpc_best`. `agents/mpc_final` = mpc_pleak (task 40) + `pulse_weeks 1.0` (39C) + code-review fixes that must not
+change play (try around the term_store loop in _setup; HiGHS `time_limit` 1.5 s on the energy LP and the main chip
+LP) + two options, off in its params.json: `pl_ucap` (cap task 40's releases at the terminal->grid edge capacity left:
+every such edge carries lng AND crude, TW's only ~6.1k/week) and `pp_scen_K` (task 43's scenario pulses; pplan.py
+copied from task-43-cpu). Deadline today 23:59 Kyiv: **report within ~1.5 h**, push after every run.
+Roots: **44A = 540469033, 44B = 1730880025, 44C = 910653604** (20 episodes each; none was used to pick these options).
+1. Smoke first (devpick:1,0,0,0 or one episode, all four variants below): 0 exceptions, 0 fallbacks.
+   **44A only:** reproduction on `full 0 devpick:1,0,0,0`: mpc_final with mpc_pleak's params.json must give exactly
+   mpc_pleak's J (the fixes are neutral); write both J. If not equal, stop and report.
+2. variants.json vs baseline `{"agent": "agents/mpc_best"}`, each `{"agent": "agents/mpc_final", "params": {<full
+   mpc_final params.json> + change}}`: `final` (as is), `final_cap` (+ `"pl_ucap": true`), `final_scen` (+
+   `"pp_scen_K": 8`), `final_cap_scen` (both). Run `full <root> 20` (4 jobs). Print the table as is.
+3. **44A only, after its root:** `small 0 dev` (no-harm), `sbf check mpc_final --task=full` and `--task=small` (CPU max
+   / median, for final and final_cap_scen params), `outputs/task-34/guard_test.py 0 agents/mpc_final`,
+   `uv run sbf pack mpc_final` + sha256. **Do not upload.**
+4. `results/task-44X.md` (X = A/B/C): status line first, table(s), J reproduction (A), checks (A). Branch
+   `task-44X-final`. No verdict needed: the team pools the three roots.
+
+### 45 A / B. STACK + REHEARSE: last small wins on top of the uploaded final (two sessions, one new root each)
+The uploaded final is `agents/mpc_final` on branch **`task-44-final`** (commit bb9674a; params.json has `pp_scen_K 8`,
+`pl_ucap` off, `pulse_weeks 1.0`; zip sha256 3ef5c2e9...c2093). Get it with `git fetch origin task-44-final &&
+git checkout origin/task-44-final -- agents/mpc_final`. Deadline today 23:59 Kyiv: **report within ~1.5 h**, push after
+every run. Roots: **45A = 995215227, 45B = 1827351891** (new, drawn with SystemRandom; nobody used them).
+Two small "leaners" were positive but never confirmed: `pl_overflow` (task 40: smart3_ovf_end4 +0.0039 vs smart3_end4
++0.0035 on dev) and the TIES-threat reaction `msg_ties_lag 4` (task 42 "ties4": +0.0021 [-0.0002, +0.0046] on dev).
+1. Port `msg_ties_lag` from `agents/mpc_msg` (branch task-42-msg; diff it against agents/mpc_best) into
+   agents/mpc_final behind its param (default 0). Reproduction on `full 0 devpick:1,0,0,0`: mpc_final with
+   msg_ties_lag 0 must give exactly the J of the unchanged mpc_final. Push the code (both sessions do the same port;
+   45B may instead wait ~10 min and take 45A's pushed agents/mpc_final from branch task-45A-stack).
+2. variants vs baseline `{"agent": "agents/mpc_final"}` (its own params.json), each = full params + change:
+   `ovf` (+ `"pl_overflow": true`), `ties4` (+ `"msg_ties_lag": 4`), `ovf_ties4` (both). `full <root> 20`, 4 jobs.
+3. **Rehearsal** (mentor's advice): from the baseline run, report the per-episode RSS distribution of mpc_final
+   (min / p10 / median / p90 / max, per level), the 3 worst and 3 best episodes with their level and top cost items
+   (reuse outputs/task-41/map41.py if quick), and fallback/CPU per week (max, median) from the run.
+4. 45A only: `sbf check` of mpc_final with the best variant's params, `--task=full` and `--task=small` (CPU).
+5. `results/task-45X.md`: status first, tables, rehearsal summary. Branch `task-45X-stack`. **Do not upload.**
+
+### 46. CHECK: the uploaded final on fresh Small episodes (does local match Codabench's 0.779?)
+`agents/mpc_final` from branch **`task-44-final`** (commit bb9674a, the uploaded zip sha256 3ef5c2e9...c2093; get it with
+`git fetch origin task-44-final && git checkout origin/task-44-final -- agents/mpc_final`). Codabench scored it
+**0.779** on its 200 private Small episodes; our local Small dev 20 gave 0.8076 (earlier uploads showed the same
+direction: imit_room local ~0.782 vs Codabench 0.7668). Question: is the dev split just easier, or does something differ?
+1. `outputs/variants.py small 993322846 120 <json with only {"final": {"agent": "agents/mpc_final"}}> 4` (fresh root;
+   the reference build is fine). Also pack the folder and confirm `sbf pack` prints the same sha256 3ef5c2e9...c2093.
+2. Report: RSS, per level, episodes per level, 90% interval of the score itself if the runner gives it (else a
+   bootstrap over episodes), fallback weeks. Compare with 0.779 and with dev 20 (0.8076, task 44A).
+3. If time allows (≤ 40 min more): a second fresh root `small 1360000001 120` the same way.
+4. `results/task-46.md`, status first, push after every run, branch `task-46-small`. **Do not upload.** Report within ~1 h.
+
+### 47 A / B / C / D. LAST CHANCE: one-step parameter variants of the uploaded final (team decision: only 47A runs, root 895331359)
+`agents/mpc_final` from branch **`task-44-final`** (commit bb9674a = the uploaded zip; `git fetch origin task-44-final &&
+git checkout origin/task-44-final -- agents/mpc_final`). Its Full RSS sits right at 0.850; the team needs a reliable
++0.002..0.005. **Hard deadline: push the full table by 20:45 Kyiv (17:45 UTC)**; if time runs short, push what you have
+(partial tables are useful), never wait past 21:00 Kyiv.
+Roots (20 episodes each, new, nobody used them): **47A = 895331359, 47B = 1200216545, 47C = 1311782892,
+47D = 2005633864**. All four sessions run the SAME variants.json, so the team can pool them.
+Baseline `{"agent": "agents/mpc_final"}` (own params.json). Each variant = full params.json + ONE change:
+`cover_1.0` (cover_frac 1.0), `safety_5` (safety_weeks 5.0), `scen_K16` (pp_scen_K 16), `scen_cvar` (pp_scen_risk 0.2),
+`smart_2.5` (pl_smart_w 2.5), `smart_3.5` (pl_smart_w 3.5), `end_6` (pl_end 6), `burn_1.0` (imit_burn 1.0).
+1. `uv run python outputs/variants.py full <root> 20 <v47.json> 4` (write v47.json exactly as above; same file in all
+   four sessions). Push the printed table the moment it is done.
+2. `results/task-47X.md`: status first, the table as printed, wall time. No verdict needed (the team pools the 4 roots).
+   Branch `task-47X-last`. **Do not upload.**
+
+### 48. TEST: "closure mode" on the uploaded final (one session, root 1341342961)
+Code: `git fetch origin task-48-closure && git checkout origin/task-48-closure -- agents/mpc_final` (commit 945fd19 =
+the uploaded mpc_final + option `cl_safety`, default 0 = unchanged). While a chokepoint on one of a fuel pool's supply
+lanes is not fully open (open < cl_open 0.99), and for cl_hold weeks after, the energy LP adds cl_safety weeks of burn to
+that pool's floor (fab grids only if cl_fab), so fuel is pulled in early / via longer routes before the fabs go dark.
+**Hard deadline: push the table by 20:45 Kyiv (17:45 UTC).**
+1. Smoke on `full 0 devpick:1,0,0,0` with `cl_safety 4`: 0 exceptions, 0 fallbacks (quick, ~2 min; skip the
+   reproduction, default 0 is the uploaded code path).
+2. variants vs baseline `{"agent": "agents/mpc_final"}` (own params.json), each = full params.json + change:
+   `cl2` (cl_safety 2), `cl4` (cl_safety 4), `cl4_all` (cl_safety 4, cl_fab false), `cl4_h8` (cl_safety 4, cl_hold 8).
+   `uv run python outputs/variants.py full 1341342961 20 <v48.json> 4`. Push the table the moment it is printed.
+3. `results/task-48.md`: status first, the table as printed. Branch `task-48-closure`. **Do not upload.**

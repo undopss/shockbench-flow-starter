@@ -1,0 +1,10 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v52_full_2053228721_1010-1922: task full, entropy 2053228721, episodes 20, baseline final
+references ready in 392 s (20 episodes)
+  played final in 250 s: RSS 0.8442
+
+full, entropy 2053228721, 20 episodes; diff = variant - final, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final                     0.8442  0.897  0.852  0.689  0.695  +0.0000  [+0.0000, +0.0000]     nan%      0
+
+results: outputs/variants/v52_full_2053228721_1010-1922/results.json

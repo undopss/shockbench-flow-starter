@@ -1,0 +1,39 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+Using CPython 3.13.16 interpreter at: /usr/bin/python3.13
+Creating virtual environment at: .venv
+   Building shockbench-flow-starter @ file:///home/user/shockbench-flow-starter
+Downloading pygments (1.2MiB)
+Downloading numba (3.7MiB)
+Downloading networkx (2.0MiB)
+Downloading numpy (15.9MiB)
+Downloading matplotlib (9.4MiB)
+Downloading kiwisolver (1.4MiB)
+Downloading llvmlite (57.1MiB)
+Downloading highspy (2.4MiB)
+Downloading scipy (33.7MiB)
+Downloading fonttools (5.1MiB)
+Downloading ruff (10.9MiB)
+Downloading pillow (6.6MiB)
+ Downloaded pygments
+ Downloaded kiwisolver
+      Built shockbench-flow-starter @ file:///home/user/shockbench-flow-starter
+ Downloaded networkx
+ Downloaded highspy
+ Downloaded numba
+ Downloaded fonttools
+ Downloaded pillow
+ Downloaded matplotlib
+ Downloaded ruff
+ Downloaded numpy
+ Downloaded scipy
+ Downloaded llvmlite
+Installed 35 packages in 40ms
+round v52_full_1573653351_1010-1831: task full, entropy 1573653351, episodes 20, baseline final
+references ready in 1306 s (20 episodes)
+  played final in 264 s: RSS 0.7985
+
+full, entropy 1573653351, 20 episodes; diff = variant - final, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final                     0.7985  0.905  0.846  0.745      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+
+results: outputs/variants/v52_full_1573653351_1010-1831/results.json

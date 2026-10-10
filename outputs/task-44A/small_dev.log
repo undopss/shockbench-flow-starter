@@ -1,0 +1,19 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round variants_small_0_1010-1336: task small, entropy 0, episodes dev, baseline mpc_best
+references ready in 1233 s (20 episodes)
+  played mpc_best in 43 s: RSS 0.8042
+  played final in 45 s: RSS 0.8072
+  played final_cap in 44 s: RSS 0.8064
+  played final_scen in 180 s: RSS 0.8076
+  played final_cap_scen in 169 s: RSS 0.8083
+
+small, entropy 0, 20 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8042  0.835  0.764  0.828  0.685  +0.0000  [+0.0000, +0.0000]     nan%      0
+final                     0.8072  0.839  0.766  0.832  0.686  +0.0030  [+0.0002, +0.0064]    96.5%      0  <-- better
+final_cap                 0.8064  0.837  0.766  0.832  0.686  +0.0022  [-0.0000, +0.0049]    94.5%      0
+final_scen                0.8076  0.837  0.771  0.830  0.681  +0.0034  [-0.0013, +0.0080]    88.6%      0
+final_cap_scen            0.8083  0.838  0.770  0.833  0.685  +0.0041  [+0.0017, +0.0067]    99.7%      0  <-- better
+
+results: outputs/variants/variants_small_0_1010-1336/results.json
+exit 0

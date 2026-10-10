@@ -1,4 +1,4 @@
-Status: Full root + small dev done; running sbf check / guard / pack
+Status: done
 
 # Task 44A — final candidate on fresh root 540469033
 
@@ -48,3 +48,37 @@ results: outputs/variants/smoke_full_0_1010-1224/results.json
 (per-episode wall: final/final_cap ~33 s, scen variants ~95 s.)
 Note: building the reference for this one dev episode took 1865 s here although cache/sbf-cache.tgz was unpacked
 (joblib _cuts_compute missed and was recomputed).
+
+## 4. Checks (this cloud machine, 4 vCPU; 1 dev episode each)
+
+| agent / params | task | week 1 (init + act) | median act | max act | budget | result |
+|---|---|---|---|---|---|---|
+| mpc_final (params.json as is) | full | 0.406 s | 0.390 s | 0.581 s | 4 s | all checks passed |
+| mpc_final + pl_ucap + pp_scen_K 8 | full | 0.481 s | 0.929 s | 1.377 s | 4 s | all checks passed |
+| mpc_final (params.json as is) | small | 0.222 s | 0.121 s | 0.222 s | 2 s | all checks passed |
+| mpc_final + pl_ucap + pp_scen_K 8 | small | 0.195 s | 0.694 s | 0.892 s | 2 s | all checks passed |
+
+Full output: `outputs/task-44A/checks.log`.
+
+Guard test `outputs/task-34/guard_test.py 0 agents/mpc_final` (exit 0):
+```
+A J 465024298066392 fallback_weeks 0
+B J 465024298066392 fallback_weeks 0
+C components: True True True
+C J 467367227590693 fallback_weeks 0
+D J 467367227590693 fallback_weeks 0
+```
+A = B and C = D as required.
+
+Pack: `uv run sbf pack mpc_final` -> outputs/mpc_final.zip (not committed, outputs/*.zip is gitignored), 5 files,
+117,724 bytes unpacked, **sha256 88e9fb07df2855425bbb9aa2179f09c3571a9f1b303b75c6b078d1874406eb21**
+(params.json as shipped: pl_ucap and pp_scen_K off). The final_cap_scen folder would be
+e85326ed634b8d34a8e8ef41d7acd47683522e0e7e687753c6cac53a3eb9a08b. **Not uploaded.**
+
+## Choices I made (no one to ask)
+
+- Smoke and J reproduction done in one runner call (baseline mpc_pleak with its own params.json, then mpc_final with
+  mpc_pleak's params, then the four variants) on `full 0 devpick:1,0,0,0`.
+- `small 0 dev` no-harm run uses the same variants.json as the Full root (baseline mpc_best, 4 variants).
+- sbf check for final_cap_scen: a copy of agents/mpc_final with the changed params.json in
+  `outputs/task-44A/mpc_final_cap_scen/`.

@@ -1,0 +1,32 @@
+=== agents/mpc_final full
+1. the scorer's checks of mpc_final.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 118,218 bytes zipped, 117,724 unpacked
+  sha256 88e9fb07df2855425bbb9aa2179f09c3571a9f1b303b75c6b078d1874406eb21 (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of full, CPU seconds per week (budget 4 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.406 s, median act 0.3898 s, max 0.581 s
+all checks passed; next: uv run sbf upload agents/mpc_final
+=== outputs/task-44A/mpc_final_cap_scen full
+1. the scorer's checks of mpc_final_cap_scen.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 118,251 bytes zipped, 117,757 unpacked
+  sha256 e85326ed634b8d34a8e8ef41d7acd47683522e0e7e687753c6cac53a3eb9a08b (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of full, CPU seconds per week (budget 4 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.481 s, median act 0.9288 s, max 1.377 s
+all checks passed; next: uv run sbf upload outputs/task-44A/mpc_final_cap_scen
+=== agents/mpc_final small
+1. the scorer's checks of mpc_final.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 118,218 bytes zipped, 117,724 unpacked
+  sha256 88e9fb07df2855425bbb9aa2179f09c3571a9f1b303b75c6b078d1874406eb21 (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of small, CPU seconds per week (budget 2 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.222 s, median act 0.1213 s, max 0.222 s
+all checks passed; next: uv run sbf upload agents/mpc_final
+=== outputs/task-44A/mpc_final_cap_scen small
+1. the scorer's checks of mpc_final_cap_scen.zip, and every file's imports (nothing is imported)
+OK: the scorer's checks pass: 5 file(s), 118,251 bytes zipped, 117,757 unpacked
+  sha256 e85326ed634b8d34a8e8ef41d7acd47683522e0e7e687753c6cac53a3eb9a08b (the submission id; it salts config['policy_seed'])
+2. a timed run in an isolated process (only the submission and the scoring image's packages): 1 dev episode(s) of small, CPU seconds per week (budget 2 s)
+  NOTE: not installed here, so not importable in this run: ['filelock', 'fsspec', 'jinja2', 'markupsafe', 'mpmath', 'setuptools', 'sympy', 'torch'] (--extra rl)
+  episode 0: week 1 (Agent(config) + first act) 0.195 s, median act 0.6940 s, max 0.892 s
+all checks passed; next: uv run sbf upload outputs/task-44A/mpc_final_cap_scen

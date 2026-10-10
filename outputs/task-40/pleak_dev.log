@@ -1,0 +1,54 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 tasks      | elapsed:  1.3min
+[Parallel(n_jobs=4)]: Done  18 out of  20 | elapsed:  2.3min remaining:   15.1s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:  2.4min finished
+best: 144 s, RSS 0.8454 by level {1: 0.8504664357123445, 2: 0.8735010917348536, 3: 0.8097276590985408, 4: 0.7673597513460635}
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 tasks      | elapsed:  1.2min
+[Parallel(n_jobs=4)]: Done  18 out of  20 | elapsed:  1.9min remaining:   12.5s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:  2.0min finished
+nopulse: 117 s, RSS 0.6688 by level {1: 0.623456506985954, 2: 0.8120566549046777, 3: 0.599437310171704, 4: 0.5623029307584314}
+
+20 episodes; mean per episode; diff = best - nopulse
+  freight         best   1.7956e+10 nopulse   1.7613e+10 diff  +3.4266e+08
+  war_risk        best   1.4827e+08 nopulse   1.4478e+08 diff  +3.4868e+06
+  tariff          best   2.0886e+10 nopulse   1.6170e+10 diff  +4.7159e+09
+  holding         best   3.2936e+10 nopulse   3.1855e+10 diff  +1.0811e+09
+  queue_holding   best   9.5821e+08 nopulse   8.9464e+08 diff  +6.3573e+07
+  shortage        best   2.2430e+12 nopulse   3.0673e+12 diff  -8.2431e+11
+  disposal        best   1.4026e+10 nopulse   1.0949e+10 diff  +3.0766e+09
+  shed            best   4.2123e+12 nopulse   4.0108e+12 diff  +2.0157e+11
+  salvage_credit  best  -5.8304e+09 nopulse  -5.8270e+09 diff  -3.3987e+06
+  TOTAL J         best   6.5364e+12 nopulse   7.1499e+12 diff  -6.1346e+11
+
+per grid (units of grid output; USD = units x VOLL), mean per episode, best | nopulse | diff
+grid_tw    shed     45573 |     30742 |   +14830 (+6.118e+10 USD)   fabE    23593 |    11043 |  +12550   gen    -2280   lots 1.75e+07 | 8.19e+06   0-shed wk 70.8 | 40.8
+    lng     inflow    164120/   160749(   +3371)  burn    161852/   162005(    -153)  dispT      3348/      515(   +2834)  dispG         5/       14(     -10)  resid     -1086/    -1785(    +699)  stT      2644/     2263(    +381)  stG      2909/     2589(    +319)  rloss     46267/    52879(   -6612)  rloss-wk 31.3/77.3
+    crude   inflow      7719/     8702(    -983)  burn      8234/     9224(    -990)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid      -516/     -523(      +7)  stT       127/       93(     +34)  stG       193/      222(     -29)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_kr    shed     92078 |     79222 |   +12856 (+5.304e+10 USD)   fabE    19689 |     8557 |  +11132   gen    -1724   lots 1.46e+07 | 6.37e+06   0-shed wk 57.4 | 24.9
+    lng     inflow    195928/   195129(    +799)  burn    198567/   199663(   -1096)  dispT      1329/       15(   +1314)  dispG         0/        0(      +0)  resid     -3968/    -4549(    +581)  stT      2518/     2185(    +332)  stG      2558/     2361(    +197)  rloss     57177/    61462(   -4285)  rloss-wk 37.9/79.4
+    crude   inflow     15143/    14995(    +148)  burn     14958/    15051(     -93)  dispT       278/       48(    +230)  dispG         2/        2(      +0)  resid       -95/     -107(     +12)  stT       246/      160(     +87)  stG       138/      191(     -53)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    nucfuel inflow    259172/   259307(    -135)  burn    325525/   325734(    -209)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid    -66353/   -66427(     +74)  stT         0/        0(      +0)  stG    109148/   109054(     +94)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_jp    shed    197040 |    193658 |    +3382 (+1.395e+10 USD)   fabE     4912 |     2476 |   +2436   gen     -946   lots 3.9e+06 | 1.96e+06   0-shed wk 28.8 | 15.2
+    lng     inflow    411468/   409007(   +2461)  burn    407853/   408710(    -857)  dispT      5331/      153(   +5178)  dispG        41/       41(      +0)  resid     -1757/      103(   -1860)  stT      5795/     7765(   -1970)  stG     10604/    10658(     -54)  rloss     82245/    83776(   -1531)  rloss-wk 42.4/45.4
+    crude   inflow     47887/    47523(    +364)  burn     48023/    48091(     -68)  dispT       497/       36(    +461)  dispG         0/        2(      -2)  resid      -633/     -606(     -27)  stT       601/      643(     -42)  stG       525/      516(      +9)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    nucfuel inflow    112968/   112970(      -2)  burn    146684/   146686(      -3)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid    -33716/   -33716(      +1)  stT         0/        0(      +0)  stG     42423/    42420(      +3)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_cn    shed    180685 |    166944 |   +13740 (+5.668e+10 USD)   fabE    17658 |     4500 |  +13158   gen     -582   lots 1.96e+07 | 5e+06   0-shed wk 50.4 | 18.2
+    lng     inflow    508453/   488436(  +20017)  burn    484091/   484613(    -522)  dispT     22169/        0(  +22169)  dispG       815/      154(    +661)  resid      1378/     3669(   -2291)  stT      3776/     4628(    -852)  stG     12599/    13575(    -976)  rloss     42813/    42887(     -74)  rloss-wk 28.7/40.9
+    crude   inflow    119028/   118360(    +668)  burn    118880/   118774(    +106)  dispT       692/       87(    +606)  dispG         0/        0(      +0)  resid      -545/     -501(     -44)  stT      1664/     1693(     -29)  stG       774/      769(      +5)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    nucfuel inflow    700464/   700467(      -3)  burn    916815/   916824(      -9)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid   -216351/  -216357(      +6)  stT         0/        0(      +0)  stG    265006/   264998(      +9)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_us    shed    102957 |    102957 |       +0 (+0.000e+00 USD)   fabE    17893 |    17964 |     -70   gen      -70   lots 1.58e+07 | 1.59e+07   0-shed wk 97.0 | 97.0
+    lng     inflow   3967274/  3967274(      +0)  burn   3307876/  3307900(     -24)  dispT         0/        0(      +0)  dispG    589633/   589609(     +24)  resid     69765/    69765(      -0)  stT         0/        0(      +0)  stG    128043/   128043(      +0)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    crude   inflow     85813/    85826(     -13)  burn     82688/    82698(     -10)  dispT         0/        0(      +0)  dispG        17/       20(      -3)  resid      3108/     3108(      +0)  stT       895/      895(      +0)  stG      3048/     3048(      +0)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    nucfuel inflow    984568/   984576(      -9)  burn   1426106/  1426117(     -11)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid   -441539/  -441541(      +2)  stT         0/        0(      +0)  stG    344756/   344754(      +2)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_eu    shed    115416 |    112023 |    +3392 (+1.399e+10 USD)   fabE     9711 |     6898 |   +2814   gen     -579   lots 8.9e+06 | 6.29e+06   0-shed wk 57.3 | 44.6
+    lng     inflow    877473/   911582(  -34110)  burn    864338/   864804(    -465)  dispT     10324/    39333(  -29009)  dispG       804/     1499(    -695)  resid      2007/     5947(   -3940)  stT      3138/     3724(    -586)  stG     18491/    21938(   -3448)  rloss     48494/    48049(    +445)  rloss-wk 25.4/46.2
+    crude   inflow     64053/    64070(     -17)  burn     63450/    63467(     -17)  dispT         0/        0(      +0)  dispG         5/        5(      +0)  resid       599/      599(      -0)  stT       750/      750(      +0)  stG      1733/     1733(      +0)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+    nucfuel inflow    947224/   947247(     -24)  burn   1235009/  1235037(     -27)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid   -287786/  -287789(      +4)  stT         0/        0(      +0)  stG    351327/   351323(      +4)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+grid_sea   shed    260550 |    259884 |     +667 (+2.750e+09 USD)   fabE     1578 |     1001 |    +577   gen      -90   lots 1.75e+06 | 1.11e+06   0-shed wk 17.0 | 12.3
+    lng     inflow    601252/   579010(  +22242)  burn    571886/   571965(     -79)  dispT     22479/        0(  +22479)  dispG         0/        0(      +0)  resid      6887/     7045(    -158)  stT     13727/    11247(   +2480)  stG     17708/    20482(   -2774)  rloss      1130/      838(    +292)  rloss-wk 5.5/5.3
+    crude   inflow     10707/    10716(      -9)  burn     17278/    17300(     -22)  dispT         0/        0(      +0)  dispG         0/        0(      +0)  resid     -6571/    -6584(     +13)  stT       342/      330(     +13)  stG       166/      166(      +1)  rloss         0/        0(      +0)  rloss-wk 0.0/0.0
+
+TOTAL fab grids: d shed +2.0159e+11 USD = transfer to fabs +1.7572e+11 + lost generation +2.5870e+10  (0.01 RSS ~ 3.4e10)
+source supply thrown away (units/ep): crude 364415/364666, lng 1501195/1520616, nucfuel 2113776/2113604, wafer 90938923/127830508

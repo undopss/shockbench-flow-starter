@@ -1,0 +1,22 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v40_probe_full_0_1010-1023: task full, entropy 0, episodes devpick:2,2,1,1, baseline mpc_best
+references ready in 1 s (6 episodes)
+  played mpc_best in 62 s: RSS 0.8864
+  played trickle10 in 63 s: RSS 0.8858
+  played trickle25 in 63 s: RSS 0.8739
+  played smart1 in 63 s: RSS 0.8771
+  played smart2 in 58 s: RSS 0.8901
+  played overflow in 57 s: RSS 0.8900
+  played end4 in 57 s: RSS 0.8880
+
+full, entropy 0, 6 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8864  0.890  0.895  0.873  0.857  +0.0000  [+0.0000, +0.0000]     nan%      0
+trickle10                 0.8858  0.887  0.900  0.875  0.828  -0.0006  [-0.0022, +0.0011]    19.6%      0
+trickle25                 0.8739  0.868  0.894  0.872  0.815  -0.0124  [-0.0254, -0.0010]     0.0%      0  <-- worse
+smart1                    0.8771  0.871  0.898  0.872  0.827  -0.0093  [-0.0223, +0.0052]    18.2%      0
+smart2                    0.8901  0.891  0.905  0.876  0.849  +0.0038  [+0.0005, +0.0074]   100.0%      0  <-- better
+overflow                  0.8900  0.891  0.904  0.876  0.850  +0.0036  [+0.0003, +0.0073]   100.0%      0  <-- better
+end4                      0.8880  0.892  0.895  0.874  0.857  +0.0016  [+0.0004, +0.0029]   100.0%      0  <-- better
+
+results: outputs/variants/v40_probe_full_0_1010-1023/results.json

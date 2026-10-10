@@ -1,0 +1,179 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:2,2,1,1",
+ "results": {
+  "best": {
+   "J": [
+    473182951504551,
+    418710486646136,
+    471373496940634,
+    721999130416996,
+    595118099484009,
+    1049912790938826
+   ],
+   "rss": 0.8863825965684332,
+   "levels": {
+    "1": 0.8897314280355387,
+    "2": 0.8950398679630175,
+    "3": 0.8725512357292128,
+    "4": 0.8568368926813406
+   },
+   "fallback_weeks": 0,
+   "seconds": 0,
+   "spec": {
+    "agent": "agents/mpc_best"
+   }
+  },
+  "nuc_c07": {
+   "J": [
+    473812470804170,
+    418299898780321,
+    471146482571638,
+    721746660294717,
+    594825882677598,
+    1049748671610372
+   ],
+   "rss": 0.8865784647302023,
+   "levels": {
+    "1": 0.8893906260956683,
+    "2": 0.8957135826507944,
+    "3": 0.8731881337132513,
+    "4": 0.8573121629450648
+   },
+   "fallback_weeks": 0,
+   "seconds": 58,
+   "spec": {
+    "agent": "agents/mpc_calm2",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "fuel_cover": {
+      "nucfuel": 0.7
+     }
+    }
+   },
+   "interval": [
+    -0.0005801574454259439,
+    0.0009813688706530321
+   ],
+   "better_share": 76.55
+  },
+  "nuc_c06": {
+   "J": [
+    472505403592770,
+    417903423716989,
+    470925856227557,
+    723052365599840,
+    594547055658652,
+    1052598107759517
+   ],
+   "rss": 0.8870381592243856,
+   "levels": {
+    "1": 0.892042463256702,
+    "2": 0.8941889585039158,
+    "3": 0.8737958481306501,
+    "4": 0.8490605311426045
+   },
+   "fallback_weeks": 0,
+   "seconds": 57,
+   "spec": {
+    "agent": "agents/mpc_calm2",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "fuel_cover": {
+      "nucfuel": 0.6
+     }
+    }
+   },
+   "interval": [
+    -6.87658311030459e-05,
+    0.0014752477165973499
+   ],
+   "better_share": 94.75
+  },
+  "nuc_c09": {
+   "J": [
+    473546004015664,
+    419135085352781,
+    471613602572631,
+    722270860519113,
+    595417459424910,
+    1050116722415301
+   ],
+   "rss": 0.8854523521218837,
+   "levels": {
+    "1": 0.888505322408361,
+    "2": 0.894320697149203,
+    "3": 0.8718987690035529,
+    "4": 0.8562463311215356
+   },
+   "fallback_weeks": 0,
+   "seconds": 54,
+   "spec": {
+    "agent": "agents/mpc_calm2",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "fuel_cover": {
+      "nucfuel": 0.9
+     }
+    }
+   },
+   "interval": [
+    -0.0010235710415218424,
+    -0.0008477748315913747
+   ],
+   "better_share": 0.0
+  }
+ }
+}

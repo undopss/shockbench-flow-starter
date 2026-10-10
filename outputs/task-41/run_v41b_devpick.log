@@ -1,0 +1,16 @@
+round v41b_full_0_1010-1006: task full, entropy 0, episodes devpick:2,2,1,1, baseline best
+references ready in 1 s (6 episodes)
+  baseline best: reused full_0_devpick-2-2-1-1_96471f42db117752.json
+  played best in 0 s: RSS 0.8864
+  played nuc_c07 in 58 s: RSS 0.8866
+  played nuc_c06 in 57 s: RSS 0.8870
+  played nuc_c09 in 54 s: RSS 0.8855
+
+full, entropy 0, 6 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8864  0.890  0.895  0.873  0.857  +0.0000  [+0.0000, +0.0000]     nan%      0
+nuc_c07                   0.8866  0.889  0.896  0.873  0.857  +0.0002  [-0.0006, +0.0010]    76.5%      0
+nuc_c06                   0.8870  0.892  0.894  0.874  0.849  +0.0007  [-0.0001, +0.0015]    94.8%      0
+nuc_c09                   0.8855  0.889  0.894  0.872  0.856  -0.0009  [-0.0010, -0.0008]     0.0%      0  <-- worse
+
+results: outputs/variants/v41b_full_0_1010-1006/results.json

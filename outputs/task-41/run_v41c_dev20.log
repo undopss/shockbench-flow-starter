@@ -1,0 +1,16 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v41c_full_0_1010-1009: task full, entropy 0, episodes dev, baseline best
+references ready in 1 s (20 episodes)
+  played best in 144 s: RSS 0.8454
+  played nuc_c07 in 142 s: RSS 0.8450
+  played nuc_c06 in 146 s: RSS 0.8439
+  played nuc_c05 in 145 s: RSS 0.8358
+
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+nuc_c07                   0.8450  0.849  0.874  0.810  0.765  -0.0004  [-0.0019, +0.0007]    31.6%      0
+nuc_c06                   0.8439  0.849  0.871  0.811  0.760  -0.0015  [-0.0047, +0.0010]    23.4%      0
+nuc_c05                   0.8358  0.847  0.852  0.802  0.752  -0.0097  [-0.0178, -0.0020]     1.6%      0  <-- worse
+
+results: outputs/variants/v41c_full_0_1010-1009/results.json

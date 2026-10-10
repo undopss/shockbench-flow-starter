@@ -1,0 +1,10 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v46_small_1360000001_1010-1528: task small, entropy 1360000001, episodes 120, baseline final
+references ready in 189 s (120 episodes)
+  played final in 871 s: RSS 0.7898
+
+small, entropy 1360000001, 120 episodes; diff = variant - final, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final                     0.7898  0.806  0.810  0.681  0.799  +0.0000  [+0.0000, +0.0000]     nan%      0
+
+results: outputs/variants/v46_small_1360000001_1010-1528/results.json

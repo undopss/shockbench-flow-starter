@@ -801,3 +801,18 @@ direction: imit_room local ~0.782 vs Codabench 0.7668). Question: is the dev spl
    bootstrap over episodes), fallback weeks. Compare with 0.779 and with dev 20 (0.8076, task 44A).
 3. If time allows (≤ 40 min more): a second fresh root `small 1360000001 120` the same way.
 4. `results/task-46.md`, status first, push after every run, branch `task-46-small`. **Do not upload.** Report within ~1 h.
+
+### 47 A / B / C / D. LAST CHANCE: one-step parameter variants of the uploaded final on 4 new roots (4 sessions)
+`agents/mpc_final` from branch **`task-44-final`** (commit bb9674a = the uploaded zip; `git fetch origin task-44-final &&
+git checkout origin/task-44-final -- agents/mpc_final`). Its Full RSS sits right at 0.850; the team needs a reliable
++0.002..0.005. **Hard deadline: push the full table by 20:45 Kyiv (17:45 UTC)**; if time runs short, push what you have
+(partial tables are useful), never wait past 21:00 Kyiv.
+Roots (20 episodes each, new, nobody used them): **47A = 895331359, 47B = 1200216545, 47C = 1311782892,
+47D = 2005633864**. All four sessions run the SAME variants.json, so the team can pool them.
+Baseline `{"agent": "agents/mpc_final"}` (own params.json). Each variant = full params.json + ONE change:
+`cover_1.0` (cover_frac 1.0), `safety_5` (safety_weeks 5.0), `scen_K16` (pp_scen_K 16), `scen_cvar` (pp_scen_risk 0.2),
+`smart_2.5` (pl_smart_w 2.5), `smart_3.5` (pl_smart_w 3.5), `end_6` (pl_end 6), `burn_1.0` (imit_burn 1.0).
+1. `uv run python outputs/variants.py full <root> 20 <v47.json> 4` (write v47.json exactly as above; same file in all
+   four sessions). Push the printed table the moment it is done.
+2. `results/task-47X.md`: status first, the table as printed, wall time. No verdict needed (the team pools the 4 roots).
+   Branch `task-47X-last`. **Do not upload.**

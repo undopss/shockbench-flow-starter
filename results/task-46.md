@@ -1,4 +1,4 @@
-Status: building references (Small root 993322846, 120 episodes; fq + cut-point caches missed and were rebuilt, 13+6 min, references started 15:11 UTC)
+Status: playing mpc_final on Small root 993322846 x120 (references ready in 1361 s)
 
 Plan: run the uploaded mpc_final (task-44-final, bb9674a) on fresh Small root 993322846 x120, compare with Codabench 0.779 and dev 0.8076.
 

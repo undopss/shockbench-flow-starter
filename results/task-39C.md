@@ -1,4 +1,4 @@
-Status: dev confirmation done (+0.0005, >0); running fresh root 342100426
+Status: done — kept pulse_weeks 1.0 (+0.0003 train, +0.0005 dev, +0.0002 fresh, all >0); others flat or worse
 
 # Task 39C: re-tune the pulse / JP parameters of `agents/mpc_best`
 
@@ -38,3 +38,27 @@ best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000,
 pulse_weeks_1.0           0.8459  0.851  0.873  0.810  0.768  +0.0005  [+0.0001, +0.0009]    99.2%      0  <-- better
 ```
 (baseline reproduces task 38's mpc_best 0.8454 exactly.)
+
+## 3. Confirmation 2: fresh root `full 342100426 20` (task 38's untouched seed)
+```
+full, entropy 342100426, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8248  0.828  0.852  0.806  0.716  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_weeks_1.0           0.8250  0.828  0.852  0.806  0.716  +0.0002  [+0.0000, +0.0004]    99.9%      0  <-- better
+```
+
+## Verdict
+- **Kept: `pulse_weeks` 1.0** (from 1.5): positive on the training root (+0.0003), Full dev 20 (+0.0005) and fresh
+  342100426 (+0.0002), every interval above 0, ~99% better share. Real but tiny (≈ +0.0003 RSS, two orders of
+  magnitude below the +0.05 bar); safe to fold into the final params.json, not worth a separate submission.
+- Not kept: pulse_weeks 2.0 (worse), jp_arrfb 0.1 / 0.35 (flat / worse), pp_end 0.5 / 0.9 (flat / worse-leaning),
+  pp_H 6 / 10 (no-op under enum; identical play).
+- The pulse/JP parameters are at a flat optimum after jpow/cq/nd_open; nothing here moves Full by a meaningful amount.
+
+Final kept params.json (mpc_best's + the one change):
+`{"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "jp_qedge": true, "jp_arrfb": 0.2, "fb_kappa_ct": true, "safety_weeks": 4.0, "pp_end": 0.7, "warn_gain": 0.5, "cq_edges": true, "cq_drain": true, "cq_kappa": true, "nd_open": true, "pulse_weeks": 1.0}`
+
+Choices made without asking: pp_H got no `sbf check` CPU run because its play is identical (enum caps the horizon at
+pp_enum_H = 6); no Small dev run (not in the 39X protocol; pulse_weeks only gates a fuel-stock threshold). The
+`agents/mpc_best` folder on this branch is task 38's, unchanged; the kept value lives only in the params above, so
+the team merges it with tasks 39A/39B's winners.

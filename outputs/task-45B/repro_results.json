@@ -1,0 +1,120 @@
+{
+ "task": "full",
+ "entropy": 0,
+ "episodes": "devpick:1,0,0,0",
+ "results": {
+  "orig": {
+   "J": [
+    471653178604352
+   ],
+   "rss": 0.8902090822963615,
+   "levels": {
+    "1": 0.8902090822963615,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 67,
+   "spec": {
+    "agent": "outputs/task-45B/orig_final"
+   }
+  },
+  "ported0": {
+   "J": [
+    471653178604352
+   ],
+   "rss": 0.8902090822963615,
+   "levels": {
+    "1": 0.8902090822963615,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 65,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8,
+     "msg_ties_lag": 0
+    }
+   },
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "better_share": 0.0
+  },
+  "ties4": {
+   "J": [
+    472156597374772
+   ],
+   "rss": 0.888660294620198,
+   "levels": {
+    "1": 0.888660294620198,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "fallback_weeks": 0,
+   "seconds": 66,
+   "spec": {
+    "agent": "agents/mpc_final",
+    "params": {
+     "kappa_lp": true,
+     "pp_direct": [
+      "grid_cn",
+      "grid_eu"
+     ],
+     "pp_split": true,
+     "sell_end": true,
+     "imit_grid": "room",
+     "jp_qedge": true,
+     "jp_arrfb": 0.2,
+     "fb_kappa_ct": true,
+     "safety_weeks": 4.0,
+     "pp_end": 0.7,
+     "warn_gain": 0.5,
+     "cq_edges": true,
+     "cq_drain": true,
+     "cq_kappa": true,
+     "nd_open": true,
+     "pl_smart": true,
+     "pl_smart_w": 3.0,
+     "pl_end": 4,
+     "pulse_weeks": 1.0,
+     "pp_scen_K": 8,
+     "msg_ties_lag": 4
+    }
+   },
+   "interval": [
+    -0.00154878767616351,
+    -0.00154878767616351
+   ],
+   "better_share": 0.0
+  }
+ }
+}

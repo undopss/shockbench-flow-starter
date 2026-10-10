@@ -849,3 +849,17 @@ Baseline `{"agent": "agents/mpc_final"}`. Variants (full params.json + one chang
 `smart_3.5` (pl_smart_w 3.5), `end_6` (pl_end 6).
 1. `uv run python outputs/variants.py full <root> 20 <v50.json> 4`. Push the table the moment it is printed.
 2. `results/task-50X.md`: status first, the table as printed. Branch `task-50X-last`. **Do not upload.**
+
+### 51 A / B / C. LAST ROUND: three new ideas on final.zip, three new roots (3 sessions, same variants)
+(Task 50 above was written by mistake and never launched; ignore it.)
+Code: `git fetch origin task-51-ideas && git checkout origin/task-51-ideas -- agents/mpc_final` (its params.json =
+final.zip, sha256 93be0efd..., safety_weeks 5; new option `buffer_skip`, default off).
+**Hard deadline: push the table by 22:50 Kyiv (19:50 UTC)**; push partial tables if short of time.
+Roots (new): **51A = 242617957, 51B = 419979470, 51C = 722245388**, 20 episodes each, same v51.json everywhere.
+Baseline `{"agent": "agents/mpc_final"}`. Variants (full params.json + one change):
+`us_nobuf` (`"buffer_skip": ["fab_us"]`: no wafer buffer at the US fabs, which dispose raw chips at storage cap ~30 weeks),
+`jp_pulse` (`"pulse_grids": ["grid_tw", "grid_kr", "grid_jp"]`: the TW/KR hold-then-pulse rule also at JP),
+`safety_6` (`"safety_weeks": 6.0`).
+1. Smoke `full 0 devpick:1,0,0,0` with us_nobuf (0 exceptions). Then `uv run python outputs/variants.py full <root> 20
+   <v51.json> 4`. Push the table the moment it is printed.
+2. `results/task-51X.md`: status first, the table as printed. Branch `task-51X-ideas`. **Do not upload.**

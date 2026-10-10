@@ -574,3 +574,27 @@ chips.py). Deadline today 23:59 Kyiv, so work carefully but report fast.
 4. Pack it: `uv run sbf pack mpc_best` and report the zip's sha256 (**do not upload**).
 5. `results/task-38.md`: tables, verdict (is mpc_best the final? if a part hurts, drop it), the final params.json, the
    zip sha256. Status line first, updated after every run.
+
+
+## Round 11: map the remaining gap to the oracle
+
+### 39. ANALYZE + IMPROVE: explain the remaining RSS gap for the final candidate
+
+Start only after task 38 has a final verdict. Use the final candidate selected there; if task 38 drops an option, do not resurrect it here. The current mpc_best score of 0.8855 is one Full dev episode only, not the pooled board score.
+
+RSS is normalized against the clairvoyant oracle: RSS = 1 exactly when J_policy = J_oracle. For each harm stratum, 1 - RSS is the remaining fraction of the naive-to-oracle savings denominator. Report this distinction clearly. The oracle knows the full disruption path; classify losses as policy-reducible, resource-constrained, or information/foresight-limited. Do not promise that 1 is attainable by a causal online policy.
+
+1. **Establish the baseline and make a fresh gap map.** On the exact Full dev episodes used for task 38, reproduce the selected candidate and compute pooled RSS with the official scoring code, per-stratum RSS, and paired differences against mpc_combo. Adapt task 34's map34 analysis to the selected candidate and report per-episode plus per-stratum costs against the same naive and oracle references. Keep units explicit (integer cents, USD/episode, and RSS); verify the mapping sums to the scorer's residual J gap. Add one untouched fresh Full root with 20 episodes, chosen before inspecting its results. Include level-4 episodes in the combined evidence, or state clearly if none were drawn.
+
+2. **Separate the residual into actionable causes.** Re-measure, rather than copy task 34's mpc_combo numbers: shortage / lost chip sales, home-grid shedding, freight, tariffs, holding, disposal, salvage, and any remaining queue delay. For chip losses split chip_le and chip_mat into not made, disposed, and delivered too late / left in stock. For each large loss, attribute it to power, wafer availability, sanctions, fab choice, OSAT output, edge capacity, chokepoint queues, or forecast error. Mark gross production ceilings as upper bounds, not recoverable savings.
+
+3. **Prioritize the experiments by measured headroom.**
+   - **Fab power and wafer allocation:** test steering scarce power and wafers toward high-value JP/KR memory and CN/SEA fabs, while reducing surplus production that is later disposed (notably US mature). Task 34 estimated about 0.683 T/episode of gross fab output at risk in weeks with at least 1% home shedding; treat this as an upper bound and identify what is actually reachable after sanctions, wafers, power, and transport constraints.
+   - **Production, routing, and sink demand together:** make the chip plan value shipments by whether they can reach a sink before demand expires. Inspect residual disposed lots and late sales after cq_edges, cq_drain, cq_kappa, and nd_open; distinguish lanes that are truly full from LP/simulator timing or inventory mismatches. Do not count the same lost sale under both shortage and disposal.
+   - **Remaining queues:** task 35 reduced next-edge-full queueing from 273M to 15.4M unit-weeks per episode; re-measure on the final candidate, including Malacca-to-Suez. Only build another queue change if the map shows it can recover material demand.
+   - **Home-grid shedding:** quantify the remaining value by grid and episode, especially TW, CN, KR, JP, and EU. Test changes to energy/fab dispatch against the same episodes; keep options that worsen homes or other harm strata out.
+   - Treat small freight/tariff/holding improvements as secondary unless the new map shows a larger share than task 34 did.
+
+4. **Run a paired funnel, one causal change at a time.** Compare each candidate to the selected task-38 final on Full dev 20 and the untouched fresh Full 20; reuse an existing seed only as a diagnostic, not as the untouched guard. Include Small dev 20 as a no-harm check. Print the paired 90% interval, better share, RSS by stratum, and the component gap before/after. Do not add separately measured gains arithmetically: interactions must be tested in the combined candidate. Run sbf check Small and Full and the task-34 guard test on any final pick.
+
+5. **Deliverable:** update results/task-39.md with the status first, exact candidate and params, seed roots, RSS tables, a cost-to-oracle waterfall that reconciles to the scorer, confidence intervals, checks, and a verdict. Rank the top three remaining levers by recoverable RSS with evidence; label speculative ceilings and irreducible/foresight losses. Keep the best validated candidate if a new idea does not beat it reliably.

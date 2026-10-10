@@ -1,0 +1,2 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v38_full_342100426_1010-0800: task full, entropy 342100426, episodes 20, baseline combo

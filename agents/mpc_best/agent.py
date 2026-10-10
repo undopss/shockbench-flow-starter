@@ -91,19 +91,6 @@ PARAMS = {
     "sell_frac": 0.9,
     "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
     "fb_kappa_ct": False,  # task 25: the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
-    # task 43: the pulse planner scores each release sequence against pp_scen_K sampled futures of the arrivals
-    # (0 = off, one forecast); pp_scen_risk 0 = best mean, a in (0, 1) = best mean of the worst a share (CVaR)
-    "pp_scen_K": 0,
-    "pp_scen_risk": 0.0,
-    # task 44 (review): cap the task-40 releases at the terminal -> grid edge's capacity left this week
-    "pl_ucap": False,
-    # task 40 (pulse leak), applied to the terminal -> grid slots of pulsed / planned grids after the pulse rule and the
-    # planner (before imit_grid's clip). All off by default
-    "pl_trickle": 0.0,  # mini pulses: release at least this share of the terminal's stock every week (0 = off)
-    "pl_smart": False,  # release the terminal stock the next full week does not need (above segment + psi I-bar - I)
-    "pl_smart_w": 1.0,  # weeks of full segment the next pulse is assumed to need (pl_smart)
-    "pl_overflow": False,  # release at least what would overflow the terminal's storage after this week's arrivals
-    "pl_end": 0,  # in the last pl_end weeks of the episode release everything (no holding)
 }
 if (HERE / "params.json").is_file():
     PARAMS |= json.loads((HERE / "params.json").read_text())
@@ -126,9 +113,7 @@ class Agent:
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
                                                  split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"],
-                                                 arrfb=PARAMS["jp_arrfb"], scen_K=PARAMS["pp_scen_K"],
-                                                 scen_risk=PARAMS["pp_scen_risk"],
-                                                 seed=int((config or {}).get("policy_seed", 0) or 0) % (2**32))
+                                                 arrfb=PARAMS["jp_arrfb"])
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]
@@ -195,21 +180,6 @@ class Agent:
                         storage = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", 0.0)
                         self.pools[p_i]["cap"] += float(storage)
 
-        self.T_ep = int(static.get("T", inst.get("T", 10**6)))
-        self.slot_edge = list(slots["edge"])
-        self.term_store = {}
-        try:  # only pl_overflow reads it: a malformed terminal must not switch the whole agent off
-            for e in range(n_edges):
-                tail = edges["tail"][e]
-                if nodes[tail].get("type") == "terminal":
-                    for k in edges["K"][e] or []:
-                        st_ = nodes[tail].get("stock", {}).get(commodities[k], {}).get("storage", np.inf)
-                        self.term_store[(tail, k)] = float(np.inf if st_ is None else st_)
-        except Exception:
-            self.term_store = {}
-        self.edge_slots = {}
-        for s_, e_ in enumerate(self.slot_edge):
-            self.edge_slots.setdefault(int(e_), []).append(s_)
         self.tg_slots = []  # (slot, terminal stock index, weekly burn share key)
         for s_, (edge, k, lane) in enumerate(zip(slots["edge"], slots["k"], slots["lane"])):
             tail, head = edges["tail"][edge], edges["head"][edge]
@@ -315,11 +285,6 @@ class Agent:
                         flows[s_] = q
             except Exception:
                 pass
-        if self.ok and (PARAMS["pl_trickle"] > 0 or PARAMS["pl_smart"] or PARAMS["pl_overflow"] or PARAMS["pl_end"] > 0):
-            try:
-                self._pleak(observation, flows)
-            except Exception:
-                pass
         if PARAMS["jp_fill"] and self.ok:
             try:
                 self._jp_fill(observation, flows)
@@ -349,58 +314,6 @@ class Agent:
                 if p_i is not None:
                     arr[p_i] = arr.get(p_i, 0.0) + float(qty)
         return arr
-
-    def _pleak(self, obs, flows):
-        """Task 40: fuel held at a pulsed grid's terminal that the pulse cannot use leaks (end of the episode, terminal
-        overflow, rationing): release it. Only raises a release, never lowers one."""
-        week = int(obs["week"][0])
-        stock, seen = obs["stock.qty"], obs["stock.qty.observed"]
-        G_bar = obs["graph_now.grid.G_bar"]
-        grids = set()
-        if self.pplan is not None:
-            grids |= {gr["node"] for gr in self.pplan.grids}
-        if PARAMS["pulse_weeks"] > 0 and isinstance(PARAMS["pulse_grids"], list):
-            grids |= {g for g in self.grid_pos if self.node_ids[g] in PARAMS["pulse_grids"]}
-        arr_t = {}
-        if PARAMS["pl_overflow"]:
-            for edge, k, aw, qty, ok in zip(obs["pipeline.edge"], obs["pipeline.k"], obs["pipeline.arrival_week"],
-                                            obs["pipeline.qty"], obs["pipeline.qty.observed"]):
-                if ok and int(aw) == week:
-                    key = (self.edges["head"][int(edge)], int(k))
-                    arr_t[key] = arr_t.get(key, 0.0) + float(qty)
-        arr_g = self._grid_arrivals(obs) if PARAMS["pl_smart"] else {}
-        end = PARAMS["pl_end"] > 0 and week > self.T_ep - int(PARAMS["pl_end"])
-        for s_, si, p_i in self.tg_slots:
-            p = self.pools[p_i]
-            if p["grid"] not in grids or si is None or not seen[si]:
-                continue
-            T = float(stock[si])
-            if T <= 0 or flows[s_] >= T:
-                continue
-            want = flows[s_]
-            if end:
-                want = T
-            if PARAMS["pl_trickle"] > 0:
-                want = max(want, PARAMS["pl_trickle"] * T)
-            if PARAMS["pl_smart"]:
-                gi = self.stock_index.get((p["grid"], p["k"]))
-                if gi is not None and seen[gi]:
-                    gpos = self.grid_pos.get(p["grid"])
-                    cap = p["share"] * (float(G_bar[gpos]) if gpos is not None else p["deliverable"])
-                    thr = self.psi * p["ibar"] if p["rationed"] else 0.0
-                    need = PARAMS["pl_smart_w"] * cap + thr - float(stock[gi]) - arr_g.get(p_i, 0.0)
-                    want = max(want, T - max(need, 0.0))
-            if PARAMS["pl_overflow"]:
-                tail = self.edges["tail"][self.slot_edge[s_]]
-                stor = self.term_store.get((tail, p["k"]), np.inf)
-                want = max(want, T + arr_t.get((tail, p["k"]), 0.0) - stor)
-            new = min(max(want, flows[s_]), T)
-            if PARAMS["pl_ucap"]:
-                # the edge is shared by the lng and crude slots; past u the simulator scales all of them pro rata
-                e_ = int(self.slot_edge[s_])
-                other = sum(float(flows[j]) for j in self.edge_slots.get(e_, ()) if j != s_)
-                new = max(float(flows[s_]), min(new, float(obs["graph_now.u"][e_]) - other))
-            flows[s_] = new
 
     def _jp_fill(self, obs, flows):
         """Task 30: release at least what fills this week's segment of the listed fuels (they are not rationed, so
@@ -691,8 +604,7 @@ class Agent:
         if time.process_time() - start > PARAMS["time_limit"]:
             return None
         res = linprog(cost, A_ub=A_ub, b_ub=np.array(rhs_ub), A_eq=A_eq, b_eq=np.array(rhs_eq),
-                      bounds=np.column_stack([lo, hi]), method="highs",
-                      options={"time_limit": 1.5})  # a hung solve returns None (fallback flows), not an over-budget week
+                      bounds=np.column_stack([lo, hi]), method="highs")
         if res.status != 0:
             return None
         x = res.x

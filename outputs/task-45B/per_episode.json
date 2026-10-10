@@ -1,0 +1,202 @@
+[
+ {
+  "episode": 0,
+  "level": 2,
+  "rss": 0.8179272948629126,
+  "harm_usd": 4259446583960.519,
+  "gap_usd": 611443497292.84,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 69.039
+ },
+ {
+  "episode": 1,
+  "level": 2,
+  "rss": 0.8773055560767428,
+  "harm_usd": 4109432641098.5522,
+  "gap_usd": 372702387152.29,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 52.488
+ },
+ {
+  "episode": 2,
+  "level": 1,
+  "rss": 0.8132734800440533,
+  "harm_usd": 3116486734880.5195,
+  "gap_usd": 611922367119.09,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 64.086
+ },
+ {
+  "episode": 3,
+  "level": 2,
+  "rss": 0.50087804621788,
+  "harm_usd": 4133185575990.644,
+  "gap_usd": 1784322923679.79,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 54.76
+ },
+ {
+  "episode": 4,
+  "level": 2,
+  "rss": 0.808903541345941,
+  "harm_usd": 4219396322312.8696,
+  "gap_usd": 292857794107.36,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 62.853
+ },
+ {
+  "episode": 5,
+  "level": 1,
+  "rss": 0.9424131723273675,
+  "harm_usd": 2915169765251.671,
+  "gap_usd": 244394096741.42,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 53.337
+ },
+ {
+  "episode": 6,
+  "level": 1,
+  "rss": 0.8141898146765914,
+  "harm_usd": 3822301988147.3667,
+  "gap_usd": 751974849743.45,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 61.617
+ },
+ {
+  "episode": 7,
+  "level": 1,
+  "rss": 0.8784479773520985,
+  "harm_usd": 2760213377895.898,
+  "gap_usd": 220629968680.06,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 49.238
+ },
+ {
+  "episode": 8,
+  "level": 2,
+  "rss": 0.9357079686441023,
+  "harm_usd": 4165939010712.815,
+  "gap_usd": 192019212837.58,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 58.114
+ },
+ {
+  "episode": 9,
+  "level": 2,
+  "rss": 0.8676281044882699,
+  "harm_usd": 4919425099049.974,
+  "gap_usd": 651033639762.89,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 56.399
+ },
+ {
+  "episode": 10,
+  "level": 3,
+  "rss": 0.7743803562973945,
+  "harm_usd": 5874382686096.827,
+  "gap_usd": 674096995677.36,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 50.51
+ },
+ {
+  "episode": 11,
+  "level": 2,
+  "rss": 0.7478657468105946,
+  "harm_usd": 5219116500227.178,
+  "gap_usd": 727360931101.26,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 61.667
+ },
+ {
+  "episode": 12,
+  "level": 4,
+  "rss": 0.937343930552925,
+  "harm_usd": 7086933397517.824,
+  "gap_usd": 216663671325.76,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 61.32
+ },
+ {
+  "episode": 13,
+  "level": 1,
+  "rss": 0.9159572131740451,
+  "harm_usd": 3045451168886.946,
+  "gap_usd": 315518028923.19,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 50.799
+ },
+ {
+  "episode": 14,
+  "level": 1,
+  "rss": 0.9236790894911122,
+  "harm_usd": 3236917258757.2915,
+  "gap_usd": 324545458884.52,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 57.237
+ },
+ {
+  "episode": 15,
+  "level": 1,
+  "rss": 0.6670700422998618,
+  "harm_usd": 2703609622604.895,
+  "gap_usd": 936334072316.84,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 49.894
+ },
+ {
+  "episode": 16,
+  "level": 4,
+  "rss": 0.7918379953391718,
+  "harm_usd": 8594532994142.024,
+  "gap_usd": 586691132213.68,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 56.084
+ },
+ {
+  "episode": 17,
+  "level": 2,
+  "rss": 0.6849104776896067,
+  "harm_usd": 4246139899831.866,
+  "gap_usd": 1107311268722.35,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 56.2
+ },
+ {
+  "episode": 18,
+  "level": 3,
+  "rss": 0.801101785293147,
+  "harm_usd": 5827871776634.527,
+  "gap_usd": 757018951817.14,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 55.925
+ },
+ {
+  "episode": 19,
+  "level": 3,
+  "rss": 0.9040252489038356,
+  "harm_usd": 5322013941428.143,
+  "gap_usd": 347465147981.95,
+  "fallback_weeks": 0,
+  "cpu_weeks": 0,
+  "seconds": 58.805
+ }
+]

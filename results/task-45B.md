@@ -1,4 +1,4 @@
-Status: running main test (full 1827351891 20, references done in 827 s)
+Status: running main test (baseline played: mpc_final RSS 0.8318 on root 1827351891; 3 variants playing)
 
 ## 1. Port + J reproduction (full 0 devpick:1,0,0,0)
 

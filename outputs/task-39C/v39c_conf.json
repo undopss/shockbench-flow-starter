@@ -1,0 +1,29 @@
+{
+ "best": {
+  "agent": "agents/mpc_best"
+ },
+ "pulse_weeks_1.0": {
+  "agent": "agents/mpc_best",
+  "params": {
+   "kappa_lp": true,
+   "pp_direct": [
+    "grid_cn",
+    "grid_eu"
+   ],
+   "pp_split": true,
+   "sell_end": true,
+   "imit_grid": "room",
+   "jp_qedge": true,
+   "jp_arrfb": 0.2,
+   "fb_kappa_ct": true,
+   "safety_weeks": 4.0,
+   "pp_end": 0.7,
+   "warn_gain": 0.5,
+   "cq_edges": true,
+   "cq_drain": true,
+   "cq_kappa": true,
+   "nd_open": true,
+   "pulse_weeks": 1.0
+  }
+ }
+}

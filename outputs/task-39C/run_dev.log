@@ -1,0 +1,2 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+round v39c_conf_full_0_1010-0829: task full, entropy 0, episodes dev, baseline best

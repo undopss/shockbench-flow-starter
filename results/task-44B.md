@@ -1,4 +1,4 @@
-Status: running Full root 1730880025 (20 episodes, building references)
+Status: references built (447 s), playing 5 variants x 20 episodes
 
 Task 44B: verify mpc_final (+cap, +scen, +cap_scen) vs mpc_best on Full root 1730880025, 20 episodes.
 

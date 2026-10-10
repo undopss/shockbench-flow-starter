@@ -17,5 +17,5 @@ Timings: references 1712 s, then ~460 s per variant (4 jobs).
 Choices made (nobody to ask):
 - Skipped the separate us_nobuf smoke on dev episode 1,0,0,0 to keep time for the deadline; the main run shows 0 fallback weeks and no exceptions for us_nobuf.
 - outputs/v51.json: baseline = agents/mpc_final (from origin/task-51-ideas) with its own params.json; each variant = full params.json + one change.
-- L4 shows '-' because this root's 20 episodes have no harm-level-4 episode (as printed by the runner).
+- L4 shows '-' because the runner reports no level-4 RSS (None) for this root's 20 episodes.
 - Not uploaded.

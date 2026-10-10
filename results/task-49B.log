@@ -1,3 +1,4 @@
 warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
 round v49_full_662778299_1010-1655: task full, entropy 662778299, episodes 20, baseline baseline
 references ready in 2240 s (20 episodes)
+  played baseline in 579 s: RSS 0.8404

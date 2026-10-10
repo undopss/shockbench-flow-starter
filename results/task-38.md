@@ -103,8 +103,8 @@ best         0.8468    +0.0115         5/5
 best_no_nd   0.8437    +0.0085         5/5
 nodisp       0.8460    +0.0108         5/5
 ```
-best vs nodisp (J per episode): best is cheaper in 60/100 episodes; the per-set gap is +0.0026 / +0.0046 / +0.0004 /
-+0.0015 / -0.0027 RSS (dev, 540469033, 1730880025, 910653604, 342100426): combo's own parts (fb_kappa_ct,
+best vs nodisp (J per episode): best is cheaper in 60/100 episodes; the per-set gap is -0.0002 / +0.0046 / +0.0005 /
++0.0015 / -0.0028 RSS (dev, 540469033, 1730880025, 910653604, 342100426): combo's own parts (fb_kappa_ct,
 safety_weeks, pp_end, warn_gain) add only ~+0.001 on top of cq + nd_open, but they don't hurt on average, and best
 is the best variant on 3 of 5 Full sets and on Small. nd_open adds +0.003 on Full (best vs best_no_nd, positive on
 all 5 sets) and +0.008 on Small (best_no_nd alone is -0.0045 on Small, interval below 0: keep nd_open).

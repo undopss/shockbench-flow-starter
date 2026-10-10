@@ -94,7 +94,8 @@ def queue_release(obs, lot_keys, chk_pos, tb_k, H, edge_cap=False):
 
 class PulsePlanner:
     def __init__(self, config, H=8, value_scale=0.5, end_value=0.9, time_limit=0.3, method="enum", enum_H=6,
-                 direct_grids=(), kappa=False, split=False, qedge=False, arrfb=0.0):
+                 direct_grids=(), kappa=False, split=False, qedge=False, arrfb=0.0, scen_K=0, scen_risk=0.0,
+                 seed=0, scen_hist=52, scen_min=4):
         self.H, self.value_scale, self.end_value, self.time_limit = int(H), float(value_scale), float(end_value), \
             float(time_limit)
         self.method, self.enum_H = method, int(enum_H)
@@ -122,6 +123,17 @@ class PulsePlanner:
         # future arrivals (week + 1 on) are scaled by it (shrunk to 1 early). 0 = off, else the EMA weight
         self.arrfb = float(arrfb)
         self.fb_prev, self.fb_num, self.fb_den = {}, {}, {}
+        # task 43 ``scen_K``: score each enumerated release sequence against K sampled futures of the controlled fuels'
+        # terminal / grid arrivals instead of the one forecast. A future multiplies the forecast of week + o (o >= 1) by
+        # a ratio drawn from that destination's own history of arrived / forecast a week earlier (normalised by its
+        # mean: the spread only, ``arrfb`` sets the level). The first future is the forecast itself. ``scen_risk``:
+        # 0 = the best mean value, a in (0, 1) = the best mean of the worst a share of the futures (CVaR). 0 = off
+        self.scen_K, self.scen_risk = int(scen_K), float(scen_risk)
+        self.scen_hist, self.scen_min = int(scen_hist), int(scen_min)
+        self.seed = int(seed)
+        self.sc_prev, self.sc_ratio = {}, {}
+        self.week = 0
+        self.scen_cost = 0.0  # CPU seconds of the last scenario enumeration (per grid), for the deadline
         self.split = int(split)
         pools = static["commodities"].get("pool") or []
         self.tb_k = {k for k, p in enumerate(pools) if p == "tb"}
@@ -250,6 +262,14 @@ class PulsePlanner:
             for key, arr in planned.items():
                 for o in range(min(H, len(arr))):
                     add(key[0], key[1], o, float(arr[o]))
+        if self.scen_K > 0:
+            for key, prev in self.sc_prev.items():
+                if prev > 1e-6:
+                    now = float(out[key][0]) if key in out else 0.0
+                    hist = self.sc_ratio.setdefault(key, [])
+                    hist.append(min(3.0, now / prev))
+                    del hist[:-self.scen_hist]
+            self.sc_prev = {key: float(v[1]) for key, v in out.items() if H > 1}
         if self.arrfb > 0:
             a = self.arrfb
             for key in set(out) | set(self.fb_prev):
@@ -269,10 +289,16 @@ class PulsePlanner:
     def plan(self, obs, planned=None, deadline=None, fab_plan=None):
         """{action slot: release this week} for the terminal -> grid slots of the planned grids."""
         arr = self.arrivals(obs, planned)
+        self.week = int(obs["week"][0])
         out = {}
         for gr in self.grids:
             if deadline is not None and time.process_time() > deadline:
                 break
+            # scenarios only while the week has room for them (else the one-forecast plan)
+            self.scen_on = self.scen_K > 0 and (deadline is None
+                                                 or time.process_time() + 2.0 * self.scen_cost < deadline)
+            if self.scen_K > 0 and not self.scen_on:
+                self.scen_cost *= 0.5  # try again in a later week
             try:
                 res = self._plan_grid(obs, gr, arr, fab_plan)
             except Exception:
@@ -468,6 +494,19 @@ class PulsePlanner:
         return {fu["slot"]: max(0.0, float(x[idx[("r", 0, j)]])) for j, fu in enumerate(ctrl)}
 
     # -------------------------------------------------------------- enumeration
+    def _scen_mult(self, key, K, H, rng):
+        """(K, H) multipliers of a destination's forecast arrivals; row 0 and column 0 are 1."""
+        m = np.ones((K, H))
+        hist = self.sc_ratio.get(key)
+        if hist is None or len(hist) < self.scen_min or K < 2 or H < 2:
+            return m
+        h = np.array(hist)
+        mu = h.mean()
+        if mu <= 1e-9 or h.std() <= 1e-9:
+            return m
+        m[1:, 1:] = rng.choice(h, size=(K - 1, H - 1)) / mu
+        return m
+
     def _enum(self, gr, ctrl, base, ehat, ybar, V, obs):
         """Every sequence of weekly release modes over ``enum_H`` weeks, simulated exactly (vectorised).
 
@@ -484,6 +523,27 @@ class PulsePlanner:
         seq = (np.arange(N)[:, None] // (modes ** np.arange(H)[None, :])) % modes  # (N, H), week 0 = digit 0
         u = obs["graph_now.u"]
         F = len(ctrl)
+        K = 1
+        t_sc = time.process_time()
+        if getattr(self, "scen_on", False):
+            rng = np.random.default_rng([self.seed, self.week, int(gr["node"])])
+            mults = []
+            for fu in ctrl:
+                mT = self._scen_mult((fu["term"], fu["k"]), self.scen_K, H, rng)
+                # a grid fed by planned direct pipes: its history mixes in the planner's own pipe releases (not
+                # forecast error), so its grid arrivals stay the forecast's
+                mG = (np.ones((self.scen_K, H)) if fu["dpipes"]
+                      else self._scen_mult((gr["node"], fu["k"]), self.scen_K, H, rng))
+                mults.append((mT, mG))
+            if any((mT != 1).any() or (mG != 1).any() for mT, mG in mults):
+                K = self.scen_K
+                ctrl = [dict(fu) for fu in ctrl]
+                for fu, (mT, mG) in zip(ctrl, mults):
+                    # (H, K * N): future k's arrivals repeated over the N sequences
+                    fu["aT"] = np.repeat((np.asarray(fu["aT"])[:H][None, :] * mT).T, N, axis=1)
+                    fu["aG"] = np.repeat((np.asarray(fu["aG"])[:H][None, :] * mG).T, N, axis=1)
+                seq = np.tile(seq, (K, 1))
+                N = K * N
         T = [np.full(N, fu["T0"]) for fu in ctrl]
         I = [np.full(N, fu["I0"]) for fu in ctrl]
         fly = [np.zeros(N) for _ in ctrl]  # direct pipes: released last week, lands this week
@@ -561,6 +621,18 @@ class PulsePlanner:
                     if t == 0:
                         d0[pp["slot"]] = rel
         value += self.end_value * sum(T[j] + I[j] + fly[j] + sum(S[j]) for j in range(F))
+        if K > 1:
+            N //= K
+            vk = value.reshape(K, N)
+            if 0 < self.scen_risk < 1:
+                n_w = max(1, int(round(self.scen_risk * K)))
+                value = np.sort(vk, axis=0)[:n_w].mean(axis=0)
+            else:
+                value = vk.mean(axis=0)
+            seq = seq[:N]
+            r0 = [r[:N] for r in r0]  # week 0 does not depend on the future (its arrivals are the forecast's)
+            d0 = {s_: r[:N] for s_, r in d0.items()}
+            self.scen_cost = time.process_time() - t_sc
         best = value.max()
         # among (near-)ties prefer the default (release everything) in week 0, then the smaller digit sum
         cand = np.flatnonzero(value >= best - 1e-9 * max(1.0, abs(best)))

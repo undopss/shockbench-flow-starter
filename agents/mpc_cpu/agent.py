@@ -89,6 +89,10 @@ PARAMS = {
     "nd_open_e": False,  # the same for the energy LP's tanker lanes (kappa_lp shares the strait's kappa_tb)
     "sell_buffer": False,
     "sell_frac": 0.9,
+    # task 43: the pulse planner scores each release sequence against pp_scen_K sampled futures of the arrivals
+    # (0 = off, one forecast); pp_scen_risk 0 = best mean, a in (0, 1) = best mean of the worst a share (CVaR)
+    "pp_scen_K": 0,
+    "pp_scen_risk": 0.0,
     "jp_arrfb": 0.0,  # pulse planner: scale future arrivals by the observed arrived / forecast ratio (EMA weight; 0 = off)
     "fb_kappa_ct": False,  # task 25: the chip LP knows container queues at chokepoints drain at kappa_ct (FIFO)
 }
@@ -113,7 +117,9 @@ class Agent:
                                                  method=PARAMS["pp_method"], enum_H=PARAMS["pp_enum_H"],
                                                  direct_grids=PARAMS["pp_direct"], kappa=PARAMS["kappa_lp"],
                                                  split=PARAMS["pp_split"], qedge=PARAMS["jp_qedge"],
-                                                 arrfb=PARAMS["jp_arrfb"])
+                                                 arrfb=PARAMS["jp_arrfb"], scen_K=PARAMS["pp_scen_K"],
+                                                 scen_risk=PARAMS["pp_scen_risk"],
+                                                 seed=int((config or {}).get("policy_seed", 0) or 0) % (2**32))
                 if PARAMS["pp_grids"]:
                     ids = [n["id"] for n in config["static"]["instance"]["nodes"]]
                     self.pplan.grids = [g for g in self.pplan.grids if ids[g["node"]] in PARAMS["pp_grids"]]

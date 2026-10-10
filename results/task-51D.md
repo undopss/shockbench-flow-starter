@@ -5,4 +5,5 @@ Run: `uv run python outputs/variants.py full 242617957 20 outputs/v51b.json 4` (
 ```
 round v51b_full_242617957_1010-1829: task full, entropy 242617957, episodes 20, baseline final
 references ready in 1642 s (20 episodes)
+  played final in 439 s: RSS 0.8153
 ```

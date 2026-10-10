@@ -1,4 +1,4 @@
-Status: dev 20 round 1 done (smart3 +0.0024, end4 +0.0009 above 0); running round 2 (smart3+end4 combo)
+Status: done. Verdict: KEEP `agents/mpc_pleak` = mpc_best + smart mini pulse (w=3) + end-of-episode release: Full dev 20 0.8489, +0.0035 [+0.0013, +0.0059] vs mpc_best (no fresh-seed check: overfit risk)
 
 # Task 40: lost generation during pulses (`agents/mpc_pleak`)
 
@@ -90,3 +90,44 @@ smart2_ovf_end4           0.8477  0.851  0.879  0.811  0.769  +0.0023  [+0.0001,
 ```
 (`outputs/variants/v40_dev_full_0_1010-1030/results.json`). The devpick-6 gains of overflow / smart2 shrank on dev 20
 (as in task 33); the fixed trickle (user's mini pulse, 10%) is reliably harmful.
+
+## 5. Full dev 20, round 2 (the combination)
+```
+full, entropy 0, 20 episodes; diff = variant - mpc_best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+mpc_best                  0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+smart3_end4               0.8489  0.853  0.879  0.812  0.770  +0.0035  [+0.0013, +0.0059]    99.6%      0  <-- better
+smart3_ovf_end4           0.8493  0.854  0.880  0.812  0.769  +0.0039  [+0.0018, +0.0060]    99.9%      0  <-- better
+smart4                    0.8471  0.851  0.878  0.811  0.770  +0.0017  [-0.0005, +0.0041]    89.0%      0
+```
+(`outputs/variants/v40_dev2_full_0_1010-1050/results.json`)
+
+## Verdict
+**Keep smart3 + end4** (`agents/mpc_pleak`): Full dev 20 **0.8489**, +0.0035 [+0.0013, +0.0059], better on every level
+(L1 +0.003, L2 +0.005, L3 +0.002, L4 +0.003). Both parts are above 0 on their own on dev 20 (smart3 +0.0024, end4
++0.0009). Overflow was left out although smart3_ovf_end4 is +0.0039: alone it was flat (+0.0003 [-0.0019, +0.0028]),
+and the task says keep only a change whose own dev-20 interval is above 0.
+- **Overfit warning: no fresh-seed check** (speed rule: only the cached Full dev episodes). The w=3 value was picked on
+  these same 20 episodes (w=1 hurts, 2 +0.0009, 3 +0.0024, 4 +0.0017), so the true gain is probably smaller than +0.0035.
+  The measured ceiling (≈ 0.026 T lost generation + ≈ 0.008 T dumped-fuel costs ≈ +0.01 RSS) makes +0.0035 plausible.
+- **User's mini pulses**: a fixed trickle is harmful (10%: -0.0044 [-0.0074, -0.0015] on dev 20; 25%: -0.012 on devpick
+  6): it drains the fuel the pulse needs. The smart version (release only what the next full weeks do not need) is the
+  part that helps.
+
+Final `agents/mpc_pleak/params.json`:
+```
+{"kappa_lp": true, "pp_direct": ["grid_cn", "grid_eu"], "pp_split": true, "sell_end": true, "imit_grid": "room", "jp_qedge": true, "jp_arrfb": 0.2, "fb_kappa_ct": true, "safety_weeks": 4.0, "pp_end": 0.7, "warn_gain": 0.5, "cq_edges": true, "cq_drain": true, "cq_kappa": true, "nd_open": true, "pl_smart": true, "pl_smart_w": 3.0, "pl_end": 4}
+```
+
+## Checks
+- `uv run sbf check mpc_pleak --task=full`: all checks passed; CPU per week max **0.415 s**, median **0.291 s**, week 1
+  0.309 s (budget 4 s) (`outputs/task-40/check_full.txt`).
+- `outputs/task-34/guard_test.py 0 agents/mpc_pleak`: A = B (465024298066392), C = D (467367227590693), 0 fallback weeks
+  (`outputs/task-40/guard.txt`).
+- `uv run sbf pack mpc_pleak`: 5 files, 112,584 bytes; sha256
+  **be2de4fc00a5ae20a6ee74d7a3411358760abadc17674b6a5f699964faf97df1**. Not uploaded.
+
+## Port note
+`agents/mpc_pleak/agent.py` = mpc_best's agent.py + PARAMS `pl_trickle`, `pl_smart`, `pl_smart_w`, `pl_overflow`,
+`pl_end` (all off), `self.T_ep` / `self.slot_edge` / `self.term_store` in `_setup`, the `_pleak()` method and its call
+in `act` (after the planner, before `jp_fill` / `imit_grid`). chips.py, pplan.py, fallback.py are unchanged.

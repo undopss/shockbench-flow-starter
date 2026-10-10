@@ -1,4 +1,4 @@
-Status: training sweep done; confirming pulse_weeks 1.0 on full 0 dev and fresh root 342100426
+Status: dev confirmation done (+0.0005, >0); running fresh root 342100426
 
 # Task 39C: re-tune the pulse / JP parameters of `agents/mpc_best`
 
@@ -29,3 +29,12 @@ pp_H_10                   0.8144  0.807  0.819  0.818      -  +0.0000  [+0.0000,
   check was needed (play is identical; pp_H would matter only with `pp_method: "milp"`).
 - Combination of winners = pulse_weeks 1.0 alone (a single winner), so the training-root "combination" run is the
   row above; it went straight to the two confirmations.
+
+## 2. Confirmation 1: `full 0 dev` (20)
+```
+full, entropy 0, 20 episodes; diff = variant - best, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+best                      0.8454  0.850  0.874  0.810  0.767  +0.0000  [+0.0000, +0.0000]     nan%      0
+pulse_weeks_1.0           0.8459  0.851  0.873  0.810  0.768  +0.0005  [+0.0001, +0.0009]    99.2%      0  <-- better
+```
+(baseline reproduces task 38's mpc_best 0.8454 exactly.)

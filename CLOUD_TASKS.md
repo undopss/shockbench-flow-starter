@@ -829,3 +829,13 @@ that pool's floor (fab grids only if cl_fab), so fuel is pulled in early / via l
    `cl2` (cl_safety 2), `cl4` (cl_safety 4), `cl4_all` (cl_safety 4, cl_fab false), `cl4_h8` (cl_safety 4, cl_hold 8).
    `uv run python outputs/variants.py full 1341342961 20 <v48.json> 4`. Push the table the moment it is printed.
 3. `results/task-48.md`: status first, the table as printed. Branch `task-48-closure`. **Do not upload.**
+
+### 49 A / B. CONFIRM the last candidates on two new roots (two sessions, same variants)
+Code: `git fetch origin task-48-closure && git checkout origin/task-48-closure -- agents/mpc_final` (commit 945fd19 =
+the uploaded mpc_final + `cl_safety` option, default off). **Hard deadline: push the table by 21:00 Kyiv (18:00 UTC)**;
+push partial tables if short of time. Roots (new): **49A = 295197412, 49B = 662778299**, 20 episodes each.
+Baseline `{"agent": "agents/mpc_final"}` (own params.json). Variants (full params.json + changes):
+`safety_5` (safety_weeks 5.0); `cl4_all` (cl_safety 4, cl_fab false); `combo` (safety_weeks 5.0, cl_safety 4,
+cl_fab false, pl_smart_w 3.5, pl_end 6); `combo_cl` (cl_safety 4, cl_fab false, pl_smart_w 3.5, pl_end 6).
+1. `uv run python outputs/variants.py full <root> 20 <v49.json> 4`, same v49.json in both sessions.
+2. `results/task-49X.md`: status first, the table as printed. Branch `task-49X-confirm`. **Do not upload.**

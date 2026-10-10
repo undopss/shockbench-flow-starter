@@ -622,3 +622,34 @@ dev 20; task 29: pp_value flat 5..80), so do it **honestly**:
 (now 0.9); `end_weeks` 2, 4 (now 3).
 **39C (pulses + JP):** `pulse_weeks` 1.0, 2.0 (now 1.5); `jp_arrfb` 0.1, 0.35 (now 0.2); `pp_end` 0.5, 0.9 (now 0.7);
 `pp_H` 6, 10 (now 8; enum stays 6).
+
+## Round 12 (2026-10-10, final day): the pulse leak
+
+### 40. MEASURE + BUILD: lost generation during pulses (`agents/mpc_pleak`)
+Start from `agents/mpc_best` (get it with `git fetch origin task-38-best && git checkout origin/task-38-best --
+agents/mpc_best`; Full 100 episodes 0.8468, final candidate). Team goal Full ≥ 0.85, so a reliable +0.003..+0.01 counts.
+Deadline today 23:59 Kyiv: **report within ~2.5 h**, push often.
+
+Background (task 14, `results/task-14.md` on branch task-14-cheaper-pulse, measured on old mpc_pulse): the TW/KR pulse
+added 0.116 T/ep of home shed; 0.065 T is the intended home→fab transfer, but **≈0.05 T (~+0.015 RSS) was generation
+lost outright** (fuel held back → ration factor / end-of-horizon stock). Nothing was built. Since then the pulse is
+planned by pplan.py (release modes) plus the `pulse_weeks` hold rule, so re-measure first.
+
+**Speed rule: test ONLY on the cached Full dev episodes** (unpack `cache/sbf-cache.tgz` as in step 3 above; no new
+seeds, no Small, no reference building). Use `full 0 devpick:<a,b,c,d>` (6 episodes) for quick probes and `full 0 dev`
+(20) for the real comparison.
+1. **Measure** on mpc_best, Full dev 20 (adapt `outputs/task-14/pulse_cost.py`): per grid (TW, KR, and any other
+   pulsed grid) and week — generation vs what the fuel delivered could give, home shed, fab energy, fuel held in
+   terminals/stock at episode end, ration-factor weeks. Split the pulse-related shed into (a) home→fab transfer,
+   (b) generation lost (fuel arrived but not burned / burned too late / left at the end), (c) other. Give USD/ep and RSS
+   (0.01 RSS ≈ 0.034 T on Full).
+2. **Build** fixes for whatever (b) turns out to be, each behind a param (default off), e.g. release the held fuel
+   so it is burned before it expires/ends idle, shorter hold when fabs are wafer-limited, burn down terminal stock
+   before the end (pp_end), match the hold to fab demand. One causal change per variant.
+3. **Variants** vs baseline `{"agent": "agents/mpc_best"}` (each = full mpc_best params.json + the change): probe on
+   devpick 6, then the best 2–3 + their combination on `full 0 dev` 20. Keep only a change whose dev-20 interval is
+   above 0. Note in the report that there is no fresh-seed check (overfit risk).
+4. If something is kept: `sbf check mpc_pleak --task=full` (CPU max), `outputs/task-34/guard_test.py 0
+   agents/mpc_pleak`, `uv run sbf pack mpc_pleak` + sha256. **Do not upload.**
+5. `results/task-40.md`: status line first (pushed after every run), the measurement table, every variant table as
+   printed, verdict, final params.json. Branch `task-40-pleak`.

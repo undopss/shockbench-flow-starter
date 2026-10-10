@@ -1,4 +1,4 @@
-Status: building references (Full root 895331359, 20 episodes), then playing 9 variants
+Status: playing variants (references ready in 1332 s at 15:48 UTC; expect the table ~17:20 UTC)
 
 Task 47A: `uv run python outputs/variants.py full 895331359 20 outputs/v47.json 4`, started 15:26 UTC.
 Baseline = `agents/mpc_final` from task-44-final (bb9674a, own params.json). v47.json = full params.json + one change

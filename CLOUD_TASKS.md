@@ -686,3 +686,33 @@ level; `devpick` for quick probes). No new seeds, no Small.
    mpc_calm2` + sha256. **Do not upload.**
 5. `results/task-41.md`: status line first (pushed after every run), the weighted map, the episode deep-dives,
    variant tables as printed, verdict, params.json. Branch `task-41-calm2`.
+
+### 42. MEASURE + BUILD: act on the announcement messages (`agents/mpc_msg`)
+Start from `agents/mpc_best` (`git fetch origin task-38-best && git checkout origin/task-38-best -- agents/mpc_best`).
+Deadline today 23:59 Kyiv: **report within ~2 h**, push often. Tasks 40 (pulses) and 41 (gap map) run in parallel:
+keep your changes in a separate, param-gated block.
+
+Why: `messages.*` (docs/fields/full.md: channel 0 tariff_formal, 1 tariff_informal, 2 tariff_final, 3 sanction_legal,
+4 ties_threat, 5 mid_threat; kind proposal / final_notice / threat / publication / withdrawal; region, target_kind,
+target, k, announced_week, stated_effective_week) are never used by mpc_best. An old Small study (Oct 6) only found the
+false-alarm rate "inconclusive"; nobody measured on Full **which messages precede a costly disruption and how early**.
+`pending_prohibitions` (already used) cover sanctions once they are official.
+
+**Speed rule: ONLY the cached Full dev episodes** (unpack `cache/sbf-cache.tgz`; `full 0 dev`, `devpick` probes).
+1. **Measure** on Full dev 20 (play mpc_best, log observations; use the episode's omega / event list as ground truth):
+   for every message thread: channel, kind sequence, target, announced / stated week, and what actually happened
+   (closure of which chokepoint and how much, sanction/prohibition, tariff change, conflict demand shock, factory
+   outage, nothing = false alarm), with the lead time in weeks. Table per channel: count, true-alarm rate, lead time
+   (median, range), and the cost the event caused (agent vs oracle gap in the weeks after it, USD and RSS points with
+   the level weights p_s / n_s as in task 41). Also: how many costly events had **no** message before them.
+2. **Decide:** a channel is usable if true-alarm rate × lead time × event cost is material (rough ceiling ≥ +0.003
+   RSS). If none is, stop and report (that is a fine result).
+3. **Build** (if usable), behind params (default off): e.g. on a credible mid_threat/ties_threat naming a chokepoint
+   or region, plan as if it closes / is cut at the stated (or typical) week — raise safety stock (safety_weeks) for
+   grids fed through it, pre-ship chips/wafers ahead, avoid committing cargo to the lane; drop it on withdrawal.
+   One causal change per variant; probe on devpick, then `full 0 dev` 20 vs `{"agent": "agents/mpc_best"}`. Keep only
+   an interval above 0 that does not lose at L1/L2. No fresh-seed check (note the overfit risk).
+4. If kept: `sbf check mpc_msg --task=full`, `outputs/task-34/guard_test.py 0 agents/mpc_msg`, `uv run sbf pack
+   mpc_msg` + sha256. **Do not upload.**
+5. `results/task-42.md`: status line first (pushed after every run), the message table, verdict, variant tables as
+   printed, params.json. Branch `task-42-msg`.

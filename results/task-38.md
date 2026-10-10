@@ -1,4 +1,4 @@
-Status: running fresh roots (1/4 done)
+Status: running fresh roots (2/4 done)
 
 ## 1. Build + reproduction
 `agents/mpc_best` = `agents/mpc_combo` (agent.py, pplan.py, fallback.py) + mpc_nodisp's chips.py changes (cq_edges,
@@ -42,3 +42,15 @@ nodisp                    0.8543  0.862  0.823  0.882      -  +0.0061  [+0.0004,
 
 ```
 (outputs/variants/v38_full_540469033_1010-0704/results.json)
+
+### task full, entropy 1730880025, episodes 20
+```
+full, entropy 1730880025, 20 episodes; diff = variant - combo, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+combo                     0.8444  0.836  0.855  0.854      -  +0.0000  [+0.0000, +0.0000]     nan%      0
+best                      0.8562  0.852  0.863  0.858      -  +0.0118  [+0.0055, +0.0191]   100.0%      0  <-- better
+best_no_nd                0.8537  0.850  0.860  0.855      -  +0.0093  [+0.0032, +0.0167]   100.0%      0  <-- better
+nodisp                    0.8557  0.851  0.866  0.855      -  +0.0114  [+0.0033, +0.0203]    99.6%      0  <-- better
+
+```
+(outputs/variants/v38_full_1730880025_1010-0723/results.json)

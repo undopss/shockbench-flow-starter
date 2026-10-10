@@ -1,0 +1,43 @@
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+Using CPython 3.13.16 interpreter at: /usr/bin/python3.13
+Creating virtual environment at: .venv
+   Building shockbench-flow-starter @ file:///home/user/shockbench-flow-starter
+Downloading llvmlite (57.1MiB)
+Downloading scipy (33.7MiB)
+Downloading pillow (6.6MiB)
+Downloading matplotlib (9.4MiB)
+Downloading ruff (10.9MiB)
+Downloading highspy (2.4MiB)
+Downloading kiwisolver (1.4MiB)
+Downloading numpy (15.9MiB)
+Downloading fonttools (5.1MiB)
+Downloading pygments (1.2MiB)
+Downloading numba (3.7MiB)
+Downloading networkx (2.0MiB)
+ Downloaded pygments
+ Downloaded kiwisolver
+ Downloaded networkx
+ Downloaded highspy
+ Downloaded numba
+      Built shockbench-flow-starter @ file:///home/user/shockbench-flow-starter
+ Downloaded fonttools
+ Downloaded pillow
+ Downloaded matplotlib
+ Downloaded ruff
+ Downloaded numpy
+ Downloaded scipy
+ Downloaded llvmlite
+Installed 35 packages in 39ms
+round v51b_full_722245388_1010-1829: task full, entropy 722245388, episodes 20, baseline final
+references ready in 1273 s (20 episodes)
+  played final in 309 s: RSS 0.8663
+  played tw_safety_7 in 303 s: RSS 0.8656
+  played pulse_w075 in 297 s: RSS 0.8669
+
+full, entropy 722245388, 20 episodes; diff = variant - final, 90% paired interval
+variant                      RSS     L1     L2     L3     L4     diff  interval               better%  fallb
+final                     0.8663  0.876  0.874  0.901  0.509  +0.0000  [+0.0000, +0.0000]     nan%      0
+tw_safety_7               0.8656  0.874  0.876  0.901  0.501  -0.0007  [-0.0030, +0.0012]    32.9%      0
+pulse_w075                0.8669  0.877  0.875  0.902  0.501  +0.0006  [-0.0005, +0.0016]    79.6%      0
+
+results: outputs/variants/v51b_full_722245388_1010-1829/results.json

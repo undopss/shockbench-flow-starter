@@ -1,4 +1,4 @@
-Status: running Full test (root 242617957, 20 episodes; started 18:28 UTC)
+Status: building references for root 242617957 (still going at 18:56 UTC, ~28 min so far)
 
 Plan: task 51A, variants us_nobuf / jp_pulse / safety_6 vs mpc_final (final.zip params, from origin/task-51-ideas) on full root 242617957, 20 episodes.
 
